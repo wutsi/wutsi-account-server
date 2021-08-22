@@ -1,0 +1,246 @@
+openapi: "3.0.0"
+info:
+  title: "Wutsi Account API"
+  description: |
+    API for managing user's accounts
+  version: "1.0.0"
+
+servers:
+  - url: https://wutsi-account-server-test.herokuapp.com
+    description: Sandbox
+  - url: https://wutsi-account-server-prod.herokuapp.com
+    description: Production
+
+paths:
+  /v1/accounts:
+    post:
+      operationId: "create-account"
+      description: Create a new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAccountResponse'
+      tags:
+        - Account
+
+  /v1/accounts/{id}:
+    get:
+      operationId: "get-account"
+      description: Return information about an account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccountResponse'
+      tags:
+        - Account
+
+    delete:
+      operationId: "delete-account"
+      description: Delete an account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Success
+      tags:
+        - Account
+
+  /v1/accounts/{id}/attributes/{name}:
+    post:
+      operationId: "update-account-attribute"
+      description: Update an account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: name
+          description: |
+            Name of the attribute to update. The different values for the name:
+            - `display-name`: The account display name
+            - `picture-url`: The account's picture URL
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountAttributeRequest'
+      responses:
+        200:
+          description: Success
+      tags:
+        - Account
+
+  /v1/accounts/{id}/password:
+    post:
+      operationId: "save-password"
+      description: Set the password of an account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavePasswordRequest'
+      responses:
+        200:
+          description: Success
+      tags:
+        - Password
+
+    get:
+      operationId: "check-password"
+      description: Validated the password of an account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: password
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+      tags:
+        - Password
+
+
+components:
+  schemas:
+    CreateAccountRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: Phone Number
+      required:
+        - phoneNumber
+
+    CreateAccountResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the account created
+
+    GetAccountResponse:
+      type: object
+      properties:
+        account:
+          type: object
+          $ref: "#/components/schemas/Account"
+
+    UpdateAccountAttributeRequest:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Value of the
+          nullable: true
+
+    SavePasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          description: Value of the
+      required:
+        - password
+
+
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID
+        phone:
+          type: object
+          $ref: "#/components/schemas/Phone"
+          description: |
+            Phone Number in the format E.164.
+            Exemple: +919638095998, +23799507890
+        pictureUrl:
+          type: string
+          format: url
+          description: URL of the account picture
+          nullable: true
+        displayName:
+          type: string
+          description: Display Name
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          description: Registration Date/Time
+        updated:
+          type: string
+          format: date-time
+          description: Last modification Date/Time
+
+    Phone:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the Phone
+        number:
+          type: string
+          description: Phone number
+        country:
+          type: string
+          description: Country code
+        created:
+          type: string
+          format: date-time
+          description: Creation date/time
