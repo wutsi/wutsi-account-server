@@ -27,5 +27,6 @@ fun AccountEntity.toAccountSummary() = AccountSummary(
     pictureUrl = this.pictureUrl,
     created = this.created,
     updated = this.updated,
-    status = this.status.shortName
+    status = this.status.shortName,
+    language = this.language
 )
