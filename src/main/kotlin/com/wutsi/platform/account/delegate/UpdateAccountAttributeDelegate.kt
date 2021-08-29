@@ -11,10 +11,15 @@ import com.wutsi.platform.core.error.exception.BadRequestException
 import org.springframework.stereotype.Service
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.Locale
 import javax.transaction.Transactional
 
 @Service
 public class UpdateAccountAttributeDelegate(private val service: AccountService) {
+    companion object {
+        const val DEFAULT_LANGUAGE = "en"
+    }
+
     @Transactional
     public fun invoke(
         id: Long,
@@ -25,6 +30,7 @@ public class UpdateAccountAttributeDelegate(private val service: AccountService)
         when (name) {
             "display-name" -> account.displayName = toString(request.value)
             "picture-url" -> account.pictureUrl = toPictureUrl(request.value)?.toString()
+            "language" -> account.language = toLanguage(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,
@@ -62,5 +68,13 @@ public class UpdateAccountAttributeDelegate(private val service: AccountService)
                 ex
             )
         }
+    }
+
+    private fun toLanguage(value: String?): String {
+        if (value.isNullOrEmpty())
+            return DEFAULT_LANGUAGE
+
+        val locale = Locale.getAvailableLocales().find { it.language == value }
+        return locale?.language ?: DEFAULT_LANGUAGE
     }
 }

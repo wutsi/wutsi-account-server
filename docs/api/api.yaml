@@ -136,6 +136,7 @@ paths:
             enum:
               - display-name
               - picture-url
+              - language
       requestBody:
         required: true
         content:
@@ -150,7 +151,7 @@ paths:
       tags:
         - Account
       security:
-        - api_key: [ 'user-read' ]
+        - api_key: [ 'user-manage' ]
 
   /v1/accounts/{id}/password:
     post:
@@ -224,6 +225,12 @@ components:
           type: string
           description: |
             Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+        language:
+          type: string
+          description: |
+            2 letter code of the account's language ([ISO 659-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)).
+          default: en
+          maxLength: 2
       required:
         - phoneNumber
 
@@ -328,6 +335,9 @@ components:
           type: string
           description: Display Name
           nullable: true
+        language:
+          type: string
+          description: Account's language
         created:
           type: string
           format: date-time

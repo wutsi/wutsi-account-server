@@ -157,4 +157,43 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.ACCOUNT_DELETED.urn, response.error.code)
     }
+
+    @Test
+    public fun `set language`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/language"
+        val request = UpdateAccountAttributeRequest(
+            value = "fr"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(request.value, account.language)
+    }
+
+    @Test
+    public fun `reset language`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/language"
+        val request = UpdateAccountAttributeRequest(
+            value = ""
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals("en", account.language)
+    }
+
+    @Test
+    public fun `reset invalid language`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/language"
+        val request = UpdateAccountAttributeRequest(
+            value = "??"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals("en", account.language)
+    }
 }

@@ -47,7 +47,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
     @Test
     fun `create account`() {
         val request = CreateAccountRequest(
-            phoneNumber = "+23774511111"
+            phoneNumber = "+23774511111",
+            language = "fr"
         )
         val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
 
@@ -59,6 +60,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
+        assertEquals(request.language, account.language)
         assertEquals(AccountStatus.ACCOUNT_STATUS_ACTIVE, account.status)
 
         val phone = phoneDao.findById(account.phone?.id).get()
@@ -70,7 +72,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
     @Test
     fun `create account with existing phone number`() {
         val request = CreateAccountRequest(
-            phoneNumber = "+237221234100"
+            phoneNumber = "+237221234100",
+            language = "fr"
         )
         val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
 
@@ -83,6 +86,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.updated)
         assertNull(account.deleted)
         assertEquals(AccountStatus.ACCOUNT_STATUS_ACTIVE, account.status)
+        assertEquals(request.language, account.language)
         assertEquals(100, account.phone?.id)
     }
 

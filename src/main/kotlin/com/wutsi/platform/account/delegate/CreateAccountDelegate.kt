@@ -44,7 +44,8 @@ public class CreateAccountDelegate(
             val account = dao.save(
                 AccountEntity(
                     phone = createPhone(request),
-                    status = ACCOUNT_STATUS_ACTIVE
+                    status = ACCOUNT_STATUS_ACTIVE,
+                    language = request.language
                 )
             )
             return CreateAccountResponse(

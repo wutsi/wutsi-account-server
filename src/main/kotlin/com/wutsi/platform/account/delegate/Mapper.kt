@@ -12,6 +12,7 @@ fun AccountEntity.toAccount() = Account(
     created = this.created,
     updated = this.updated,
     status = this.status.shortName,
+    language = this.language,
     phone = Phone(
         id = this.phone!!.id ?: -1,
         number = this.phone!!.number,
