@@ -5,6 +5,7 @@ import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,14 +19,21 @@ import kotlin.test.assertNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/UpdateAccountAttributeController.sql"])
-public class UpdateAccountAttributeControllerTest {
+public class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
     @LocalServerPort
     public val port: Int = 0
 
     @Autowired
     private lateinit var dao: AccountRepository
 
-    private val rest = RestTemplate()
+    private lateinit var rest: RestTemplate
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        rest = createResTemplate(listOf("user-manage"))
+    }
 
     @Test
     public fun `set display-name`() {

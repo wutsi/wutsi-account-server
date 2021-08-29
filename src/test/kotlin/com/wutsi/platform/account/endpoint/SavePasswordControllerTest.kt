@@ -3,6 +3,7 @@ package com.wutsi.platform.account.endpoint
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.dto.SavePasswordRequest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,7 +16,7 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/SavePasswordController.sql"])
-public class SavePasswordControllerTest {
+public class SavePasswordControllerTest : AbstractSecuredController() {
     @LocalServerPort
     public val port: Int = 0
 
@@ -25,7 +26,14 @@ public class SavePasswordControllerTest {
     @Autowired
     private lateinit var accountDao: AccountRepository
 
-    private val rest = RestTemplate()
+    private lateinit var rest: RestTemplate
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        rest = createResTemplate(listOf("user-manage"))
+    }
 
     @Test
     public fun `create password`() {

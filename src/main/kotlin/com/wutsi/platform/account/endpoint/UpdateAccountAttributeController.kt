@@ -2,6 +2,7 @@ package com.wutsi.platform.account.endpoint
 
 import com.wutsi.platform.account.`delegate`.UpdateAccountAttributeDelegate
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.`annotation`.CrossOrigin
 import org.springframework.web.bind.`annotation`.PathVariable
 import org.springframework.web.bind.`annotation`.PostMapping
@@ -30,6 +31,7 @@ public class UpdateAccountAttributeController(
     private val `delegate`: UpdateAccountAttributeDelegate
 ) {
     @PostMapping("/v1/accounts/{id}/attributes/{name}")
+    @PreAuthorize(value = "hasAuthority('user-read')")
     public fun invoke(
         @PathVariable(name = "id") @NotNull id: Long,
         @PathVariable(name = "name") @NotBlank name: String,

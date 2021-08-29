@@ -3,6 +3,7 @@ package com.wutsi.platform.account.endpoint
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,16 +15,24 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/CheckPasswordController.sql"])
-public class CheckPasswordControllerTest {
+public class CheckPasswordControllerTest : AbstractSecuredController() {
     @LocalServerPort
     public val port: Int = 0
 
-    private val rest = RestTemplate()
+    private lateinit var rest: RestTemplate
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        rest = createResTemplate(listOf("user-read"))
+    }
 
     @Test
     public fun `check password`() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/100/password?password=$password"
+
         val response = rest.getForEntity(url, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
@@ -33,6 +42,7 @@ public class CheckPasswordControllerTest {
     public fun `password mismatch`() {
         val password = "123456"
         val url = "http://localhost:$port/v1/accounts/100/password?password=$password"
+
         val ex = assertThrows<HttpStatusCodeException> {
             rest.getForEntity(url, Any::class.java)
         }
@@ -47,6 +57,7 @@ public class CheckPasswordControllerTest {
     public fun `no password`() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/101/password?password=$password"
+
         val ex = assertThrows<HttpStatusCodeException> {
             rest.getForEntity(url, Any::class.java)
         }
@@ -61,6 +72,7 @@ public class CheckPasswordControllerTest {
     public fun `invalid account`() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/9999/password?password=$password"
+
         val ex = assertThrows<HttpStatusCodeException> {
             rest.getForEntity(url, Any::class.java)
         }

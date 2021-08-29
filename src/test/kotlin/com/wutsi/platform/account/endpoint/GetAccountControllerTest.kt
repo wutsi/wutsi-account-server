@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dto.GetAccountResponse
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,11 +17,18 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetAccountController.sql"])
-public class GetAccountControllerTest {
+public class GetAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
     public val port: Int = 0
 
-    private val rest = RestTemplate()
+    private lateinit var rest: RestTemplate
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        rest = createResTemplate(listOf("user-read"))
+    }
 
     @Test
     public fun `get account`() {
@@ -33,6 +41,7 @@ public class GetAccountControllerTest {
         assertEquals(100, account.id)
         assertEquals("Ray Sponsible", account.displayName)
         assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
+        assertEquals("active", account.status)
         assertNotNull(account.created)
         assertNotNull(account.updated)
 

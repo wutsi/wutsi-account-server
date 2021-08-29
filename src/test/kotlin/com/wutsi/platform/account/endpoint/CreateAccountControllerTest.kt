@@ -23,7 +23,7 @@ import kotlin.test.assertNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/CreateAccountController.sql"])
-public class CreateAccountControllerTest {
+public class CreateAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
     public val port: Int = 0
 
@@ -33,12 +33,15 @@ public class CreateAccountControllerTest {
     @Autowired
     private lateinit var phoneDao: PhoneRepository
 
-    private val rest = RestTemplate()
+    private lateinit var rest: RestTemplate
     private lateinit var url: String
 
     @BeforeEach
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
+
         url = "http://localhost:$port/v1/accounts"
+        rest = createResTemplate(listOf("user-manage"))
     }
 
     @Test

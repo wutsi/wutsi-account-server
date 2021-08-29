@@ -15,17 +15,20 @@ import kotlin.test.assertNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/DeleteAccountController.sql"])
-public class DeleteAccountControllerTest {
+public class DeleteAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
     public val port: Int = 0
 
     @Autowired
     private lateinit var dao: AccountRepository
 
-    private val rest = RestTemplate()
+    private lateinit var rest: RestTemplate
 
     @BeforeEach
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
+
+        rest = createResTemplate(listOf("user-manage"))
     }
 
     @Test

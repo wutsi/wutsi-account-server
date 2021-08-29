@@ -5,9 +5,8 @@ import java.time.OffsetDateTime
 import kotlin.Long
 import kotlin.String
 
-public data class Account(
+public data class AccountSummary(
     public val id: Long = 0,
-    public val phone: Phone = Phone(),
     public val pictureUrl: String? = null,
     public val status: String = "",
     public val displayName: String? = null,

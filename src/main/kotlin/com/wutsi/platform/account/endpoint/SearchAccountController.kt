@@ -1,15 +1,13 @@
 package com.wutsi.platform.account.endpoint
 
-import com.wutsi.platform.account.`delegate`.CheckPasswordDelegate
+import com.wutsi.platform.account.`delegate`.SearchAccountDelegate
+import com.wutsi.platform.account.dto.SearchAccountResponse
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.`annotation`.CrossOrigin
 import org.springframework.web.bind.`annotation`.GetMapping
-import org.springframework.web.bind.`annotation`.PathVariable
 import org.springframework.web.bind.`annotation`.RequestParam
 import org.springframework.web.bind.`annotation`.RestController
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
-import kotlin.Long
+import kotlin.Int
 import kotlin.String
 
 @RestController
@@ -25,18 +23,14 @@ import kotlin.String
         org.springframework.web.bind.annotation.RequestMethod.PUT
     ]
 )
-public class CheckPasswordController(
-    private val `delegate`: CheckPasswordDelegate
+public class SearchAccountController(
+    private val `delegate`: SearchAccountDelegate
 ) {
-    @GetMapping("/v1/accounts/{id}/password")
+    @GetMapping("/v1/accounts")
     @PreAuthorize(value = "hasAuthority('user-read')")
     public fun invoke(
-        @PathVariable(name = "id") @NotNull id: Long,
-        @RequestParam(
-            name = "password",
-            required = true
-        ) @NotBlank password: String
-    ) {
-        delegate.invoke(id, password)
-    }
+        @RequestParam(name = "phone-number", required = false) phoneNumber: String,
+        @RequestParam(name = "limit", required = false, defaultValue = "20") limit: Int = 20,
+        @RequestParam(name = "offset", required = false, defaultValue = "0") offset: Int = 0
+    ): SearchAccountResponse = delegate.invoke(phoneNumber, limit, offset)
 }

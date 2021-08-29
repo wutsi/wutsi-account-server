@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.endpoint
 
 import com.wutsi.platform.account.`delegate`.DeleteAccountDelegate
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.`annotation`.CrossOrigin
 import org.springframework.web.bind.`annotation`.DeleteMapping
 import org.springframework.web.bind.`annotation`.PathVariable
@@ -25,6 +26,7 @@ public class DeleteAccountController(
     private val `delegate`: DeleteAccountDelegate
 ) {
     @DeleteMapping("/v1/accounts/{id}")
+    @PreAuthorize(value = "hasAuthority('user-manage')")
     public fun invoke(@PathVariable(name = "id") @NotNull id: Long) {
         delegate.invoke(id)
     }

@@ -29,8 +29,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateAccountResponse'
+        409:
+          description: The phone number has already assigned to another account
       tags:
         - Account
+      security:
+        - api_key: [ 'user-manage' ]
+
+    get:
+      operationId: "search-account"
+      description: Search Account
+      parameters:
+        - in: query
+          name: phone-number
+          description: |
+            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int32
+            default: 20
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchAccountResponse'
+      tags:
+        - Account
+      security:
+        - api_key: [ 'user-read' ]
 
   /v1/accounts/{id}:
     get:
@@ -51,8 +89,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAccountResponse'
+        404:
+          description: The account not found
       tags:
         - Account
+      security:
+        - api_key: [ 'user-read' ]
 
     delete:
       operationId: "delete-account"
@@ -70,6 +112,8 @@ paths:
           description: Success
       tags:
         - Account
+      security:
+        - api_key: [ 'user-manage' ]
 
   /v1/accounts/{id}/attributes/{name}:
     post:
@@ -85,13 +129,13 @@ paths:
             format: int64
         - in: path
           name: name
-          description: |
-            Name of the attribute to update. The different values for the name:
-            - `display-name`: The account display name
-            - `picture-url`: The account's picture URL
+          description: Name of the attribute to update
           required: true
           schema:
             type: string
+            enum:
+              - display-name
+              - picture-url
       requestBody:
         required: true
         content:
@@ -101,8 +145,12 @@ paths:
       responses:
         200:
           description: Success
+        404:
+          description: The account doesnt exist
       tags:
         - Account
+      security:
+        - api_key: [ 'user-read' ]
 
   /v1/accounts/{id}/password:
     post:
@@ -125,8 +173,12 @@ paths:
       responses:
         200:
           description: Success
+        404:
+          description: The account doesnt exist
       tags:
         - Password
+      security:
+        - api_key: [ 'user-manage' ]
 
     get:
       operationId: "check-password"
@@ -147,18 +199,31 @@ paths:
       responses:
         200:
           description: Success
+        404:
+          description: The account doesnt exist
+        409:
+          description: The password is not valid
       tags:
         - Password
+      security:
+        - api_key: [ 'user-read' ]
 
 
 components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: Authorization
+
   schemas:
     CreateAccountRequest:
       type: object
       properties:
         phoneNumber:
           type: string
-          description: Phone Number
+          description: |
+            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
       required:
         - phoneNumber
 
@@ -177,6 +242,14 @@ components:
           type: object
           $ref: "#/components/schemas/Account"
 
+    SearchAccountResponse:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: "#/components/schemas/AccountSummary"
+
     UpdateAccountAttributeRequest:
       type: object
       properties:
@@ -190,11 +263,42 @@ components:
       properties:
         password:
           type: string
-          description: Value of the
+          description: Value of the password.
+          minLength: 6
       required:
         - password
 
 
+    AccountSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier of the account
+        pictureUrl:
+          type: string
+          format: url
+          description: URL of the account picture
+          nullable: true
+        status:
+          type: string
+          description: Status of the account
+          enum:
+            - active
+            - suspended
+        displayName:
+          type: string
+          description: Display Name
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          description: Registration Date/Time
+        updated:
+          type: string
+          format: date-time
+          description: Last modification Date/Time
 
     Account:
       type: object
@@ -202,7 +306,7 @@ components:
         id:
           type: integer
           format: int64
-          description: ID
+          description: Unique identifier of the account
         phone:
           type: object
           $ref: "#/components/schemas/Phone"
@@ -214,6 +318,12 @@ components:
           format: url
           description: URL of the account picture
           nullable: true
+        status:
+          type: string
+          description: Status of the account
+          enum:
+            - active
+            - suspended
         displayName:
           type: string
           description: Display Name
