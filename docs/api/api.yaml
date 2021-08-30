@@ -298,6 +298,9 @@ components:
           type: string
           description: Display Name
           nullable: true
+        language:
+          type: string
+          description: Account's language
         created:
           type: string
           format: date-time
@@ -317,9 +320,7 @@ components:
         phone:
           type: object
           $ref: "#/components/schemas/Phone"
-          description: |
-            Phone Number in the format E.164.
-            Exemple: +919638095998, +23799507890
+          description: Phone Number in E.164 format.
         pictureUrl:
           type: string
           format: url
@@ -346,6 +347,12 @@ components:
           type: string
           format: date-time
           description: Last modification Date/Time
+        superUser:
+          type: boolean
+          default: false
+          description: |
+            `true` if this is the account of super-user.
+            Super User have full right accross the whole platform
 
     Phone:
       type: object

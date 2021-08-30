@@ -13,6 +13,7 @@ fun AccountEntity.toAccount() = Account(
     updated = this.updated,
     status = this.status.shortName,
     language = this.language,
+    superUser = this.superUser,
     phone = Phone(
         id = this.phone!!.id ?: -1,
         number = this.phone!!.number,
@@ -28,5 +29,6 @@ fun AccountEntity.toAccountSummary() = AccountSummary(
     created = this.created,
     updated = this.updated,
     status = this.status.shortName,
-    language = this.language
+    language = this.language,
+    superUser = this.superUser,
 )

@@ -31,5 +31,6 @@ data class AccountEntity(
     val created: OffsetDateTime = OffsetDateTime.now(),
     val updated: OffsetDateTime = OffsetDateTime.now(),
     var deleted: OffsetDateTime? = null,
-    var language: String = ""
+    var language: String = "",
+    val superUser: Boolean = false
 )

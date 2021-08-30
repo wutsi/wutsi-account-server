@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetAccountController.sql"])
@@ -45,6 +46,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertEquals("fr", account.language)
         assertNotNull(account.created)
         assertNotNull(account.updated)
+        assertTrue(account.superUser)
 
         assertNotNull("+237221234100", account.phone.number)
         assertNotNull("CM", account.phone.country)
