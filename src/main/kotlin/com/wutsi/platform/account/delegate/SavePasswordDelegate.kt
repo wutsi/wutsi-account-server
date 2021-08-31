@@ -5,6 +5,7 @@ import com.wutsi.platform.account.dto.SavePasswordRequest
 import com.wutsi.platform.account.entity.PasswordEntity
 import com.wutsi.platform.account.service.AccountService
 import com.wutsi.platform.account.service.PasswordHasher
+import com.wutsi.platform.account.service.SecurityManager
 import org.springframework.stereotype.Service
 import java.util.UUID
 import javax.transaction.Transactional
@@ -13,11 +14,14 @@ import javax.transaction.Transactional
 public class SavePasswordDelegate(
     private val dao: PasswordRepository,
     private val hasher: PasswordHasher,
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    private val securityManager: SecurityManager
 ) {
     @Transactional
     public fun invoke(id: Long, request: SavePasswordRequest) {
         val account = accountService.findById(id)
+        securityManager.checkOwnership(account)
+
         val opt = dao.findByAccount(account)
         if (opt.isPresent) {
             val obj = opt.get()

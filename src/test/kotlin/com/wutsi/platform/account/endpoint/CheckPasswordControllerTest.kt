@@ -25,7 +25,7 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
     override fun setUp() {
         super.setUp()
 
-        rest = createResTemplate(listOf("user-read"))
+        rest = createResTemplate(listOf("user-read"), subjectId = 100)
     }
 
     @Test
@@ -58,6 +58,7 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/101/password?password=$password"
 
+        rest = createResTemplate(listOf("user-read"), subjectId = 101)
         val ex = assertThrows<HttpStatusCodeException> {
             rest.getForEntity(url, Any::class.java)
         }
@@ -81,5 +82,19 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.ACCOUNT_NOT_FOUND.urn, response.error.code)
+    }
+
+    @Test
+    fun `cannot check another user password`() {
+        val url = "http://localhost:$port/v1/accounts/101/password?password=1111"
+
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.getForEntity(url, Any::class.java)
+        }
+
+        assertEquals(403, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals("urn:error:wutsi:access-denied", response.error.code)
     }
 }

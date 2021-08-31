@@ -2,6 +2,7 @@ package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
 import com.wutsi.platform.account.service.AccountService
+import com.wutsi.platform.account.service.SecurityManager
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -15,7 +16,10 @@ import java.util.Locale
 import javax.transaction.Transactional
 
 @Service
-public class UpdateAccountAttributeDelegate(private val service: AccountService) {
+public class UpdateAccountAttributeDelegate(
+    private val service: AccountService,
+    private val securityManager: SecurityManager
+) {
     companion object {
         const val DEFAULT_LANGUAGE = "en"
     }
@@ -27,6 +31,8 @@ public class UpdateAccountAttributeDelegate(private val service: AccountService)
         request: UpdateAccountAttributeRequest
     ) {
         val account = service.findById(id)
+        securityManager.checkOwnership(account)
+
         when (name) {
             "display-name" -> account.displayName = toString(request.value)
             "picture-url" -> account.pictureUrl = toPictureUrl(request.value)?.toString()

@@ -2,6 +2,7 @@ package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.entity.AccountStatus.ACCOUNT_STATUS_DELETED
+import com.wutsi.platform.account.service.SecurityManager
 import com.wutsi.platform.account.util.ErrorURN.ACCOUNT_NOT_FOUND
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -13,7 +14,8 @@ import javax.transaction.Transactional
 
 @Service
 public class DeleteAccountDelegate(
-    private val dao: AccountRepository
+    private val dao: AccountRepository,
+    private val securityManager: SecurityManager
 ) {
     @Transactional
     public fun invoke(id: Long) {
@@ -30,6 +32,9 @@ public class DeleteAccountDelegate(
                     )
                 )
             }
+
+        securityManager.checkOwnership(account)
+
         if (account.status == ACCOUNT_STATUS_DELETED)
             return
 

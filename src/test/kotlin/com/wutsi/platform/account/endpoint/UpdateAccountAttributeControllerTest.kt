@@ -32,7 +32,26 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     override fun setUp() {
         super.setUp()
 
-        rest = createResTemplate(listOf("user-manage"))
+        rest = createResTemplate(
+            subjectId = 100,
+            scope = listOf("user-manage")
+        )
+    }
+
+    @Test
+    public fun `cannot update another user profile`() {
+        val url = "http://localhost:$port/v1/accounts/101/attributes/display-name"
+        val request = UpdateAccountAttributeRequest(
+            value = "Roger Milla"
+        )
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.postForEntity(url, request, Any::class.java)
+        }
+
+        assertEquals(403, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals("urn:error:wutsi:access-denied", response.error.code)
     }
 
     @Test

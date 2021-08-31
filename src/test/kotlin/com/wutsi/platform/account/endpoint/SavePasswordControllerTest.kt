@@ -1,14 +1,18 @@
 package com.wutsi.platform.account.endpoint
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.dto.SavePasswordRequest
+import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
+import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import java.time.OffsetDateTime
 import kotlin.test.assertEquals
@@ -32,7 +36,7 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
     override fun setUp() {
         super.setUp()
 
-        rest = createResTemplate(listOf("user-manage"))
+        rest = createResTemplate(scope = listOf("user-manage"), subjectId = 100)
     }
 
     @Test
@@ -53,6 +57,7 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
 
     @Test
     public fun `update password`() {
+        rest = createResTemplate(scope = listOf("user-manage"), subjectId = 101)
         val url = "http://localhost:$port/v1/accounts/101/password"
         val request = SavePasswordRequest(
             password = "This is a secret"
@@ -65,5 +70,22 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
         assertNotNull(password.salt)
         assertNotNull(password.created)
         assertEquals(OffsetDateTime.now().year, password.updated.year)
+    }
+
+    @Test
+    public fun `cannot set another user password`() {
+        rest = createResTemplate(scope = listOf("user-manage"), subjectId = 7777)
+        val url = "http://localhost:$port/v1/accounts/101/password"
+        val request = SavePasswordRequest(
+            password = "This is a secret"
+        )
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.postForEntity(url, request, Any::class.java)
+        }
+
+        assertEquals(403, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals("urn:error:wutsi:access-denied", response.error.code)
     }
 }
