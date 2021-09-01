@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,7 +29,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     override fun setUp() {
         super.setUp()
 
-        rest = createResTemplate(listOf("user-read"))
+        rest = createResTemplate(listOf("user-read"), subjectId = 100)
     }
 
     @Test
@@ -48,9 +49,37 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.updated)
         assertTrue(account.superUser)
 
-        assertNotNull("+237221234100", account.phone.number)
-        assertNotNull("CM", account.phone.country)
-        assertNotNull(account.phone.created)
+        assertNotNull(account.phone)
+        assertNotNull("+237221234100", account.phone?.number)
+        assertNotNull("CM", account.phone?.country)
+        assertNotNull(account.phone?.created)
+    }
+
+    @Test
+    public fun `phone is returned without user-phone scope`() {
+        rest = createResTemplate(listOf("user-read", "user-phone"), subjectId = 101)
+        val url = "http://localhost:$port/v1/accounts/100"
+        val response = rest.getForEntity(url, GetAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = response.body.account
+        assertNotNull(account.phone)
+        assertNotNull("+237221234100", account.phone?.number)
+        assertNotNull("CM", account.phone?.country)
+        assertNotNull(account.phone?.created)
+    }
+
+    @Test
+    public fun `phone is not returned without user-phone scope`() {
+        rest = createResTemplate(listOf("user-read"), subjectId = 101)
+        val url = "http://localhost:$port/v1/accounts/100"
+        val response = rest.getForEntity(url, GetAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = response.body.account
+        assertNull(account.phone)
     }
 
     @Test
