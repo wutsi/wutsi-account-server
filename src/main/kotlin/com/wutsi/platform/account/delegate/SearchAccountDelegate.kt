@@ -2,7 +2,6 @@ package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dto.SearchAccountResponse
 import com.wutsi.platform.account.entity.AccountEntity
-import com.wutsi.platform.account.entity.AccountStatus
 import org.springframework.stereotype.Service
 import javax.persistence.EntityManager
 import javax.persistence.Query
@@ -42,7 +41,7 @@ public class SearchAccountDelegate(
         "SELECT a FROM AccountEntity a"
 
     private fun where(phoneNumber: String): String {
-        val criteria = mutableListOf("a.status<>:status")
+        val criteria = mutableListOf("a.isDeleted=:is_deleted")
         if (!phoneNumber.isNullOrEmpty()) {
             criteria.add("a.phone.number=:phoneNumber")
         }
@@ -50,7 +49,7 @@ public class SearchAccountDelegate(
     }
 
     private fun parameters(phoneNumber: String, query: Query) {
-        query.setParameter("status", AccountStatus.ACCOUNT_STATUS_DELETED)
+        query.setParameter("is_deleted", false)
         if (!phoneNumber.isNullOrEmpty()) {
             val xphoneNumber = phoneNumber.trim()
             query.setParameter(

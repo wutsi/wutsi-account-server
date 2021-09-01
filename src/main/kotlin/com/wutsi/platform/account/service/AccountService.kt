@@ -2,7 +2,6 @@ package com.wutsi.platform.account.service
 
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.entity.AccountEntity
-import com.wutsi.platform.account.entity.AccountStatus.ACCOUNT_STATUS_DELETED
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -30,7 +29,7 @@ public class AccountService(
                 )
             }
 
-        if (account.status == ACCOUNT_STATUS_DELETED)
+        if (account.isDeleted)
             throw NotFoundException(
                 error = Error(
                     code = ErrorURN.ACCOUNT_DELETED.urn,

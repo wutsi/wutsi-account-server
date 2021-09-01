@@ -2,7 +2,6 @@ package com.wutsi.platform.account.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dao.AccountRepository
-import com.wutsi.platform.account.entity.AccountStatus
 import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,6 +15,7 @@ import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/DeleteAccountController.sql"])
@@ -41,7 +41,7 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
         rest.delete(url)
 
         val account = dao.findById(100).get()
-        assertEquals(AccountStatus.ACCOUNT_STATUS_DELETED, account.status)
+        assertTrue(account.isDeleted)
         assertNotNull(account.deleted)
         assertNull(account.phone)
     }
@@ -50,11 +50,11 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
     public fun `already deleted`() {
         rest = createResTemplate(listOf("user-manage"), subjectId = 199)
         val url = "http://localhost:$port/v1/accounts/199"
-        rest.delete(url)
 
-        val account = dao.findById(199).get()
-        assertEquals(AccountStatus.ACCOUNT_STATUS_DELETED, account.status)
-        assertEquals(2011, account.deleted?.year)
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.delete(url)
+        }
+        assertEquals(404, ex.rawStatusCode)
     }
 
     @Test

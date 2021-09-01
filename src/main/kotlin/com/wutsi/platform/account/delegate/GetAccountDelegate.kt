@@ -10,10 +10,8 @@ public class GetAccountDelegate(
     private val service: AccountService,
     private val securityManager: SecurityManager
 ) {
-    public fun invoke(id: Long): GetAccountResponse {
-        val account = service.findById(id)
-        return GetAccountResponse(
-            account = account.toAccount(securityManager)
+    fun invoke(id: Long): GetAccountResponse =
+        GetAccountResponse(
+            account = service.findById(id).toAccount(securityManager)
         )
-    }
 }
