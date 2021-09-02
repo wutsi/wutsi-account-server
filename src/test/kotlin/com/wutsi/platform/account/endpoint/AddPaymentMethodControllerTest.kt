@@ -158,4 +158,42 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.PAYMENT_METHOD_OWNERSHIP.urn, response.error.code)
     }
+
+    @Test
+    public fun `cannot add payment method with invalid phone number`() {
+        val request = AddPaymentMethodRequest(
+            ownerName = "Roger Milla",
+            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
+            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            phoneNumber = "xxxx"
+        )
+        val url = "http://localhost:$port/v1/accounts/100/payment-methods"
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.postForEntity(url, request, AddPaymentMethodResponse::class.java)
+        }
+
+        assertEquals(400, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals(ErrorURN.PHONE_NUMBER_MALFORMED.urn, response.error.code)
+    }
+
+    @Test
+    public fun `cannot add payment method with invalid type`() {
+        val request = AddPaymentMethodRequest(
+            ownerName = "Roger Milla",
+            type = "xxx",
+            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            phoneNumber = "+237221234200"
+        )
+        val url = "http://localhost:$port/v1/accounts/100/payment-methods"
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.postForEntity(url, request, AddPaymentMethodResponse::class.java)
+        }
+
+        assertEquals(400, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals(ErrorURN.PAYMENT_METHOD_INVALID_TYPE.urn, response.error.code)
+    }
 }

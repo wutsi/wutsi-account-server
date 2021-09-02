@@ -27,7 +27,6 @@ class SecurityManager {
 
     private fun isOwner(account: AccountEntity): Boolean {
         val authentication = SecurityContextHolder.getContext().authentication
-            ?: return false
         val principal = authentication.principal
         return principal is WutsiPrincipal &&
             (account.id.toString() == principal.id || principal.admin)
