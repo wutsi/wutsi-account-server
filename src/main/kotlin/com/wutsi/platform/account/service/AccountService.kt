@@ -9,10 +9,13 @@ import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
+import javax.persistence.EntityManager
+import javax.persistence.Query
 
 @Service
-public class AccountService(
-    private val dao: AccountRepository
+class AccountService(
+    private val dao: AccountRepository,
+    private val em: EntityManager
 ) {
     fun findById(id: Long, parameterType: ParameterType = PARAMETER_TYPE_PATH): AccountEntity {
         val account = dao.findById(id)
@@ -42,5 +45,54 @@ public class AccountService(
             )
 
         return account
+    }
+
+    fun search(
+        phoneId: Long? = null,
+        phoneNumber: String,
+        limit: Int = 20,
+        offset: Int = 0
+    ): List<AccountEntity> {
+        val query = em.createQuery(sql(phoneId, phoneNumber))
+        parameters(phoneId, phoneNumber, query)
+        return query
+            .setFirstResult(offset)
+            .setMaxResults(limit)
+            .resultList as List<AccountEntity>
+    }
+
+    private fun sql(phoneId: Long?, phoneNumber: String): String {
+        val select = select()
+        val where = where(phoneId, phoneNumber)
+
+        return if (where.isNullOrEmpty())
+            select
+        else
+            "$select WHERE $where"
+    }
+
+    private fun select(): String =
+        "SELECT a FROM AccountEntity a"
+
+    private fun where(phoneId: Long?, phoneNumber: String): String {
+        val criteria = mutableListOf("a.isDeleted=:is_deleted")
+        if (!phoneNumber.isNullOrEmpty())
+            criteria.add("a.phone.number=:phone_number")
+        if (phoneId != null)
+            criteria.add("a.phone.id=:phone_id")
+        return criteria.joinToString(separator = " AND ")
+    }
+
+    private fun parameters(phoneId: Long?, phoneNumber: String, query: Query) {
+        query.setParameter("is_deleted", false)
+        if (phoneId != null)
+            query.setParameter("phone_id", phoneId)
+        if (!phoneNumber.isNullOrEmpty()) {
+            val xphoneNumber = phoneNumber.trim()
+            query.setParameter(
+                "phone_number",
+                if (xphoneNumber.startsWith("+")) xphoneNumber else "+$xphoneNumber"
+            )
+        }
     }
 }

@@ -1,15 +1,12 @@
 package com.wutsi.platform.account.`delegate`
 
 import com.google.i18n.phonenumbers.NumberParseException
-import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat.E164
 import com.wutsi.platform.account.dao.AccountRepository
-import com.wutsi.platform.account.dao.PhoneRepository
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.AccountStatus.ACCOUNT_STATUS_ACTIVE
-import com.wutsi.platform.account.entity.PhoneEntity
+import com.wutsi.platform.account.service.PhoneService
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -21,13 +18,13 @@ import javax.transaction.Transactional
 
 @Service
 public class CreateAccountDelegate(
-    private val phoneDao: PhoneRepository,
+    private val phoneService: PhoneService,
     private val dao: AccountRepository
 ) {
     @Transactional
     public fun invoke(request: CreateAccountRequest): CreateAccountResponse {
         try {
-            val phone = createPhone(request)
+            val phone = phoneService.findOrCreate(request.phoneNumber)
             if (dao.findByPhone(phone).isPresent) {
                 throw ConflictException(
                     error = Error(
@@ -43,7 +40,7 @@ public class CreateAccountDelegate(
 
             val account = dao.save(
                 AccountEntity(
-                    phone = createPhone(request),
+                    phone = phone,
                     status = ACCOUNT_STATUS_ACTIVE,
                     language = request.language
                 )
@@ -62,21 +59,6 @@ public class CreateAccountDelegate(
                     )
                 ),
                 ex
-            )
-        }
-    }
-
-    private fun createPhone(request: CreateAccountRequest): PhoneEntity {
-        val util = PhoneNumberUtil.getInstance()
-        val phoneNumber = util.parse(request.phoneNumber, "")
-        val number = util.format(phoneNumber, E164)
-
-        return phoneDao.findByNumber(number).orElseGet {
-            phoneDao.save(
-                PhoneEntity(
-                    number = number,
-                    country = util.getRegionCodeForCountryCode(phoneNumber.countryCode)
-                )
             )
         }
     }

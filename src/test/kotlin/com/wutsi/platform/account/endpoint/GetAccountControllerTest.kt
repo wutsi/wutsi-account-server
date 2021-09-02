@@ -56,7 +56,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `phone is returned without user-phone scope`() {
+    fun `phone is returned without user-phone permission`() {
         rest = createResTemplate(listOf("user-read", "user-phone"), subjectId = 101)
         val url = "http://localhost:$port/v1/accounts/100"
         val response = rest.getForEntity(url, GetAccountResponse::class.java)
@@ -71,7 +71,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `phone is not returned without user-phone scope`() {
+    fun `phone is not returned without user-phone scope`() {
         rest = createResTemplate(listOf("user-read"), subjectId = 101)
         val url = "http://localhost:$port/v1/accounts/100"
         val response = rest.getForEntity(url, GetAccountResponse::class.java)
@@ -87,7 +87,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         val url = "http://localhost:$port/v1/accounts/199"
 
         val ex = assertThrows<HttpStatusCodeException> {
-            val response = rest.getForEntity(url, GetAccountResponse::class.java)
+            rest.getForEntity(url, GetAccountResponse::class.java)
         }
         assertEquals(404, ex.rawStatusCode)
 
@@ -100,7 +100,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         val url = "http://localhost:$port/v1/accounts/9999"
 
         val ex = assertThrows<HttpStatusCodeException> {
-            val response = rest.getForEntity(url, GetAccountResponse::class.java)
+            rest.getForEntity(url, GetAccountResponse::class.java)
         }
         assertEquals(404, ex.rawStatusCode)
 

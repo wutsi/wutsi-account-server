@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.service
 
 import com.wutsi.platform.account.entity.AccountEntity
+import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.core.security.WutsiPrincipal
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Service
 @Service
 class SecurityManager {
     companion object {
-        const val SCOPE_PHONE = "user-phone"
+        const val PERMISSION_USER_PHONE = "user-phone"
+        const val PERMISSION_PAYMENT_DETAILS = "payment-method-details"
     }
 
     fun checkOwnership(account: AccountEntity) {
@@ -18,7 +20,10 @@ class SecurityManager {
     }
 
     fun canAccessPhone(account: AccountEntity): Boolean =
-        isOwner(account) || hasAuthority(SCOPE_PHONE)
+        isOwner(account) || hasAuthority(PERMISSION_USER_PHONE)
+
+    fun canAccessPaymentMethodDetails(payment: PaymentMethodEntity): Boolean =
+        isOwner(payment.account) || hasAuthority(PERMISSION_PAYMENT_DETAILS)
 
     private fun isOwner(account: AccountEntity): Boolean {
         val authentication = SecurityContextHolder.getContext().authentication

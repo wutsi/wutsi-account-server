@@ -1,7 +1,10 @@
 package com.wutsi.platform.account.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
 
 public data class AccountSummary(
     public val id: Long = 0,
