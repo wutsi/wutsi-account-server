@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dao.PaymentMethodRepository
 import com.wutsi.platform.account.dto.AddPaymentMethodResponse
 import com.wutsi.platform.account.dto.UpdatePaymentMethodRequest
-import com.wutsi.platform.account.entity.PaymentMethodProvider
-import com.wutsi.platform.account.entity.PaymentMethodType
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.platform.payment.PaymentMethodProvider
+import com.wutsi.platform.payment.PaymentMethodType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

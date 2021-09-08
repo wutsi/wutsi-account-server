@@ -6,13 +6,13 @@ import com.wutsi.platform.account.dto.AddPaymentMethodRequest
 import com.wutsi.platform.account.dto.UpdatePaymentMethodRequest
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.PaymentMethodEntity
-import com.wutsi.platform.account.entity.PaymentMethodProvider
-import com.wutsi.platform.account.entity.PaymentMethodType
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
+import com.wutsi.platform.payment.PaymentMethodProvider
+import com.wutsi.platform.payment.PaymentMethodType
 import org.springframework.stereotype.Service
 
 @Service

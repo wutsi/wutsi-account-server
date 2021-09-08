@@ -1,9 +1,9 @@
 package com.wutsi.platform.account.endpoint
 
 import com.wutsi.platform.account.dto.ListPaymentMethodResponse
-import com.wutsi.platform.account.entity.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN
-import com.wutsi.platform.account.entity.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE
-import com.wutsi.platform.account.entity.PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT
+import com.wutsi.platform.payment.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN
+import com.wutsi.platform.payment.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE
+import com.wutsi.platform.payment.PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

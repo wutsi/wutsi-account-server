@@ -1,7 +1,9 @@
 package com.wutsi.platform.account.entity
 
-import com.wutsi.platform.account.entity.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN
-import com.wutsi.platform.account.entity.PaymentMethodType.PAYMENT_METHOD_TYPE_INVALID
+import com.wutsi.platform.payment.PaymentMethodProvider
+import com.wutsi.platform.payment.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN
+import com.wutsi.platform.payment.PaymentMethodType
+import com.wutsi.platform.payment.PaymentMethodType.PAYMENT_METHOD_TYPE_INVALID
 import java.time.OffsetDateTime
 import javax.persistence.Entity
 import javax.persistence.Enumerated

@@ -3,10 +3,10 @@ package com.wutsi.platform.account.endpoint
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dto.GetAccountResponse
 import com.wutsi.platform.account.dto.GetPaymentMethodResponse
-import com.wutsi.platform.account.entity.PaymentMethodProvider
-import com.wutsi.platform.account.entity.PaymentMethodType
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.platform.payment.PaymentMethodProvider
+import com.wutsi.platform.payment.PaymentMethodType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

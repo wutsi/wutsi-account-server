@@ -2,7 +2,6 @@ package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dto.AddPaymentMethodRequest
 import com.wutsi.platform.account.dto.AddPaymentMethodResponse
-import com.wutsi.platform.account.entity.PaymentMethodType
 import com.wutsi.platform.account.service.AccountService
 import com.wutsi.platform.account.service.MobilePaymentService
 import com.wutsi.platform.account.service.PaymentMethodTypeService
@@ -14,6 +13,7 @@ import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
+import com.wutsi.platform.payment.PaymentMethodType
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 
