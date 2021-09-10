@@ -63,15 +63,15 @@ wutsi:
     name: wutsi-account
   platform:
     security:
-      type: "jwt"
+      type: jwt
       api-key: 00000
     cache:
       type: local
     stream:
-      name: "${wutsi.application.name}"
+      name: ${wutsi.application.name}
       type: local
     tracing:
-      client-id: "${wutsi.application.name}"
+      client-id: ${wutsi.application.name}
       device-id-provider:
         type: header
 
