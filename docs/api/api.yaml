@@ -464,14 +464,13 @@ components:
           type: string
           description: Type of payment method
           enum:
-            - mobile-payment
+            - MOBILE_PAYMENT
         provider:
           type: string
           description: Payment provider
           enum:
-            - mtn
-            - orange
-            - express-union
+            - MTN
+            - ORANGE
       required:
         - ownerName
         - type
@@ -534,8 +533,8 @@ components:
           type: string
           description: Status of the account
           enum:
-            - active
-            - suspended
+            - ACTIVE
+            - SUSPENDED
         displayName:
           type: string
           description: Display Name
@@ -582,8 +581,8 @@ components:
           type: string
           description: Status of the account
           enum:
-            - active
-            - suspended
+            - ACTIVE
+            - SUSPENDED
         displayName:
           type: string
           description: Display Name
