@@ -42,8 +42,8 @@ class MobilePaymentService(
             return dao.save(
                 PaymentMethodEntity(
                     ownerName = request.ownerName,
-                    type = PaymentMethodType.values().find { it.shortName == request.type }!!,
-                    provider = PaymentMethodProvider.values().find { it.shortName == request.provider }!!,
+                    type = PaymentMethodType.valueOf(request.type),
+                    provider = PaymentMethodProvider.valueOf(request.provider),
                     phone = phone,
                     token = paymentService.hash(phone),
                     account = account
@@ -69,7 +69,7 @@ class MobilePaymentService(
 
     override fun save(account: AccountEntity, payment: PaymentMethodEntity, request: UpdatePaymentMethodRequest) {
         payment.ownerName = request.ownerName
-        payment.provider = PaymentMethodProvider.values().find { it.shortName == request.provider }!!
+        payment.provider = PaymentMethodProvider.valueOf(request.provider)
         dao.save(payment)
     }
 }

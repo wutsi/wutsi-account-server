@@ -48,8 +48,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     public fun `add payment method with existing phone number`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
-            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            type = PaymentMethodType.MOBILE_PAYMENT.name,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "+237221234100"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"
@@ -63,8 +63,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
 
         val payment = dao.findByToken(response.body.token).get()
         assertEquals(request.ownerName, payment.ownerName)
-        assertEquals(PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT, payment.type)
-        assertEquals(PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE, payment.provider)
+        assertEquals(PaymentMethodType.MOBILE_PAYMENT, payment.type)
+        assertEquals(PaymentMethodProvider.ORANGE, payment.provider)
         assertEquals(phone.id, payment.phone?.id)
         assertFalse(payment.isDeleted)
         assertNull(payment.deleted)
@@ -76,8 +76,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     public fun `add payment method with new phone number`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
-            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            type = PaymentMethodType.MOBILE_PAYMENT.name,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "+237221234111"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"
@@ -91,8 +91,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
 
         val payment = dao.findByToken(response.body.token).get()
         assertEquals(request.ownerName, payment.ownerName)
-        assertEquals(PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT, payment.type)
-        assertEquals(PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE, payment.provider)
+        assertEquals(PaymentMethodType.MOBILE_PAYMENT, payment.type)
+        assertEquals(PaymentMethodProvider.ORANGE, payment.provider)
         assertEquals(phone.id, payment.phone?.id)
         assertFalse(payment.isDeleted)
         assertNull(payment.deleted)
@@ -105,8 +105,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
         rest = createResTemplate(listOf("payment-method-manage"), subjectId = 7777)
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
-            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            type = PaymentMethodType.MOBILE_PAYMENT.name,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "+237221234111"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"
@@ -125,8 +125,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
         rest = createResTemplate(listOf(), subjectId = 100)
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
-            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            type = PaymentMethodType.MOBILE_PAYMENT.name,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "+237221234111"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"
@@ -144,8 +144,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     public fun `cannot add payment method already owner by another account`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
-            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            type = PaymentMethodType.MOBILE_PAYMENT.name,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "+237221234200"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"
@@ -163,8 +163,8 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     public fun `cannot add payment method with invalid phone number`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
-            type = PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName,
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            type = PaymentMethodType.MOBILE_PAYMENT.name,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "xxxx"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"
@@ -183,7 +183,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
             type = "xxx",
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE.shortName,
+            provider = PaymentMethodProvider.ORANGE.name,
             phoneNumber = "+237221234200"
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods"

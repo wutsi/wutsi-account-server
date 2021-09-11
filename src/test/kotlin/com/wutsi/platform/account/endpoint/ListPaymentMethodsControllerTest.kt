@@ -1,9 +1,9 @@
 package com.wutsi.platform.account.endpoint
 
 import com.wutsi.platform.account.dto.ListPaymentMethodResponse
-import com.wutsi.platform.payment.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN
-import com.wutsi.platform.payment.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_ORANGE
-import com.wutsi.platform.payment.PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT
+import com.wutsi.platform.payment.PaymentMethodProvider.MTN
+import com.wutsi.platform.payment.PaymentMethodProvider.ORANGE
+import com.wutsi.platform.payment.PaymentMethodType.MOBILE_PAYMENT
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -43,16 +43,16 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertEquals("0000-00000-100", paymentMethods[0].token)
         assertEquals("...4100", paymentMethods[0].maskedNumber)
         assertEquals("Ray Sponsible", paymentMethods[0].ownerName)
-        assertEquals(PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName, paymentMethods[0].type)
-        assertEquals(PAYMENT_METHOD_PROVIDER_MTN.shortName, paymentMethods[0].provider)
+        assertEquals(MOBILE_PAYMENT.name, paymentMethods[0].type)
+        assertEquals(MTN.name, paymentMethods[0].provider)
         assertNotNull(paymentMethods[0].created)
         assertNotNull(paymentMethods[0].updated)
 
         assertEquals("0000-00000-101", paymentMethods[1].token)
         assertEquals("...4101", paymentMethods[1].maskedNumber)
         assertEquals("Ray Sponsible", paymentMethods[1].ownerName)
-        assertEquals(PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName, paymentMethods[1].type)
-        assertEquals(PAYMENT_METHOD_PROVIDER_ORANGE.shortName, paymentMethods[1].provider)
+        assertEquals(MOBILE_PAYMENT.name, paymentMethods[1].type)
+        assertEquals(ORANGE.name, paymentMethods[1].provider)
         assertNotNull(paymentMethods[1].created)
         assertNotNull(paymentMethods[1].updated)
     }

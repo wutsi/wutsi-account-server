@@ -41,15 +41,15 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     public fun `update a payment method`() {
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN.shortName
+            provider = PaymentMethodProvider.MTN.name
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
         val response = rest.postForEntity(url, request, Any::class.java)
 
         val payment = dao.findByToken("0000-00000-100").get()
         assertEquals(request.ownerName, payment.ownerName)
-        assertEquals(PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN, payment.provider)
-        assertEquals(PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT, payment.type)
+        assertEquals(PaymentMethodProvider.MTN, payment.provider)
+        assertEquals(PaymentMethodType.MOBILE_PAYMENT, payment.type)
         assertEquals(100L, payment.phone?.id)
     }
 
@@ -58,7 +58,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
         rest = createResTemplate(listOf("payment-method-manage"), subjectId = 7777)
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN.shortName
+            provider = PaymentMethodProvider.MTN.name
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
         val ex = assertThrows<HttpStatusCodeException> {
@@ -76,7 +76,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
         rest = createResTemplate(listOf(), subjectId = 100)
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN.shortName
+            provider = PaymentMethodProvider.MTN.name
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
         val ex = assertThrows<HttpStatusCodeException> {
@@ -93,7 +93,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     public fun `cannot update payment method with invalid token`() {
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN.shortName
+            provider = PaymentMethodProvider.MTN.name
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/xxxx-xxx"
         val ex = assertThrows<HttpStatusCodeException> {
@@ -110,7 +110,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     public fun `cannot update payment method with invalid account`() {
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
-            provider = PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN.shortName
+            provider = PaymentMethodProvider.MTN.name
         )
         val url = "http://localhost:$port/v1/accounts/888888/payment-methods/xxxx-xxx"
         val ex = assertThrows<HttpStatusCodeException> {

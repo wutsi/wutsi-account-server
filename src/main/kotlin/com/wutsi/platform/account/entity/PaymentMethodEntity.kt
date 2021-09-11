@@ -1,9 +1,8 @@
 package com.wutsi.platform.account.entity
 
 import com.wutsi.platform.payment.PaymentMethodProvider
-import com.wutsi.platform.payment.PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN
+import com.wutsi.platform.payment.PaymentMethodProvider.UNKNOWN
 import com.wutsi.platform.payment.PaymentMethodType
-import com.wutsi.platform.payment.PaymentMethodType.PAYMENT_METHOD_TYPE_INVALID
 import java.time.OffsetDateTime
 import javax.persistence.Entity
 import javax.persistence.Enumerated
@@ -35,10 +34,10 @@ data class PaymentMethodEntity(
     var ownerName: String = "",
 
     @Enumerated
-    val type: PaymentMethodType = PAYMENT_METHOD_TYPE_INVALID,
+    val type: PaymentMethodType = PaymentMethodType.UNKNOWN,
 
     @Enumerated
-    var provider: PaymentMethodProvider = PAYMENT_METHOD_PROVIDER_MTN,
+    var provider: PaymentMethodProvider = UNKNOWN,
 
     val created: OffsetDateTime = OffsetDateTime.now(),
     val updated: OffsetDateTime = OffsetDateTime.now(),

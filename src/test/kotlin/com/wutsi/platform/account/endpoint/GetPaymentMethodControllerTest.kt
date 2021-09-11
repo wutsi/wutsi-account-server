@@ -44,8 +44,8 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
         assertEquals("0000-00000-100", paymentMethod.token)
         assertEquals("...4100", paymentMethod.maskedNumber)
         assertEquals("Ray Sponsible", paymentMethod.ownerName)
-        assertEquals(PaymentMethodType.PAYMENT_METHOD_TYPE_MOBILE_PAYMENT.shortName, paymentMethod.type)
-        assertEquals(PaymentMethodProvider.PAYMENT_METHOD_PROVIDER_MTN.shortName, paymentMethod.provider)
+        assertEquals(PaymentMethodType.MOBILE_PAYMENT.name, paymentMethod.type)
+        assertEquals(PaymentMethodProvider.MTN.name, paymentMethod.provider)
         assertNotNull(paymentMethod.created)
         assertNotNull(paymentMethod.updated)
 
