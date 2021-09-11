@@ -61,7 +61,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.updated)
         assertNull(account.deleted)
         assertEquals(request.language, account.language)
-        assertEquals(AccountStatus.ACCOUNT_STATUS_ACTIVE, account.status)
+        assertEquals(AccountStatus.ACTIVE, account.status)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals("+23774511111", phone.number)
@@ -85,7 +85,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
-        assertEquals(AccountStatus.ACCOUNT_STATUS_ACTIVE, account.status)
+        assertEquals(AccountStatus.ACTIVE, account.status)
         assertEquals(request.language, account.language)
         assertEquals(100, account.phone?.id)
     }

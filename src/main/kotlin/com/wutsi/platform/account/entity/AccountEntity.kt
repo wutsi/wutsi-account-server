@@ -1,6 +1,6 @@
 package com.wutsi.platform.account.entity
 
-import com.wutsi.platform.account.entity.AccountStatus.ACCOUNT_STATUS_INVALID
+import com.wutsi.platform.account.entity.AccountStatus.UNKNOWN
 import java.time.OffsetDateTime
 import javax.persistence.Entity
 import javax.persistence.Enumerated
@@ -26,7 +26,7 @@ data class AccountEntity(
     var pictureUrl: String? = null,
 
     @Enumerated
-    var status: AccountStatus = ACCOUNT_STATUS_INVALID,
+    var status: AccountStatus = UNKNOWN,
 
     val created: OffsetDateTime = OffsetDateTime.now(),
     val updated: OffsetDateTime = OffsetDateTime.now(),

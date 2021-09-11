@@ -5,7 +5,7 @@ import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
 import com.wutsi.platform.account.entity.AccountEntity
-import com.wutsi.platform.account.entity.AccountStatus.ACCOUNT_STATUS_ACTIVE
+import com.wutsi.platform.account.entity.AccountStatus.ACTIVE
 import com.wutsi.platform.account.service.PhoneService
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
@@ -41,7 +41,7 @@ public class CreateAccountDelegate(
             val account = dao.save(
                 AccountEntity(
                     phone = phone,
-                    status = ACCOUNT_STATUS_ACTIVE,
+                    status = ACTIVE,
                     language = request.language
                 )
             )

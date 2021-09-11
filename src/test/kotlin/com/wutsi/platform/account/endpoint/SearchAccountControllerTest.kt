@@ -40,7 +40,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
         assertEquals(100, account.id)
         assertEquals("Ray Sponsible", account.displayName)
         assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
-        assertEquals("active", account.status)
+        assertEquals("ACTIVE", account.status)
         assertEquals("fr", account.language)
         assertNotNull(account.created)
         assertNotNull(account.updated)
@@ -61,7 +61,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
         assertEquals(100, account.id)
         assertEquals("Ray Sponsible", account.displayName)
         assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
-        assertEquals("active", account.status)
+        assertEquals("ACTIVE", account.status)
         assertNotNull(account.created)
         assertNotNull(account.updated)
     }

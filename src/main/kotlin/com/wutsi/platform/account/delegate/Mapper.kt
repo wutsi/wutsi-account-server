@@ -16,7 +16,7 @@ fun AccountEntity.toAccount(securityManager: SecurityManager) = Account(
     pictureUrl = this.pictureUrl,
     created = this.created,
     updated = this.updated,
-    status = this.status.shortName,
+    status = this.status.name,
     language = this.language,
     superUser = this.isSuperUser,
     phone = if (securityManager.canAccessPhone(this))
@@ -38,7 +38,7 @@ fun AccountEntity.toAccountSummary() = AccountSummary(
     pictureUrl = this.pictureUrl,
     created = this.created,
     updated = this.updated,
-    status = this.status.shortName,
+    status = this.status.name,
     language = this.language,
     superUser = this.isSuperUser
 )
