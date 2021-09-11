@@ -23,7 +23,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateAccountRequest'
       responses:
-        201:
+        200:
           description: Success
           content:
             application/json:
@@ -302,7 +302,6 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
       responses:
         200:
           description: Success
@@ -465,7 +464,7 @@ components:
           type: string
           description: Type of payment method
           enum:
-            - mobile
+            - mobile-payment
         provider:
           type: string
           description: Payment provider
@@ -515,7 +514,7 @@ components:
       type: object
       properties:
         paymentMethods:
-          type: list
+          type: array
           items:
             $ref: "#/components/schemas/PaymentMethodSummary"
 
@@ -629,7 +628,6 @@ components:
       properties:
         token:
           type: string
-          format: uuid
           description: Payment Method's token
         type:
           type: string
@@ -662,7 +660,6 @@ components:
       properties:
         token:
           type: string
-          format: uuid
           description: Payment Method's token
         type:
           type: string
