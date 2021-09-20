@@ -1,6 +1,6 @@
 package com.wutsi.platform.account.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
 
 public data class Account(
