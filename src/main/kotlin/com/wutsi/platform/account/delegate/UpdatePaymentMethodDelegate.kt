@@ -27,7 +27,7 @@ public class UpdatePaymentMethodDelegate(
         val account = accountService.findById(id, PARAMETER_TYPE_PATH)
         securityManager.checkOwnership(account)
 
-        val payment = paymentService.findByToken(token, PARAMETER_TYPE_PATH)
+        val payment = paymentService.findByToken(id, token, PARAMETER_TYPE_PATH)
 
         val service: PaymentMethodTypeService = when (payment.type) {
             PaymentMethodType.MOBILE_PAYMENT -> mobile

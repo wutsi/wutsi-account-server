@@ -18,20 +18,29 @@ import java.util.UUID
 public class PaymentMethodService(
     private val dao: PaymentMethodRepository
 ) {
-    fun findByToken(token: String, parameterType: ParameterType = PARAMETER_TYPE_PATH): PaymentMethodEntity {
+    fun findByToken(accountId: Long, token: String, parameterType: ParameterType = PARAMETER_TYPE_PATH): PaymentMethodEntity {
         val payment = dao.findByToken(token)
             .orElseThrow {
                 NotFoundException(
                     error = Error(
                         code = ErrorURN.PAYMENT_METHOD_NOT_FOUND.urn,
-                        parameter = Parameter(
-                            name = "token",
-                            value = token,
-                            type = parameterType
+                        data = mapOf(
+                            "accountId" to accountId,
+                            "token" to token
                         )
                     )
                 )
             }
+        if (payment.account.id != accountId)
+            throw NotFoundException(
+                error = Error(
+                    code = ErrorURN.ACCOUNT_NOT_FOUND.urn,
+                    data = mapOf(
+                        "accountId" to accountId,
+                        "token" to token
+                    )
+                )
+            )
 
         if (payment.isDeleted)
             throw NotFoundException(
