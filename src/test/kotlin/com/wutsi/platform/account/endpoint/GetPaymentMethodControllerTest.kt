@@ -42,7 +42,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
 
         val paymentMethod = response.body.paymentMethod
         assertEquals("0000-00000-100", paymentMethod.token)
-        assertEquals("...4100", paymentMethod.maskedNumber)
+        assertEquals("+237...4100", paymentMethod.maskedNumber)
         assertEquals("Ray Sponsible", paymentMethod.ownerName)
         assertEquals(PaymentMethodType.MOBILE_PAYMENT.name, paymentMethod.type)
         assertEquals(PaymentMethodProvider.MTN.name, paymentMethod.provider)

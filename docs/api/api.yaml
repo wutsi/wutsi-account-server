@@ -1,682 +1,678 @@
 openapi: "3.0.0"
 info:
-  title: "Wutsi Account API"
-  description: |
-    API for managing user's accounts
-  version: "1.0.0"
+    title: "Wutsi Account API"
+    description: |
+        API for managing user's accounts
+    version: "1.0.0"
 
 servers:
-  - url: https://wutsi-account-server-test.herokuapp.com
-    description: Sandbox
-  - url: https://wutsi-account-server-prod.herokuapp.com
-    description: Production
+    -   url: https://wutsi-account-server-test.herokuapp.com
+        description: Sandbox
+    -   url: https://wutsi-account-server-prod.herokuapp.com
+        description: Production
 
 paths:
-  /v1/accounts:
-    post:
-      operationId: "create-account"
-      description: Create a new account
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAccountRequest'
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateAccountResponse'
-        409:
-          description: The phone number has already assigned to another account
-      tags:
-        - Account
-      security:
-        - api_key: [ 'user-manage' ]
+    /v1/accounts:
+        post:
+            operationId: "create-account"
+            description: Create a new account
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateAccountRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateAccountResponse'
+                409:
+                    description: The phone number has already assigned to another account
+            tags:
+                - Account
+            security:
+                -   api_key: [ 'user-manage' ]
 
-    get:
-      operationId: "search-account"
-      description: Search Account
-      parameters:
-        - in: query
-          name: phone-number
-          description: |
-            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
-          schema:
-            type: string
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            format: int32
-            default: 20
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            format: int32
-            default: 0
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SearchAccountResponse'
-      tags:
-        - Account
-      security:
-        - api_key: [ 'user-read' ]
+        get:
+            operationId: "search-account"
+            description: Search Account
+            parameters:
+                -   in: query
+                    name: phone-number
+                    description: |
+                        Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+                    schema:
+                        type: string
+                -   in: query
+                    name: limit
+                    schema:
+                        type: integer
+                        format: int32
+                        default: 20
+                -   in: query
+                    name: offset
+                    schema:
+                        type: integer
+                        format: int32
+                        default: 0
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SearchAccountResponse'
+            tags:
+                - Account
+            security:
+                -   api_key: [ 'user-read' ]
 
-  /v1/accounts/{id}:
-    get:
-      operationId: "get-account"
-      description: Return information about an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAccountResponse'
-        404:
-          description: The account not found
-      tags:
-        - Account
-      security:
-        - api_key: [ 'user-read' ]
+    /v1/accounts/{id}:
+        get:
+            operationId: "get-account"
+            description: Return information about an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAccountResponse'
+                404:
+                    description: The account not found
+            tags:
+                - Account
+            security:
+                -   api_key: [ 'user-read' ]
 
-    delete:
-      operationId: "delete-account"
-      description: Delete an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        200:
-          description: Success
-        403:
-          description: The caller is not the owner of the account
-      tags:
-        - Account
-      security:
-        - api_key: [ 'user-manage' ]
+        delete:
+            operationId: "delete-account"
+            description: Delete an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account to delete
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+            responses:
+                200:
+                    description: Success
+                403:
+                    description: The caller is not the owner of the account
+            tags:
+                - Account
+            security:
+                -   api_key: [ 'user-manage' ]
 
-  /v1/accounts/{id}/attributes/{name}:
-    post:
-      operationId: "update-account-attribute"
-      description: Update an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - in: path
-          name: name
-          description: Name of the attribute to update
-          required: true
-          schema:
-            type: string
-            enum:
-              - display-name
-              - picture-url
-              - language
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAccountAttributeRequest'
-      responses:
-        200:
-          description: Success
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: The account doesnt exist
-      tags:
-        - Account
-      security:
-        - api_key: [ 'user-manage' ]
+    /v1/accounts/{id}/attributes/{name}:
+        post:
+            operationId: "update-account-attribute"
+            description: Update an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+                -   in: path
+                    name: name
+                    description: Name of the attribute to update
+                    required: true
+                    schema:
+                        type: string
+                        enum:
+                            - display-name
+                            - picture-url
+                            - language
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateAccountAttributeRequest'
+            responses:
+                200:
+                    description: Success
+                403:
+                    description: The caller is not the owner of the account
+                404:
+                    description: The account doesnt exist
+            tags:
+                - Account
+            security:
+                -   api_key: [ 'user-manage' ]
 
-  /v1/accounts/{id}/password:
-    post:
-      operationId: "save-password"
-      description: Set the password of an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SavePasswordRequest'
-      responses:
-        200:
-          description: Success
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: The account doesnt exist
-      tags:
-        - Password
-      security:
-        - api_key: [ 'user-manage' ]
+    /v1/accounts/{id}/password:
+        post:
+            operationId: "save-password"
+            description: Set the password of an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SavePasswordRequest'
+            responses:
+                200:
+                    description: Success
+                403:
+                    description: The caller is not the owner of the account
+                404:
+                    description: The account doesnt exist
+            tags:
+                - Password
+            security:
+                -   api_key: [ 'user-manage' ]
 
-    get:
-      operationId: "check-password"
-      description: Validated the password of an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - in: query
-          name: password
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Success
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: The account doesnt exist
-        409:
-          description: The password is not valid
-      tags:
-        - Password
-      security:
-        - api_key: [ 'user-read' ]
+        get:
+            operationId: "check-password"
+            description: Validated the password of an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+                -   in: query
+                    name: password
+                    required: true
+                    schema:
+                        type: string
+            responses:
+                200:
+                    description: Success
+                403:
+                    description: The caller is not the owner of the account
+                404:
+                    description: The account doesnt exist
+                409:
+                    description: The password is not valid
+            tags:
+                - Password
+            security:
+                -   api_key: [ 'user-read' ]
 
 
 
-  /v1/accounts/{id}/payment-methods:
-    get:
-      operationId: "list-payment-methods"
-      description: Return all the payment methods of an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListPaymentMethodResponse'
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: The account doesnt exist
-        409:
-          description: The payment method is already assiged to another account
-      tags:
-        - Payment Methods
-      security:
-        - api_key: [ 'payment-method-read' ]
+    /v1/accounts/{id}/payment-methods:
+        get:
+            operationId: "list-payment-methods"
+            description: Return all the payment methods of an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListPaymentMethodResponse'
+                404:
+                    description: The account doesnt exist
+                409:
+                    description: The payment method is already assiged to another account
+            tags:
+                - Payment Methods
+            security:
+                -   api_key: [ 'payment-method-read' ]
 
-    post:
-      operationId: "add-payment-method"
-      description: Add a payment method to an account
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddPaymentMethodRequest'
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddPaymentMethodResponse'
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: The account doesnt exist
-        409:
-          description: The payment method is already assiged to another account
-      tags:
-        - Payment Methods
-      security:
-        - api_key: [ 'payment-method-manage' ]
+        post:
+            operationId: "add-payment-method"
+            description: Add a payment method to an account
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddPaymentMethodRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AddPaymentMethodResponse'
+                403:
+                    description: The caller is not the owner of the account
+                404:
+                    description: The account doesnt exist
+                409:
+                    description: The payment method is already assiged to another account
+            tags:
+                - Payment Methods
+            security:
+                -   api_key: [ 'payment-method-manage' ]
 
-  /v1/accounts/{id}/payment-methods/{token}:
-    get:
-      operationId: "get-payment-method"
-      description: Get a payment method
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - in: path
-          name: token
-          description: Payment method token
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetPaymentMethodResponse'
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: Payment method doesn't exist
-      tags:
-        - Payment Methods
-      security:
-        - api_key: [ 'payment-method-read' ]
+    /v1/accounts/{id}/payment-methods/{token}:
+        get:
+            operationId: "get-payment-method"
+            description: Get a payment method
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+                -   in: path
+                    name: token
+                    description: Payment method token
+                    required: true
+                    schema:
+                        type: string
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPaymentMethodResponse'
+                404:
+                    description: Payment method doesn't exist
+            tags:
+                - Payment Methods
+            security:
+                -   api_key: [ 'payment-method-read' ]
 
-    post:
-      operationId: "update-payment-method"
-      description: Update a payment method
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - in: path
-          name: token
-          description: Payment method token
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdatePaymentMethodRequest'
-      responses:
-        200:
-          description: Success
-        403:
-          description: The caller is not the owner of the account
-        404:
-          description: Payment method doesn't exist
-      tags:
-        - Payment Methods
-      security:
-        - api_key: [ 'payment-method-manage' ]
+        post:
+            operationId: "update-payment-method"
+            description: Update a payment method
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+                -   in: path
+                    name: token
+                    description: Payment method token
+                    required: true
+                    schema:
+                        type: string
+                        format: uuid
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdatePaymentMethodRequest'
+            responses:
+                200:
+                    description: Success
+                403:
+                    description: The caller is not the owner of the account
+                404:
+                    description: Payment method doesn't exist
+            tags:
+                - Payment Methods
+            security:
+                -   api_key: [ 'payment-method-manage' ]
 
-    delete:
-      operationId: "delete-payment-method"
-      description: Delete a payment method
-      parameters:
-        - in: path
-          name: id
-          description: ID of the account
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - in: path
-          name: token
-          description: Payment method token
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        200:
-          description: Success
-        403:
-          description: The caller is not the owner of the account
-      tags:
-        - Payment Methods
-      security:
-        - api_key: [ 'payment-method-manage' ]
+        delete:
+            operationId: "delete-payment-method"
+            description: Delete a payment method
+            parameters:
+                -   in: path
+                    name: id
+                    description: ID of the account
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+                -   in: path
+                    name: token
+                    description: Payment method token
+                    required: true
+                    schema:
+                        type: string
+                        format: uuid
+            responses:
+                200:
+                    description: Success
+                403:
+                    description: The caller is not the owner of the account
+            tags:
+                - Payment Methods
+            security:
+                -   api_key: [ 'payment-method-manage' ]
 
 
 components:
-  securitySchemes:
-    api_key:
-      type: apiKey
-      in: header
-      name: Authorization
+    securitySchemes:
+        api_key:
+            type: apiKey
+            in: header
+            name: Authorization
 
-  schemas:
-    CreateAccountRequest:
-      type: object
-      properties:
-        phoneNumber:
-          type: string
-          description: |
-            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
-        language:
-          type: string
-          description: |
-            2 letter code of the account's language ([ISO 659-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)).
-          default: en
-          maxLength: 2
-      required:
-        - phoneNumber
+    schemas:
+        CreateAccountRequest:
+            type: object
+            properties:
+                phoneNumber:
+                    type: string
+                    description: |
+                        Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+                language:
+                    type: string
+                    description: |
+                        2 letter code of the account's language ([ISO 659-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)).
+                    default: en
+                    maxLength: 2
+            required:
+                - phoneNumber
 
-    CreateAccountResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: ID of the account created
+        CreateAccountResponse:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    description: ID of the account created
 
-    GetAccountResponse:
-      type: object
-      properties:
-        account:
-          type: object
-          $ref: "#/components/schemas/Account"
+        GetAccountResponse:
+            type: object
+            properties:
+                account:
+                    type: object
+                    $ref: "#/components/schemas/Account"
 
-    SearchAccountResponse:
-      type: object
-      properties:
-        accounts:
-          type: array
-          items:
-            $ref: "#/components/schemas/AccountSummary"
+        SearchAccountResponse:
+            type: object
+            properties:
+                accounts:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/AccountSummary"
 
-    UpdateAccountAttributeRequest:
-      type: object
-      properties:
-        value:
-          type: string
-          description: Value of the
-          nullable: true
+        UpdateAccountAttributeRequest:
+            type: object
+            properties:
+                value:
+                    type: string
+                    description: Value of the
+                    nullable: true
 
-    SavePasswordRequest:
-      type: object
-      properties:
-        password:
-          type: string
-          description: Value of the password.
-          minLength: 6
-      required:
-        - password
+        SavePasswordRequest:
+            type: object
+            properties:
+                password:
+                    type: string
+                    description: Value of the password.
+                    minLength: 6
+            required:
+                - password
 
-    AddPaymentMethodRequest:
-      type: object
-      properties:
-        ownerName:
-          type: string
-          description: Name of the owner of the payment method
-          maxLength: 100
-        phoneNumber:
-          type: string
-          description: |
-            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
-          nullable: true
-        type:
-          type: string
-          description: Type of payment method
-          enum:
-            - MOBILE_PAYMENT
-        provider:
-          type: string
-          description: Payment provider
-          enum:
-            - MTN
-            - ORANGE
-      required:
-        - ownerName
-        - type
-        - provider
+        AddPaymentMethodRequest:
+            type: object
+            properties:
+                ownerName:
+                    type: string
+                    description: Name of the owner of the payment method
+                    maxLength: 100
+                phoneNumber:
+                    type: string
+                    description: |
+                        Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+                    nullable: true
+                type:
+                    type: string
+                    description: Type of payment method
+                    enum:
+                        - MOBILE_PAYMENT
+                provider:
+                    type: string
+                    description: Payment provider
+                    enum:
+                        - MTN
+                        - ORANGE
+            required:
+                - ownerName
+                - type
+                - provider
 
-    AddPaymentMethodResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          format: uuid
-          description: Payment method token
+        AddPaymentMethodResponse:
+            type: object
+            properties:
+                token:
+                    type: string
+                    format: uuid
+                    description: Payment method token
 
-    UpdatePaymentMethodRequest:
-      type: object
-      properties:
-        ownerName:
-          type: string
-          description: Name of the owner of the payment method
-          maxLength: 100
-        provider:
-          type: string
-          description: Payment provider
-          enum:
-            - mtn
-            - orange
-            - express-union
-      required:
-        - ownerName
-        - provider
+        UpdatePaymentMethodRequest:
+            type: object
+            properties:
+                ownerName:
+                    type: string
+                    description: Name of the owner of the payment method
+                    maxLength: 100
+                provider:
+                    type: string
+                    description: Payment provider
+                    enum:
+                        - mtn
+                        - orange
+                        - express-union
+            required:
+                - ownerName
+                - provider
 
-    GetPaymentMethodResponse:
-      type: object
-      properties:
-        paymentMethod:
-          type: object
-          $ref: "#/components/schemas/PaymentMethod"
+        GetPaymentMethodResponse:
+            type: object
+            properties:
+                paymentMethod:
+                    type: object
+                    $ref: "#/components/schemas/PaymentMethod"
 
-    ListPaymentMethodResponse:
-      type: object
-      properties:
-        paymentMethods:
-          type: array
-          items:
-            $ref: "#/components/schemas/PaymentMethodSummary"
+        ListPaymentMethodResponse:
+            type: object
+            properties:
+                paymentMethods:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/PaymentMethodSummary"
 
-    AccountSummary:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Unique identifier of the account
-        pictureUrl:
-          type: string
-          format: url
-          description: URL of the account picture
-          nullable: true
-        status:
-          type: string
-          description: Status of the account
-          enum:
-            - ACTIVE
-            - SUSPENDED
-        displayName:
-          type: string
-          description: Display Name
-          nullable: true
-        language:
-          type: string
-          description: Account's language
-        created:
-          type: string
-          format: date-time
-          description: Registration Date/Time
-        updated:
-          type: string
-          format: date-time
-          description: Last modification Date/Time
-        superUser:
-          type: boolean
-          default: false
-          description: |
-            `true` if this is the account of super-user
+        AccountSummary:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    description: Unique identifier of the account
+                pictureUrl:
+                    type: string
+                    format: url
+                    description: URL of the account picture
+                    nullable: true
+                status:
+                    type: string
+                    description: Status of the account
+                    enum:
+                        - ACTIVE
+                        - SUSPENDED
+                displayName:
+                    type: string
+                    description: Display Name
+                    nullable: true
+                language:
+                    type: string
+                    description: Account's language
+                created:
+                    type: string
+                    format: date-time
+                    description: Registration Date/Time
+                updated:
+                    type: string
+                    format: date-time
+                    description: Last modification Date/Time
+                superUser:
+                    type: boolean
+                    default: false
+                    description: |
+                        `true` if this is the account of super-user
 
-    Account:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Unique identifier of the account
-        phone:
-          type: object
-          $ref: "#/components/schemas/Phone"
-          description: |
-            Phone Number.
-            The phone number is returned only if the caller:
-              - is the owner of the account
-              - or the owner has the permission `user-phone`
-          nullable: true
-        pictureUrl:
-          type: string
-          format: url
-          description: URL of the account picture
-          nullable: true
-        status:
-          type: string
-          description: Status of the account
-          enum:
-            - ACTIVE
-            - SUSPENDED
-        displayName:
-          type: string
-          description: Display Name
-          nullable: true
-        language:
-          type: string
-          description: Account's language
-        created:
-          type: string
-          format: date-time
-          description: Registration Date/Time
-        updated:
-          type: string
-          format: date-time
-          description: Last modification Date/Time
-        superUser:
-          type: boolean
-          default: false
-          description: |
-            `true` if this is the account of super-user.
+        Account:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    description: Unique identifier of the account
+                phone:
+                    type: object
+                    $ref: "#/components/schemas/Phone"
+                    description: |
+                        Phone Number.
+                        The phone number is returned only if the caller:
+                          - is the owner of the account
+                          - or the owner has the permission `user-phone`
+                    nullable: true
+                pictureUrl:
+                    type: string
+                    format: url
+                    description: URL of the account picture
+                    nullable: true
+                status:
+                    type: string
+                    description: Status of the account
+                    enum:
+                        - ACTIVE
+                        - SUSPENDED
+                displayName:
+                    type: string
+                    description: Display Name
+                    nullable: true
+                language:
+                    type: string
+                    description: Account's language
+                created:
+                    type: string
+                    format: date-time
+                    description: Registration Date/Time
+                updated:
+                    type: string
+                    format: date-time
+                    description: Last modification Date/Time
+                superUser:
+                    type: boolean
+                    default: false
+                    description: |
+                        `true` if this is the account of super-user.
 
-    Phone:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: ID of the Phone
-        number:
-          type: string
-          description: Phone number
-        country:
-          type: string
-          description: Country code
-        created:
-          type: string
-          format: date-time
-          description: Creation date/time
+        Phone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    description: ID of the Phone
+                number:
+                    type: string
+                    description: Phone number
+                country:
+                    type: string
+                    description: Country code
+                created:
+                    type: string
+                    format: date-time
+                    description: Creation date/time
 
-    PaymentMethod:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Payment Method's token
-        type:
-          type: string
-          description: Type of payment method
-        provider:
-          type: string
-          description: Payment provider
-        ownerName:
-          type: string
-          description: Name of the owner of the payment method
-        maskedNumber:
-          type: string
-          description: Masked number of this payment method
-        phone:
-          type: object
-          $ref: "#/components/schemas/Phone"
-          description: Phone Number (for mobile payment)
-          nullable: true
-        created:
-          type: string
-          format: date-time
-          description: Creation date/time
-        updated:
-          type: string
-          format: date-time
-          description: Updated date/time
+        PaymentMethod:
+            type: object
+            properties:
+                token:
+                    type: string
+                    description: Payment Method's token
+                type:
+                    type: string
+                    description: Type of payment method
+                provider:
+                    type: string
+                    description: Payment provider
+                ownerName:
+                    type: string
+                    description: Name of the owner of the payment method
+                maskedNumber:
+                    type: string
+                    description: Masked number of this payment method
+                phone:
+                    type: object
+                    $ref: "#/components/schemas/Phone"
+                    description: Phone Number (for mobile payment)
+                    nullable: true
+                created:
+                    type: string
+                    format: date-time
+                    description: Creation date/time
+                updated:
+                    type: string
+                    format: date-time
+                    description: Updated date/time
 
-    PaymentMethodSummary:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Payment Method's token
-        type:
-          type: string
-          description: Type of payment method
-        provider:
-          type: string
-          description: Payment provider
-        ownerName:
-          type: string
-          description: Name of the owner of the payment method
-        maskedNumber:
-          type: string
-          description: Masked number of this payment method
-        created:
-          type: string
-          format: date-time
-          description: Creation date/time
-        updated:
-          type: string
-          format: date-time
-          description: Updated date/time
+        PaymentMethodSummary:
+            type: object
+            properties:
+                token:
+                    type: string
+                    description: Payment Method's token
+                type:
+                    type: string
+                    description: Type of payment method
+                provider:
+                    type: string
+                    description: Payment provider
+                ownerName:
+                    type: string
+                    description: Name of the owner of the payment method
+                maskedNumber:
+                    type: string
+                    description: Masked number of this payment method
+                created:
+                    type: string
+                    format: date-time
+                    description: Creation date/time
+                updated:
+                    type: string
+                    format: date-time
+                    description: Updated date/time

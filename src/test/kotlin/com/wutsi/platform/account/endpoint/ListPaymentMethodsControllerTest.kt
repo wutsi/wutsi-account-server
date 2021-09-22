@@ -41,7 +41,7 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertEquals(2, paymentMethods.size)
 
         assertEquals("0000-00000-100", paymentMethods[0].token)
-        assertEquals("...4100", paymentMethods[0].maskedNumber)
+        assertEquals("+237...4100", paymentMethods[0].maskedNumber)
         assertEquals("Ray Sponsible", paymentMethods[0].ownerName)
         assertEquals(MOBILE_PAYMENT.name, paymentMethods[0].type)
         assertEquals(MTN.name, paymentMethods[0].provider)
@@ -49,23 +49,12 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertNotNull(paymentMethods[0].updated)
 
         assertEquals("0000-00000-101", paymentMethods[1].token)
-        assertEquals("...4101", paymentMethods[1].maskedNumber)
+        assertEquals("+237...4101", paymentMethods[1].maskedNumber)
         assertEquals("Ray Sponsible", paymentMethods[1].ownerName)
         assertEquals(MOBILE_PAYMENT.name, paymentMethods[1].type)
         assertEquals(ORANGE.name, paymentMethods[1].provider)
         assertNotNull(paymentMethods[1].created)
         assertNotNull(paymentMethods[1].updated)
-    }
-
-    @Test
-    fun `cannot get payment-methods of another user`() {
-        rest = createResTemplate(listOf("payment-method-read"), subjectId = 777)
-
-        val url = "http://localhost:$port/v1/accounts/100/payment-methods"
-        val ex = assertThrows<HttpStatusCodeException> {
-            rest.getForEntity(url, ListPaymentMethodResponse::class.java)
-        }
-        assertEquals(403, ex.rawStatusCode)
     }
 
     @Test

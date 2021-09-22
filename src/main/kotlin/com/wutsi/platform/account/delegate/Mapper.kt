@@ -1,5 +1,7 @@
 package com.wutsi.platform.account.delegate
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL
 import com.wutsi.platform.account.dto.Account
 import com.wutsi.platform.account.dto.AccountSummary
 import com.wutsi.platform.account.dto.PaymentMethod
@@ -67,8 +69,21 @@ fun PaymentMethodEntity.toPaymentMethodSummary() = PaymentMethodSummary(
     ownerName = this.ownerName
 )
 
-fun PaymentMethodEntity.toMaskedNumber(): String =
-    if (this.phone != null)
-        "..." + this.phone!!.number.takeLast(4)
-    else
-        ""
+fun PaymentMethodEntity.toMaskedNumber(): String {
+    if (this.phone == null)
+        return ""
+
+    try {
+        val util = PhoneNumberUtil.getInstance()
+        val phoneNumber = util.parse(this.phone!!.number, "")
+        val number = util.format(phoneNumber, INTERNATIONAL)
+        val i = number.indexOf(' ')
+        return number.substring(0, i) +
+            "..." +
+            number.substring(i)
+                .filter { !it.isWhitespace() }
+                .takeLast(4)
+    } catch (ex: Exception) {
+        return "..." + this.phone!!.number.takeLast(4)
+    }
+}
