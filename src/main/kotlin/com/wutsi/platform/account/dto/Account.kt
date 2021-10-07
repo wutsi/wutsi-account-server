@@ -1,6 +1,6 @@
 package com.wutsi.platform.account.dto
 
-import org.springframework.format.`annotation`.DateTimeFormat
+import org.springframework.format.annotation.DateTimeFormat
 import java.time.OffsetDateTime
 
 public data class Account(
@@ -10,6 +10,7 @@ public data class Account(
     public val status: String = "",
     public val displayName: String? = null,
     public val language: String = "",
+    public val country: String = "",
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     public val created: OffsetDateTime = OffsetDateTime.now(),
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")

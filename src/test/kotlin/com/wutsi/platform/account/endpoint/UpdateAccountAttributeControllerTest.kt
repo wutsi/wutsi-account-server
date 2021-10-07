@@ -215,4 +215,17 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
         val account = dao.findById(100).get()
         assertEquals("en", account.language)
     }
+
+    @Test
+    public fun `set country`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/country"
+        val request = UpdateAccountAttributeRequest(
+            value = "CM"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(request.value, account.country)
+    }
 }

@@ -22,6 +22,7 @@ public class UpdateAccountAttributeDelegate(
 ) {
     companion object {
         const val DEFAULT_LANGUAGE = "en"
+        const val DEFAULT_COUNTRY = "US"
     }
 
     @Transactional
@@ -37,6 +38,7 @@ public class UpdateAccountAttributeDelegate(
             "display-name" -> account.displayName = toString(request.value)
             "picture-url" -> account.pictureUrl = toPictureUrl(request.value)?.toString()
             "language" -> account.language = toLanguage(request.value)
+            "country" -> account.country = toCountry(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,
@@ -80,7 +82,15 @@ public class UpdateAccountAttributeDelegate(
         if (value.isNullOrEmpty())
             return DEFAULT_LANGUAGE
 
-        val locale = Locale.getAvailableLocales().find { it.language == value }
+        val locale = Locale.getAvailableLocales().find { it.language.equals(value, true) }
         return locale?.language ?: DEFAULT_LANGUAGE
+    }
+
+    private fun toCountry(value: String?): String {
+        if (value.isNullOrEmpty())
+            return DEFAULT_COUNTRY
+
+        val locale = Locale.getAvailableLocales().find { it.country.equals(value, true) }
+        return locale?.country ?: DEFAULT_COUNTRY
     }
 }

@@ -42,7 +42,10 @@ public class CreateAccountDelegate(
                 AccountEntity(
                     phone = phone,
                     status = ACTIVE,
-                    language = request.language
+                    language = request.language,
+                    country = request.country,
+                    displayName = request.displayName,
+                    pictureUrl = request.pictureUrl,
                 )
             )
             return CreateAccountResponse(

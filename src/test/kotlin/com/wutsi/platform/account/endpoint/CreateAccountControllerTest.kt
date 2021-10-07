@@ -48,20 +48,24 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
     fun `create account`() {
         val request = CreateAccountRequest(
             phoneNumber = "+23774511111",
-            language = "fr"
+            language = "fr",
+            country = "US",
+            displayName = "Ray Sponsible",
+            pictureUrl = "http://www.google.ca/img/1.ong"
         )
         val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
         val account = dao.findById(response.body.id).get()
-        assertNull(account.displayName)
-        assertNull(account.pictureUrl)
+        assertEquals(request.displayName, account.displayName)
+        assertEquals(request.pictureUrl, account.pictureUrl)
+        assertEquals(request.language, account.language)
+        assertEquals(request.country, account.country)
+        assertEquals(AccountStatus.ACTIVE, account.status)
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
-        assertEquals(request.language, account.language)
-        assertEquals(AccountStatus.ACTIVE, account.status)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals("+23774511111", phone.number)
