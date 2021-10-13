@@ -28,7 +28,7 @@ public class AddPaymentMethodDelegate(
         securityManager.checkOwnership(account)
 
         val service: PaymentMethodTypeService = when (request.type.toUpperCase()) {
-            PaymentMethodType.MOBILE_PAYMENT.name -> mobile
+            PaymentMethodType.MOBILE.name -> mobile
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.PAYMENT_METHOD_INVALID_TYPE.urn,

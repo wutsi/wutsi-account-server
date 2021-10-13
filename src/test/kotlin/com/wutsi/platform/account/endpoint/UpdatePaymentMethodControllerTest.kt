@@ -49,7 +49,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
         val payment = dao.findByToken("0000-00000-100").get()
         assertEquals(request.ownerName, payment.ownerName)
         assertEquals(PaymentMethodProvider.MTN, payment.provider)
-        assertEquals(PaymentMethodType.MOBILE_PAYMENT, payment.type)
+        assertEquals(PaymentMethodType.MOBILE, payment.type)
         assertEquals(100L, payment.phone?.id)
     }
 

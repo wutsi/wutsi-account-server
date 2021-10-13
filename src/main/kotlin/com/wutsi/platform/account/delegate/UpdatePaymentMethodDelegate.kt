@@ -30,7 +30,7 @@ public class UpdatePaymentMethodDelegate(
         val payment = paymentService.findByToken(id, token, PARAMETER_TYPE_PATH)
 
         val service: PaymentMethodTypeService = when (payment.type) {
-            PaymentMethodType.MOBILE_PAYMENT -> mobile
+            PaymentMethodType.MOBILE -> mobile
             else -> throw IllegalStateException("Unsupported payment type: ${payment.type}")
         }
 

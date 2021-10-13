@@ -474,13 +474,17 @@ components:
           type: string
           description: Type of payment method
           enum:
-            - MOBILE_PAYMENT
+            - MOBILE
+            - CREDIT_CARD
+            - BANK
+            - CASH
         provider:
           type: string
           description: Payment provider
           enum:
             - MTN
             - ORANGE
+            - NEXTTEL
       required:
         - ownerName
         - type
