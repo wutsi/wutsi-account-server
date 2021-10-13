@@ -409,6 +409,7 @@ components:
         displayName:
           type: string
           description: Account's display name
+          nullable: true
         pictureUrl:
           type: string
           description: Account's picture
