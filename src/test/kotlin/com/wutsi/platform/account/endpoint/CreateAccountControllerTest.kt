@@ -2,6 +2,7 @@ package com.wutsi.platform.account.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dao.AccountRepository
+import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.dao.PhoneRepository
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/CreateAccountController.sql"])
@@ -32,6 +34,9 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
     @Autowired
     private lateinit var phoneDao: PhoneRepository
+
+    @Autowired
+    private lateinit var passwordDao: PasswordRepository
 
     private lateinit var rest: RestTemplate
     private lateinit var url: String
@@ -68,9 +73,46 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNull(account.deleted)
 
         val phone = phoneDao.findById(account.phone?.id).get()
-        assertEquals("+23774511111", phone.number)
+        assertEquals(request.phoneNumber, phone.number)
         assertEquals("CM", phone.country)
         assertNotNull(phone.created)
+
+        val password = passwordDao.findByAccount(account)
+        assertTrue(password.isEmpty)
+    }
+
+    @Test
+    fun `create account with password`() {
+        val request = CreateAccountRequest(
+            phoneNumber = "+23774511117",
+            language = "fr",
+            country = "CM",
+            displayName = "Ray Sponsible",
+            pictureUrl = "http://www.google.ca/img/1.ong",
+            password = "12345"
+        )
+        val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(response.body.id).get()
+        assertEquals(request.displayName, account.displayName)
+        assertEquals(request.pictureUrl, account.pictureUrl)
+        assertEquals(request.language, account.language)
+        assertEquals(request.country, account.country)
+        assertEquals(AccountStatus.ACTIVE, account.status)
+        assertNotNull(account.created)
+        assertNotNull(account.updated)
+        assertNull(account.deleted)
+
+        val phone = phoneDao.findById(account.phone?.id).get()
+        assertEquals(request.phoneNumber, phone.number)
+        assertEquals("CM", phone.country)
+        assertNotNull(phone.created)
+
+        val password = passwordDao.findByAccount(account).get()
+        assertNotNull(password.value)
+        assertNotNull(password.salt)
     }
 
     @Test

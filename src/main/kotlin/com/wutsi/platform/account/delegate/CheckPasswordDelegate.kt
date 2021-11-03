@@ -2,7 +2,7 @@ package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.service.AccountService
-import com.wutsi.platform.account.service.PasswordHasher
+import com.wutsi.platform.account.service.PasswordService
 import com.wutsi.platform.account.service.SecurityManager
 import com.wutsi.platform.account.util.ErrorURN.PASSWORD_MISMATCH
 import com.wutsi.platform.core.error.Error
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 public class CheckPasswordDelegate(
-    private val hasher: PasswordHasher,
+    private val service: PasswordService,
     private val accountService: AccountService,
     private val dao: PasswordRepository,
     private val securityManager: SecurityManager
@@ -29,7 +29,7 @@ public class CheckPasswordDelegate(
                 )
             }
 
-        val xpassword = hasher.hash(password, obj.salt)
+        val xpassword = service.hash(password, obj.salt)
         if (xpassword != obj.value)
             throw ConflictException(
                 Error(

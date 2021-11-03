@@ -4,8 +4,10 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
+import com.wutsi.platform.account.dto.SavePasswordRequest
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.AccountStatus.ACTIVE
+import com.wutsi.platform.account.service.PasswordService
 import com.wutsi.platform.account.service.PhoneService
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
@@ -19,6 +21,7 @@ import javax.transaction.Transactional
 @Service
 public class CreateAccountDelegate(
     private val phoneService: PhoneService,
+    private val passwordService: PasswordService,
     private val dao: AccountRepository
 ) {
     @Transactional
@@ -48,6 +51,16 @@ public class CreateAccountDelegate(
                     pictureUrl = request.pictureUrl,
                 )
             )
+
+            if (!request.password.isNullOrEmpty()) {
+                passwordService.set(
+                    account,
+                    SavePasswordRequest(
+                        password = request.password
+                    )
+                )
+            }
+
             return CreateAccountResponse(
                 id = account.id ?: -1
             )
