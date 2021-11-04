@@ -3,7 +3,6 @@ package com.wutsi.platform.account.`delegate`
 import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.service.AccountService
 import com.wutsi.platform.account.service.PasswordService
-import com.wutsi.platform.account.service.SecurityManager
 import com.wutsi.platform.account.util.ErrorURN.PASSWORD_MISMATCH
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.exception.ConflictException
@@ -14,11 +13,9 @@ public class CheckPasswordDelegate(
     private val service: PasswordService,
     private val accountService: AccountService,
     private val dao: PasswordRepository,
-    private val securityManager: SecurityManager
 ) {
     public fun invoke(id: Long, password: String) {
         val account = accountService.findById(id)
-        securityManager.checkOwnership(account)
 
         val obj = dao.findByAccount(account)
             .orElseThrow {
