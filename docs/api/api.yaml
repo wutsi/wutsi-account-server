@@ -414,6 +414,10 @@ components:
           type: string
           description: Account's picture
           nullable: true
+        password:
+          type: string
+          description: Password. If not provided, a password-less account will be created
+          nullable: true
       required:
         - phoneNumber
 
