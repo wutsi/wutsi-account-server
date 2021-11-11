@@ -57,7 +57,7 @@ abstract class AbstractSecuredController {
         val tokenProvider = TestTokenProvider(
             JWTBuilder(
                 subject = subjectId.toString(),
-                subjectName = URN.of("user", subjectId.toString()).value,
+                name = URN.of("user", subjectId.toString()).value,
                 subjectType = subjectType,
                 scope = scope,
                 keyProvider = keyProvider,
