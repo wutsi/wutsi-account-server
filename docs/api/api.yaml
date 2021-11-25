@@ -30,34 +30,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAccountResponse'
         409:
-          description: The phone number has already assigned to another account
+          description: |
+            Account creation failed.
+            The possible error codes:
+            - `urn:error:wutsi:account:phone-number-already-assigned`: The phone number already assigned to another user
+            - `urn:error:wutsi:account:phone-number-malformed`: The phone number format is not confirm to [E164](https://en.wikipedia.org/wiki/E.164) format.
       tags:
         - Account
       security:
         - api_key: [ 'user-manage' ]
 
-    get:
+  /v1/accounts/search:
+    post:
       operationId: "search-account"
       description: Search Account
-      parameters:
-        - in: query
-          name: phone-number
-          description: |
-            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
-          schema:
-            type: string
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            format: int32
-            default: 20
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            format: int32
-            default: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchAccountRequest'
       responses:
         200:
           description: Success
@@ -151,7 +143,7 @@ paths:
         403:
           description: The caller is not the owner of the account
         404:
-          description: The account doesnt exist
+          description: The account not found
       tags:
         - Account
       security:
@@ -181,7 +173,7 @@ paths:
         403:
           description: The caller is not the owner of the account
         404:
-          description: The account doesnt exist
+          description: The account not found
       tags:
         - Password
       security:
@@ -276,7 +268,10 @@ paths:
         404:
           description: The account doesnt exist
         409:
-          description: The payment method is already assiged to another account
+          description: |
+            The operation failed.
+            The possible error codes:
+            - `urn:error:wutsi:account:payment-method-ownership`: The payment method already assigned to another user
       tags:
         - Payment Methods
       security:
@@ -435,6 +430,26 @@ components:
         account:
           type: object
           $ref: "#/components/schemas/Account"
+
+
+    SearchAccountRequest:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        phoneNumber:
+          type: string
+          description: |
+            Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+        limit:
+          type: integer
+          default: 30
+        offset:
+          type: integer
+          default: 0
 
     SearchAccountResponse:
       type: object

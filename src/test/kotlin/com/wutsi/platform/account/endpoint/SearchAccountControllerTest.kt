@@ -1,5 +1,6 @@
 package com.wutsi.platform.account.endpoint
 
+import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.account.dto.SearchAccountResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -19,17 +20,22 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
 
     private lateinit var rest: RestTemplate
 
+    private lateinit var url: String
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
         rest = createResTemplate(listOf("user-read"))
+        url = "http://localhost:$port/v1/accounts/search"
     }
 
     @Test
     public fun `search by phone`() {
-        val url = "http://localhost:$port/v1/accounts?phone-number=+237221234100"
-        val response = rest.getForEntity(url, SearchAccountResponse::class.java)
+        val request = SearchAccountRequest(
+            phoneNumber = "+237221234100"
+        )
+        val response = rest.postForEntity(url, request, SearchAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -48,21 +54,17 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `search by phone without +`() {
-        val url = "http://localhost:$port/v1/accounts?phone-number=237221234100"
-        val response = rest.getForEntity(url, SearchAccountResponse::class.java)
+    public fun `search by ID`() {
+        val request = SearchAccountRequest(
+            ids = listOf(100L, 101L)
+        )
+        val response = rest.postForEntity(url, request, SearchAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
         val accounts = response.body.accounts
-        assertEquals(1, accounts.size)
-
-        val account = accounts[0]
-        assertEquals(100, account.id)
-        assertEquals("Ray Sponsible", account.displayName)
-        assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
-        assertEquals("ACTIVE", account.status)
-        assertNotNull(account.created)
-        assertNotNull(account.updated)
+        assertEquals(2, accounts.size)
+        assertEquals(100, accounts[0].id)
+        assertEquals(101, accounts[1].id)
     }
 }

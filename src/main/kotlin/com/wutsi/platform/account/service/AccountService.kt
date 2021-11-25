@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.service
 
 import com.wutsi.platform.account.dao.AccountRepository
+import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
@@ -47,24 +48,18 @@ class AccountService(
         return account
     }
 
-    fun search(
-        phoneId: Long? = null,
-        phoneNumber: String,
-        limit: Int = 20,
-        offset: Int = 0
-    ): List<AccountEntity> {
-        val query = em.createQuery(sql(phoneId, phoneNumber))
-        parameters(phoneId, phoneNumber, query)
+    fun search(request: SearchAccountRequest): List<AccountEntity> {
+        val query = em.createQuery(sql(request))
+        parameters(request, query)
         return query
-            .setFirstResult(offset)
-            .setMaxResults(limit)
+            .setFirstResult(request.offset)
+            .setMaxResults(request.limit)
             .resultList as List<AccountEntity>
     }
 
-    private fun sql(phoneId: Long?, phoneNumber: String): String {
+    private fun sql(request: SearchAccountRequest): String {
         val select = select()
-        val where = where(phoneId, phoneNumber)
-
+        val where = where(request)
         return if (where.isNullOrEmpty())
             select
         else
@@ -74,25 +69,20 @@ class AccountService(
     private fun select(): String =
         "SELECT a FROM AccountEntity a"
 
-    private fun where(phoneId: Long?, phoneNumber: String): String {
+    private fun where(request: SearchAccountRequest): String {
         val criteria = mutableListOf("a.isDeleted=:is_deleted")
-        if (!phoneNumber.isNullOrEmpty())
+        if (!request.phoneNumber.isNullOrEmpty())
             criteria.add("a.phone.number=:phone_number")
-        if (phoneId != null)
-            criteria.add("a.phone.id=:phone_id")
+        if (request.ids.isNotEmpty())
+            criteria.add("a.phone.id IN :ids")
         return criteria.joinToString(separator = " AND ")
     }
 
-    private fun parameters(phoneId: Long?, phoneNumber: String, query: Query) {
+    private fun parameters(request: SearchAccountRequest, query: Query) {
         query.setParameter("is_deleted", false)
-        if (phoneId != null)
-            query.setParameter("phone_id", phoneId)
-        if (!phoneNumber.isNullOrEmpty()) {
-            val xphoneNumber = phoneNumber.trim()
-            query.setParameter(
-                "phone_number",
-                if (xphoneNumber.startsWith("+")) xphoneNumber else "+$xphoneNumber"
-            )
-        }
+        if (!request.phoneNumber.isNullOrEmpty())
+            query.setParameter("phone_number", request.phoneNumber)
+        if (request.ids.isNotEmpty())
+            query.setParameter("ids", request.ids)
     }
 }
