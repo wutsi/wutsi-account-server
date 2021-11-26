@@ -9,7 +9,6 @@ import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.platform.core.error.exception.NotFoundException
-import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
 import javax.persistence.EntityManager
 import javax.persistence.Query
@@ -18,7 +17,6 @@ import javax.persistence.Query
 class AccountService(
     private val dao: AccountRepository,
     private val em: EntityManager,
-    private val logger: KVLogger,
 ) {
     fun findById(id: Long, parameterType: ParameterType = PARAMETER_TYPE_PATH): AccountEntity {
         val account = dao.findById(id)
@@ -51,20 +49,12 @@ class AccountService(
     }
 
     fun search(request: SearchAccountRequest): List<AccountEntity> {
-        logger.add("phone_number", request.phoneNumber)
-        logger.add("ids", request.ids)
-        logger.add("limit", request.limit)
-        logger.add("offset", request.offset)
-
         val query = em.createQuery(sql(request))
         parameters(request, query)
-        val accounts = query
+        return query
             .setFirstResult(request.offset)
             .setMaxResults(request.limit)
             .resultList as List<AccountEntity>
-
-        logger.add("count", accounts.size)
-        return accounts
     }
 
     private fun sql(request: SearchAccountRequest): String {
