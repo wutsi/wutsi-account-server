@@ -35,7 +35,7 @@
     <postgresql.version>42.3.1</postgresql.version>
     <flyway.version>8.0.5</flyway.version>
     <wutsi-platform-core.version>0.0.74</wutsi-platform-core.version>
-    <wutsi-platform-payment.version>0.0.47</wutsi-platform-payment.version>
+    <wutsi-platform-payment.version>0.0.51</wutsi-platform-payment.version>
   </properties>
 
   <dependencies>
@@ -273,7 +273,8 @@
             <phase>validate</phase>
             <configuration>
               <target name="ktlint">
-                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main"
+                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
+                      classname="com.pinterest.ktlint.Main"
                       classpathref="maven.plugin.classpath">
                   <arg value="src/**/*.kt"/>
                   <!-- to generate report in checkstyle format prepend following args: -->

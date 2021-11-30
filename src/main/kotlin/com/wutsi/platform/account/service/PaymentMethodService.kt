@@ -3,7 +3,7 @@ package com.wutsi.platform.account.service
 import com.wutsi.platform.account.dao.PaymentMethodRepository
 import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.entity.PhoneEntity
-import com.wutsi.platform.account.util.ErrorURN
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
@@ -18,7 +18,11 @@ import java.util.UUID
 public class PaymentMethodService(
     private val dao: PaymentMethodRepository
 ) {
-    fun findByToken(accountId: Long, token: String, parameterType: ParameterType = PARAMETER_TYPE_PATH): PaymentMethodEntity {
+    fun findByToken(
+        accountId: Long,
+        token: String,
+        parameterType: ParameterType = PARAMETER_TYPE_PATH
+    ): PaymentMethodEntity {
         val payment = dao.findByToken(token)
             .orElseThrow {
                 NotFoundException(

@@ -2,7 +2,7 @@ package com.wutsi.platform.account.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dto.GetAccountResponse
-import com.wutsi.platform.account.util.ErrorURN
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

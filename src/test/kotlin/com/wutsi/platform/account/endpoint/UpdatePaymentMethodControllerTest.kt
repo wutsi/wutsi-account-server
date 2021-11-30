@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dao.PaymentMethodRepository
 import com.wutsi.platform.account.dto.AddPaymentMethodResponse
 import com.wutsi.platform.account.dto.UpdatePaymentMethodRequest
-import com.wutsi.platform.account.util.ErrorURN
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import com.wutsi.platform.payment.PaymentMethodProvider
 import com.wutsi.platform.payment.PaymentMethodType

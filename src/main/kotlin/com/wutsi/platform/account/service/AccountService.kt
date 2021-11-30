@@ -3,7 +3,7 @@ package com.wutsi.platform.account.service
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.account.entity.AccountEntity
-import com.wutsi.platform.account.util.ErrorURN
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType

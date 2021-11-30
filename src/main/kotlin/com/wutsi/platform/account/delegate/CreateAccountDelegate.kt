@@ -7,14 +7,17 @@ import com.wutsi.platform.account.dto.CreateAccountResponse
 import com.wutsi.platform.account.dto.SavePasswordRequest
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.AccountStatus.ACTIVE
+import com.wutsi.platform.account.error.ErrorURN
+import com.wutsi.platform.account.event.AccountCreatedPayload
+import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.account.service.PasswordService
 import com.wutsi.platform.account.service.PhoneService
-import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
+import com.wutsi.platform.core.stream.EventStream
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
@@ -22,7 +25,8 @@ import javax.transaction.Transactional
 public class CreateAccountDelegate(
     private val phoneService: PhoneService,
     private val passwordService: PasswordService,
-    private val dao: AccountRepository
+    private val dao: AccountRepository,
+    private val stream: EventStream,
 ) {
     @Transactional
     public fun invoke(request: CreateAccountRequest): CreateAccountResponse {
@@ -61,8 +65,15 @@ public class CreateAccountDelegate(
                 )
             }
 
+            stream.publish(
+                EventURN.ACCOUNT_CREATED.urn,
+                AccountCreatedPayload(
+                    account.id!!,
+                    phone.number
+                )
+            )
             return CreateAccountResponse(
-                id = account.id ?: -1
+                id = account.id
             )
         } catch (ex: NumberParseException) {
             throw BadRequestException(

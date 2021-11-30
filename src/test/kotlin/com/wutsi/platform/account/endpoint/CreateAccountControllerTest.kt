@@ -1,19 +1,28 @@
 package com.wutsi.platform.account.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.dao.PhoneRepository
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
 import com.wutsi.platform.account.entity.AccountStatus
-import com.wutsi.platform.account.util.ErrorURN
+import com.wutsi.platform.account.error.ErrorURN
+import com.wutsi.platform.account.event.AccountCreatedPayload
+import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.platform.core.stream.EventStream
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
@@ -37,6 +46,9 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
     @Autowired
     private lateinit var passwordDao: PasswordRepository
+
+    @MockBean
+    private lateinit var eventStream: EventStream
 
     private lateinit var rest: RestTemplate
     private lateinit var url: String
@@ -79,6 +91,11 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val password = passwordDao.findByAccount(account)
         assertTrue(password.isEmpty)
+
+        val payload = argumentCaptor<AccountCreatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
+        assertEquals(response.body.id, payload.firstValue.id)
+        assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
     @Test
@@ -113,6 +130,11 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         val password = passwordDao.findByAccount(account).get()
         assertNotNull(password.value)
         assertNotNull(password.salt)
+
+        val payload = argumentCaptor<AccountCreatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
+        assertEquals(response.body.id, payload.firstValue.id)
+        assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
     @Test
@@ -134,6 +156,11 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertEquals(AccountStatus.ACTIVE, account.status)
         assertEquals(request.language, account.language)
         assertEquals(100, account.phone?.id)
+
+        val payload = argumentCaptor<AccountCreatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
+        assertEquals(response.body.id, payload.firstValue.id)
+        assertEquals(request.phoneNumber, payload.firstValue.phoneNumber)
     }
 
     @Test
@@ -149,6 +176,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.PHONE_NUMBER_MALFORMED.urn, response.error.code)
+
+        verify(eventStream, never()).publish(any(), any())
     }
 
     @Test
@@ -164,5 +193,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.PHONE_NUMBER_ALREADY_ASSIGNED.urn, response.error.code)
+
+        verify(eventStream, never()).publish(any(), any())
     }
 }

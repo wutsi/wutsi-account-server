@@ -3,7 +3,7 @@ package com.wutsi.platform.account.endpoint
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dto.GetAccountResponse
 import com.wutsi.platform.account.dto.GetPaymentMethodResponse
-import com.wutsi.platform.account.util.ErrorURN
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import com.wutsi.platform.payment.PaymentMethodProvider
 import com.wutsi.platform.payment.PaymentMethodType

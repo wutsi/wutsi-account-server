@@ -1,9 +1,9 @@
 package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.account.service.AccountService
 import com.wutsi.platform.account.service.SecurityManager
-import com.wutsi.platform.account.util.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
