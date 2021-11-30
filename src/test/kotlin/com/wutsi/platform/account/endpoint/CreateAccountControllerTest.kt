@@ -94,7 +94,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.id)
+        assertEquals(response.body.id, payload.firstValue.accountId)
         assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
@@ -133,7 +133,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.id)
+        assertEquals(response.body.id, payload.firstValue.accountId)
         assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
@@ -159,7 +159,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.id)
+        assertEquals(response.body.id, payload.firstValue.accountId)
         assertEquals(request.phoneNumber, payload.firstValue.phoneNumber)
     }
 
