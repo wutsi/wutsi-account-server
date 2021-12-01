@@ -74,7 +74,7 @@ class AccountService(
         if (!request.phoneNumber.isNullOrEmpty())
             criteria.add("a.phone.number=:phone_number")
         if (request.ids.isNotEmpty())
-            criteria.add("a.phone.id IN :ids")
+            criteria.add("a.id IN :ids")
         return criteria.joinToString(separator = " AND ")
     }
 
