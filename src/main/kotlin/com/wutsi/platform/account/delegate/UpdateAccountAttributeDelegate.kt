@@ -9,6 +9,7 @@ import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
+import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
 import java.net.MalformedURLException
 import java.net.URL
@@ -18,7 +19,8 @@ import javax.transaction.Transactional
 @Service
 public class UpdateAccountAttributeDelegate(
     private val service: AccountService,
-    private val securityManager: SecurityManager
+    private val securityManager: SecurityManager,
+    private val logger: KVLogger,
 ) {
     companion object {
         const val DEFAULT_LANGUAGE = "en"
@@ -31,6 +33,9 @@ public class UpdateAccountAttributeDelegate(
         name: String,
         request: UpdateAccountAttributeRequest
     ) {
+        logger.add("attribute", name)
+        logger.add("value", request.value)
+
         val account = service.findById(id)
         securityManager.checkOwnership(account)
 
