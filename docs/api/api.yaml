@@ -170,6 +170,7 @@ paths:
               - picture-url
               - language
               - country
+              - is-transfer-secured
       requestBody:
         required: true
         content:
@@ -711,6 +712,11 @@ components:
           default: false
           description: |
             `true` if this is the account of super-user.
+        transferSecured:
+          type: boolean
+          default: true
+          description: |
+            `true`, transfer will require confirmation from user
 
     Phone:
       type: object

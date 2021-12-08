@@ -22,10 +22,11 @@ fun AccountEntity.toAccount(securityManager: SecurityManager) = Account(
     language = this.language,
     country = this.country,
     superUser = this.isSuperUser,
+    transferSecured = this.isTransferSecured,
     phone = if (securityManager.canAccessPhone(this))
         this.phone?.toPhone()
     else
-        null
+        null,
 )
 
 fun PhoneEntity.toPhone() = Phone(
@@ -58,7 +59,7 @@ fun PaymentMethodEntity.toPaymentMethod(securityManager: SecurityManager) = Paym
     phone = if (securityManager.canAccessPaymentMethodDetails(this))
         this.phone?.toPhone()
     else
-        null,
+        null
 )
 
 fun PaymentMethodEntity.toPaymentMethodSummary() = PaymentMethodSummary(

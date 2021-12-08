@@ -1,0 +1,1 @@
+ALTER TABLE T_ACCOUNT ADD COLUMN is_transfer_secured BOOLEAN DEFAULT true;

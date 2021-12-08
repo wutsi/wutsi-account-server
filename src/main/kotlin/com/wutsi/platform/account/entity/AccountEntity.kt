@@ -34,5 +34,6 @@ data class AccountEntity(
     var language: String = "",
     var country: String = "",
     val isSuperUser: Boolean = false,
-    var isDeleted: Boolean = false
+    var isDeleted: Boolean = false,
+    var isTransferSecured: Boolean = true
 )

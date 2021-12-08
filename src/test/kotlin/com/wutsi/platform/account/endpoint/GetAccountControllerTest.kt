@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -48,6 +49,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertTrue(account.superUser)
+        assertFalse(account.transferSecured)
 
         assertNotNull(account.phone)
         assertNotNull("+237221234100", account.phone?.number)

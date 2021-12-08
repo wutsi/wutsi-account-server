@@ -44,6 +44,7 @@ public class UpdateAccountAttributeDelegate(
             "picture-url" -> account.pictureUrl = toPictureUrl(request.value)?.toString()
             "language" -> account.language = toLanguage(request.value)
             "country" -> account.country = toCountry(request.value)
+            "transfer-secured" -> account.isTransferSecured = request.value?.lowercase() == "true"
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

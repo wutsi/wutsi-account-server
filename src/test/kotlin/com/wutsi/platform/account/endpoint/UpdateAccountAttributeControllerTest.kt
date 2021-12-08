@@ -15,7 +15,9 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/UpdateAccountAttributeController.sql"])
@@ -227,5 +229,44 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals(request.value, account.country)
+    }
+
+    @Test
+    public fun `set transfer security`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
+        val request = UpdateAccountAttributeRequest(
+            value = "true"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertTrue(account.isTransferSecured)
+    }
+
+    @Test
+    public fun `reset transfer security`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
+        val request = UpdateAccountAttributeRequest(
+            value = "false"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertFalse(account.isTransferSecured)
+    }
+
+    @Test
+    public fun `null transfer security`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
+        val request = UpdateAccountAttributeRequest(
+            value = null
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertFalse(account.isTransferSecured)
     }
 }
