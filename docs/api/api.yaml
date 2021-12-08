@@ -29,12 +29,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateAccountResponse'
+        403:
+          description: The caller is not authorized to call this endpoint
         409:
           description: |
-            Account creation failed.
-            The possible error codes:
-            - `urn:error:wutsi:account:phone-number-already-assigned`: The phone number already assigned to another user
-            - `urn:error:wutsi:account:phone-number-malformed`: The phone number format is not confirm to [E164](https://en.wikipedia.org/wiki/E.164) format.
+            Account creation failed. The possible error codes:
+            - `urn:wutsi:error:account:phone-number-already-assigned`: The phone number already assigned to another user
+            - `urn:wutsi:error:account:phone-number-malformed`: The phone number format is not confirm to [E164](https://en.wikipedia.org/wiki/E.164) format.
       tags:
         - Account
       security:
@@ -57,6 +58,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchAccountResponse'
+        403:
+          description: The caller is not authorized to call this endpoint
       tags:
         - Account
       security:
@@ -81,12 +84,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAccountResponse'
+        403:
+          description: The caller is not authorized to call this endpoint
         404:
           description: The account not found
       tags:
         - Account
       security:
         - api_key: [ 'user-read' ]
+
+    post:
+      operationId: "update-account"
+      description: Update an account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAccountResponse'
+        403:
+          description: The caller is not the owner of the account
+        404:
+          description: The account not found
+      tags:
+        - Account
+      security:
+        - api_key: [ 'user-manage' ]
 
     delete:
       operationId: "delete-account"
@@ -131,6 +169,7 @@ paths:
               - display-name
               - picture-url
               - language
+              - country
       requestBody:
         required: true
         content:
@@ -203,7 +242,9 @@ paths:
         404:
           description: The account doesnt exist
         409:
-          description: The password is not valid
+          description: |
+            Password validation failed. The possible error codes:
+            - `urn:wutsi:error:account:password-mismatch`: Password is invalid
       tags:
         - Password
       security:
@@ -269,9 +310,8 @@ paths:
           description: The account doesnt exist
         409:
           description: |
-            The operation failed.
-            The possible error codes:
-            - `urn:error:wutsi:account:payment-method-ownership`: The payment method already assigned to another user
+            The operation failed. The possible error codes:
+            - `urn:wutsi:error:account:payment-method-ownership`: The payment method already assigned to another user
       tags:
         - Payment Methods
       security:
@@ -303,7 +343,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetPaymentMethodResponse'
         404:
-          description: Payment method doesn't exist
+          description: Payment method not found
       tags:
         - Payment Methods
       security:
@@ -424,6 +464,34 @@ components:
           format: int64
           description: ID of the account created
 
+    UpdateAccountRequest:
+      type: object
+      properties:
+        language:
+          type: string
+          description: |
+            2 letter code of the account's language ([ISO 659-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)).
+          default: en
+          maxLength: 2
+        country:
+          type: string
+          description: |
+            2 letter code of the account's conntry ([ISO_3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+          default: US
+          maxLength: 2
+        displayName:
+          type: string
+          description: Account's display name
+          nullable: true
+
+    UpdateAccountResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the account updated
+
     GetAccountResponse:
       type: object
       properties:
@@ -444,6 +512,7 @@ components:
           type: string
           description: |
             Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
+          nullable: true
         limit:
           type: integer
           default: 30
