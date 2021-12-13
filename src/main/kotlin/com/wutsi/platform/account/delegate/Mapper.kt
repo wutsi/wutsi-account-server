@@ -10,12 +10,13 @@ import com.wutsi.platform.account.dto.Phone
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.entity.PhoneEntity
+import com.wutsi.platform.account.service.ImageKit
 import com.wutsi.platform.account.service.SecurityManager
 
-fun AccountEntity.toAccount(securityManager: SecurityManager) = Account(
+fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit) = Account(
     id = this.id ?: -1,
     displayName = this.displayName,
-    pictureUrl = this.pictureUrl,
+    pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, true) },
     created = this.created,
     updated = this.updated,
     status = this.status.name,
@@ -36,10 +37,10 @@ fun PhoneEntity.toPhone() = Phone(
     created = this.created,
 )
 
-fun AccountEntity.toAccountSummary() = AccountSummary(
+fun AccountEntity.toAccountSummary(imageKit: ImageKit) = AccountSummary(
     id = this.id ?: -1,
     displayName = this.displayName,
-    pictureUrl = this.pictureUrl,
+    pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, true) },
     country = this.country,
     created = this.created,
     updated = this.updated,

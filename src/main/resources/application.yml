@@ -76,6 +76,9 @@ wutsi:
       client-id: ${wutsi.application.name}
       device-id-provider:
         type: header
+  image-kit:
+    origin-url: "https://s3.amazonaws.com/int-wutsi"
+    endpoint-url: "https://ik.imagekit.io/cx8qxsgz4d"
 
 logging:
   level:
