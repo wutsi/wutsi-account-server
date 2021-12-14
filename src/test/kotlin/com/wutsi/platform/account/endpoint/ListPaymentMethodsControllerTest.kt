@@ -41,7 +41,7 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertEquals(2, paymentMethods.size)
 
         assertEquals("0000-00000-100", paymentMethods[0].token)
-        assertEquals("+237...4100", paymentMethods[0].maskedNumber)
+        assertEquals("+237 2 21...00", paymentMethods[0].maskedNumber)
         assertEquals("Ray Sponsible", paymentMethods[0].ownerName)
         assertEquals(MOBILE.name, paymentMethods[0].type)
         assertEquals(MTN.name, paymentMethods[0].provider)
@@ -49,7 +49,7 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertNotNull(paymentMethods[0].updated)
 
         assertEquals("0000-00000-101", paymentMethods[1].token)
-        assertEquals("+237...4101", paymentMethods[1].maskedNumber)
+        assertEquals("+237 2 21...01", paymentMethods[1].maskedNumber)
         assertEquals("Ray Sponsible", paymentMethods[1].ownerName)
         assertEquals(MOBILE.name, paymentMethods[1].type)
         assertEquals(ORANGE.name, paymentMethods[1].provider)
