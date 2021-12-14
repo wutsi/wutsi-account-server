@@ -82,11 +82,11 @@ fun PaymentMethodEntity.toMaskedNumber(): String {
         val phoneNumber = util.parse(this.phone!!.number, "")
         val number = util.format(phoneNumber, INTERNATIONAL)
         val i = number.indexOf(' ')
-        return number.substring(0, i) +
+        return number.substring(0, i + 5) +
             "..." +
             number.substring(i)
                 .filter { !it.isWhitespace() }
-                .takeLast(4)
+                .takeLast(2)
     } catch (ex: Exception) {
         return "..." + this.phone!!.number.takeLast(4)
     }
