@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.dto
 
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 

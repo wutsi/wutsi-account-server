@@ -6,8 +6,6 @@ import org.springframework.web.bind.`annotation`.GetMapping
 import org.springframework.web.bind.`annotation`.PathVariable
 import org.springframework.web.bind.`annotation`.RequestParam
 import org.springframework.web.bind.`annotation`.RestController
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import kotlin.Long
 import kotlin.String
 
@@ -18,11 +16,11 @@ public class CheckPasswordController(
     @GetMapping("/v1/accounts/{id}/password")
     @PreAuthorize(value = "hasAuthority('user-read')")
     public fun invoke(
-        @PathVariable(name = "id") @NotNull id: Long,
+        @PathVariable(name = "id") id: Long,
         @RequestParam(
             name = "password",
-            required = true
-        ) @NotBlank password: String
+            required = false
+        ) password: String
     ) {
         delegate.invoke(id, password)
     }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.`annotation`.PostMapping
 import org.springframework.web.bind.`annotation`.RequestBody
 import org.springframework.web.bind.`annotation`.RestController
 import javax.validation.Valid
-import javax.validation.constraints.NotNull
 import kotlin.Long
 
 @RestController
@@ -18,7 +17,7 @@ public class SavePasswordController(
     @PostMapping("/v1/accounts/{id}/password")
     @PreAuthorize(value = "hasAuthority('user-manage')")
     public fun invoke(
-        @PathVariable(name = "id") @NotNull id: Long,
+        @PathVariable(name = "id") id: Long,
         @Valid @RequestBody
         request: SavePasswordRequest
     ) {

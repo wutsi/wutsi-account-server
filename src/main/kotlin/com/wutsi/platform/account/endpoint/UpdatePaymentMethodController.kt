@@ -8,8 +8,6 @@ import org.springframework.web.bind.`annotation`.PostMapping
 import org.springframework.web.bind.`annotation`.RequestBody
 import org.springframework.web.bind.`annotation`.RestController
 import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import kotlin.Long
 import kotlin.String
 
@@ -20,8 +18,8 @@ public class UpdatePaymentMethodController(
     @PostMapping("/v1/accounts/{id}/payment-methods/{token}")
     @PreAuthorize(value = "hasAuthority('payment-method-manage')")
     public fun invoke(
-        @PathVariable(name = "id") @NotNull id: Long,
-        @PathVariable(name = "token") @NotBlank token: String,
+        @PathVariable(name = "id") id: Long,
+        @PathVariable(name = "token") token: String,
         @Valid @RequestBody request: UpdatePaymentMethodRequest
     ) {
         delegate.invoke(id, token, request)

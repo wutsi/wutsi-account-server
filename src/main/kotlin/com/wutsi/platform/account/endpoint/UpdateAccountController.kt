@@ -9,7 +9,6 @@ import org.springframework.web.bind.`annotation`.PostMapping
 import org.springframework.web.bind.`annotation`.RequestBody
 import org.springframework.web.bind.`annotation`.RestController
 import javax.validation.Valid
-import javax.validation.constraints.NotNull
 import kotlin.Long
 
 @RestController
@@ -19,7 +18,7 @@ public class UpdateAccountController(
     @PostMapping("/v1/accounts/{id}")
     @PreAuthorize(value = "hasAuthority('user-manage')")
     public fun invoke(
-        @PathVariable(name = "id") @NotNull id: Long,
+        @PathVariable(name = "id") id: Long,
         @Valid @RequestBody
         request: UpdateAccountRequest
     ): UpdateAccountResponse = delegate.invoke(id, request)
