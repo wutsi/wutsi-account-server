@@ -4,6 +4,7 @@ import com.wutsi.platform.account.dto.ListPaymentMethodResponse
 import com.wutsi.platform.payment.PaymentMethodProvider.MTN
 import com.wutsi.platform.payment.PaymentMethodProvider.ORANGE
 import com.wutsi.platform.payment.PaymentMethodType.MOBILE
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -47,6 +48,10 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertEquals(MTN.name, paymentMethods[0].provider)
         assertNotNull(paymentMethods[0].created)
         assertNotNull(paymentMethods[0].updated)
+        assertNotNull(paymentMethods[0].phone)
+        assertNotNull("+237221234100", paymentMethods[0].phone?.number)
+        assertNotNull("CM", paymentMethods[0].phone?.country)
+        assertNotNull(paymentMethods[0].phone?.created)
 
         assertEquals("0000-00000-101", paymentMethods[1].token)
         assertEquals("+237 2 21...01", paymentMethods[1].maskedNumber)
@@ -55,6 +60,28 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
         assertEquals(ORANGE.name, paymentMethods[1].provider)
         assertNotNull(paymentMethods[1].created)
         assertNotNull(paymentMethods[1].updated)
+        assertNotNull("+237221234101", paymentMethods[1].phone?.number)
+        assertNotNull("CM", paymentMethods[1].phone?.country)
+        assertNotNull(paymentMethods[1].phone?.created)
+    }
+
+    @Test
+    fun `return all payment-methods do not return other users phone details`() {
+        rest = createResTemplate(listOf("payment-method-read"), subjectId = 900)
+
+        val url = "http://localhost:$port/v1/accounts/100/payment-methods"
+        val response = rest.getForEntity(url, ListPaymentMethodResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val paymentMethods = response.body.paymentMethods
+        assertEquals(2, paymentMethods.size)
+
+        assertEquals("+237 2 21...00", paymentMethods[0].maskedNumber)
+        assertNull(paymentMethods[0].phone)
+
+        assertEquals("+237 2 21...01", paymentMethods[1].maskedNumber)
+        assertNull(paymentMethods[1].phone)
     }
 
     @Test

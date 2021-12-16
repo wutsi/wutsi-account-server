@@ -63,14 +63,18 @@ fun PaymentMethodEntity.toPaymentMethod(securityManager: SecurityManager) = Paym
         null
 )
 
-fun PaymentMethodEntity.toPaymentMethodSummary() = PaymentMethodSummary(
+fun PaymentMethodEntity.toPaymentMethodSummary(securityManager: SecurityManager) = PaymentMethodSummary(
     token = this.token,
     created = this.created,
     updated = this.updated,
     type = this.type.name,
     provider = this.provider.name,
     maskedNumber = toMaskedNumber(),
-    ownerName = this.ownerName
+    ownerName = this.ownerName,
+    phone = if (securityManager.canAccessPaymentMethodDetails(this))
+        this.phone?.toPhone()
+    else
+        null
 )
 
 fun PaymentMethodEntity.toMaskedNumber(): String {

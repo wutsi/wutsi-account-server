@@ -786,6 +786,11 @@ components:
         maskedNumber:
           type: string
           description: Masked number of this payment method
+        phone:
+          type: object
+          $ref: "#/components/schemas/Phone"
+          description: Phone Number (for mobile payment)
+          nullable: true
         created:
           type: string
           format: date-time
