@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dao.PasswordRepository
+import com.wutsi.platform.account.dao.PaymentMethodRepository
 import com.wutsi.platform.account.dao.PhoneRepository
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
@@ -17,6 +18,8 @@ import com.wutsi.platform.account.event.AccountCreatedPayload
 import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.core.error.ErrorResponse
 import com.wutsi.platform.core.stream.EventStream
+import com.wutsi.platform.payment.PaymentMethodProvider
+import com.wutsi.platform.payment.PaymentMethodType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -49,6 +52,9 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
     @MockBean
     private lateinit var eventStream: EventStream
+
+    @Autowired
+    private lateinit var paymentMethodDao: PaymentMethodRepository
 
     private lateinit var rest: RestTemplate
     private lateinit var url: String
@@ -161,6 +167,52 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
         assertEquals(response.body.id, payload.firstValue.accountId)
         assertEquals(request.phoneNumber, payload.firstValue.phoneNumber)
+    }
+
+    @Test
+    fun `create account and add payment method`() {
+        val request = CreateAccountRequest(
+            phoneNumber = "+23774511555",
+            language = "fr",
+            country = "CM",
+            displayName = "Ray Sponsible",
+            pictureUrl = "http://www.google.ca/img/1.ong",
+            addPaymentMethod = true
+        )
+        val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(response.body.id).get()
+        assertEquals(request.displayName, account.displayName)
+        assertEquals(request.pictureUrl, account.pictureUrl)
+        assertEquals(request.language, account.language)
+        assertEquals(request.country, account.country)
+        assertEquals(AccountStatus.ACTIVE, account.status)
+        assertNotNull(account.created)
+        assertNotNull(account.updated)
+        assertNull(account.deleted)
+
+        val phone = phoneDao.findById(account.phone?.id).get()
+        assertEquals(request.phoneNumber, phone.number)
+        assertEquals("CM", phone.country)
+        assertNotNull(phone.created)
+
+        val password = passwordDao.findByAccount(account)
+        assertTrue(password.isEmpty)
+
+        val paymentMethods = paymentMethodDao.findByAccount(account)
+        assertEquals(1, paymentMethods.size)
+        assertEquals(account.displayName, paymentMethods[0].ownerName)
+        assertNotNull(paymentMethods[0].token)
+        assertEquals(phone, paymentMethods[0].phone)
+        assertEquals(PaymentMethodProvider.ORANGE, paymentMethods[0].provider)
+        assertEquals(PaymentMethodType.MOBILE, paymentMethods[0].type)
+
+        val payload = argumentCaptor<AccountCreatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
+        assertEquals(response.body.id, payload.firstValue.accountId)
+        assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
     @Test

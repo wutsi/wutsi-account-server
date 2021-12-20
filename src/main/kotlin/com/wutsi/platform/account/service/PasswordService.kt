@@ -10,15 +10,15 @@ import java.util.UUID
 
 @Service
 public class PasswordService(private val dao: PasswordRepository) {
-    fun set(account: AccountEntity, request: SavePasswordRequest) {
+    fun set(account: AccountEntity, request: SavePasswordRequest): PasswordEntity {
         val opt = dao.findByAccount(account)
         if (opt.isPresent) {
             val obj = opt.get()
             obj.value = hash(request.password, obj.salt)
-            dao.save(obj)
+            return dao.save(obj)
         } else {
             val salt = UUID.randomUUID().toString()
-            dao.save(
+            return dao.save(
                 PasswordEntity(
                     account = account,
                     salt = salt,

@@ -454,6 +454,10 @@ components:
           type: string
           description: Password. If not provided, a password-less account will be created
           nullable: true
+        addPaymentMethod:
+          type: boolean
+          description: |
+            if `true`, the phone number assciated with the account will be added as payment method
       required:
         - phoneNumber
 
@@ -499,7 +503,6 @@ components:
         account:
           type: object
           $ref: "#/components/schemas/Account"
-
 
     SearchAccountRequest:
       type: object
@@ -662,6 +665,7 @@ components:
           description: |
             `true` if this is the account of super-user
 
+
     Account:
       type: object
       properties:
@@ -717,6 +721,8 @@ components:
           default: true
           description: |
             `true`, transfer will require confirmation from user
+
+
 
     Phone:
       type: object
