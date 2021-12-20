@@ -1,15 +1,24 @@
 package com.wutsi.platform.account.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
 import com.wutsi.platform.account.error.ErrorURN
+import com.wutsi.platform.account.event.AccountUpdatedPayload
+import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.core.error.ErrorResponse
+import com.wutsi.platform.core.stream.EventStream
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
@@ -29,6 +38,9 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     private lateinit var dao: AccountRepository
 
     private lateinit var rest: RestTemplate
+
+    @MockBean
+    private lateinit var eventStream: EventStream
 
     @BeforeEach
     override fun setUp() {
@@ -54,6 +66,8 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals("urn:error:wutsi:access-denied", response.error.code)
+
+        verify(eventStream, never()).publish(any(), any())
     }
 
     @Test
@@ -67,6 +81,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals(request.value, account.displayName)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("display-name", payload.firstValue.attribute)
     }
 
     @Test
@@ -80,6 +99,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertNull(account.displayName)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("display-name", payload.firstValue.attribute)
     }
 
     @Test
@@ -93,6 +117,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertNull(account.displayName)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("display-name", payload.firstValue.attribute)
     }
 
     @Test
@@ -106,6 +135,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals(request.value, account.pictureUrl)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("picture-url", payload.firstValue.attribute)
     }
 
     @Test
@@ -119,6 +153,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertNull(account.pictureUrl)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("picture-url", payload.firstValue.attribute)
     }
 
     @Test
@@ -132,6 +171,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertNull(account.pictureUrl)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("picture-url", payload.firstValue.attribute)
     }
 
     @Test
@@ -147,6 +191,8 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.PICTURE_URL_MALFORMED.urn, response.error.code)
+
+        verify(eventStream, never()).publish(any(), any())
     }
 
     @Test
@@ -162,6 +208,8 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.ATTRIBUTE_INVALID.urn, response.error.code)
+
+        verify(eventStream, never()).publish(any(), any())
     }
 
     @Test
@@ -177,6 +225,8 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.ACCOUNT_DELETED.urn, response.error.code)
+
+        verify(eventStream, never()).publish(any(), any())
     }
 
     @Test
@@ -190,6 +240,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals(request.value, account.language)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("language", payload.firstValue.attribute)
     }
 
     @Test
@@ -203,6 +258,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals("en", account.language)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("language", payload.firstValue.attribute)
     }
 
     @Test
@@ -216,6 +276,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals("en", account.language)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("language", payload.firstValue.attribute)
     }
 
     @Test
@@ -229,6 +294,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertEquals(request.value, account.country)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("country", payload.firstValue.attribute)
     }
 
     @Test
@@ -242,6 +312,11 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertTrue(account.isTransferSecured)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("transfer-secured", payload.firstValue.attribute)
     }
 
     @Test
@@ -255,10 +330,15 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertFalse(account.isTransferSecured)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("transfer-secured", payload.firstValue.attribute)
     }
 
     @Test
-    public fun `null transfer security`() {
+    public fun `null transfer secured`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
         val request = UpdateAccountAttributeRequest(
             value = null
@@ -268,5 +348,10 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
 
         val account = dao.findById(100).get()
         assertFalse(account.isTransferSecured)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals("transfer-secured", payload.firstValue.attribute)
     }
 }

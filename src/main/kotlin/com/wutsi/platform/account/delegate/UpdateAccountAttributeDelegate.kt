@@ -2,6 +2,8 @@ package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
 import com.wutsi.platform.account.error.ErrorURN
+import com.wutsi.platform.account.event.AccountUpdatedPayload
+import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.account.service.AccountService
 import com.wutsi.platform.account.service.SecurityManager
 import com.wutsi.platform.core.error.Error
@@ -10,6 +12,8 @@ import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.logging.KVLogger
+import com.wutsi.platform.core.stream.EventStream
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.net.MalformedURLException
 import java.net.URL
@@ -21,8 +25,10 @@ public class UpdateAccountAttributeDelegate(
     private val service: AccountService,
     private val securityManager: SecurityManager,
     private val logger: KVLogger,
+    private val stream: EventStream,
 ) {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(UpdateAccountAttributeDelegate::class.java)
         const val DEFAULT_LANGUAGE = "en"
         const val DEFAULT_COUNTRY = "US"
     }
@@ -56,6 +62,8 @@ public class UpdateAccountAttributeDelegate(
                 )
             )
         }
+
+        publishEvent(id, name)
     }
 
     private fun toString(value: String?): String? =
@@ -98,5 +106,16 @@ public class UpdateAccountAttributeDelegate(
 
         val locale = Locale.getAvailableLocales().find { it.country.equals(value, true) }
         return locale?.country ?: DEFAULT_COUNTRY
+    }
+
+    private fun publishEvent(id: Long, attribute: String) {
+        try {
+            stream.publish(
+                EventURN.ACCOUNT_UPDATED.urn,
+                AccountUpdatedPayload(id, attribute)
+            )
+        } catch (ex: Exception) {
+            LOGGER.error("Unable to push event ${EventURN.ACCOUNT_UPDATED.urn}", ex)
+        }
     }
 }
