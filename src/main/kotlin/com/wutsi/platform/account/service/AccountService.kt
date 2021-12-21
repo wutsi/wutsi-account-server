@@ -81,8 +81,18 @@ class AccountService(
     private fun parameters(request: SearchAccountRequest, query: Query) {
         query.setParameter("is_deleted", false)
         if (!request.phoneNumber.isNullOrEmpty())
-            query.setParameter("phone_number", request.phoneNumber)
+            query.setParameter("phone_number", normalizePhoneNumber(request.phoneNumber))
         if (request.ids.isNotEmpty())
             query.setParameter("ids", request.ids)
+    }
+
+    private fun normalizePhoneNumber(phoneNumber: String?): String? {
+        phoneNumber ?: return null
+
+        val value = phoneNumber.trim()
+        return if (value.startsWith("+"))
+            value
+        else
+            "+$value"
     }
 }

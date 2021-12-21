@@ -54,6 +54,29 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
+    public fun `search by phone to normalize`() {
+        val request = SearchAccountRequest(
+            phoneNumber = " 237221234100"
+        )
+        val response = rest.postForEntity(url, request, SearchAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val accounts = response.body.accounts
+        assertEquals(1, accounts.size)
+
+        val account = accounts[0]
+        assertEquals(100, account.id)
+        assertEquals("Ray Sponsible", account.displayName)
+        assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
+        assertEquals("ACTIVE", account.status)
+        assertEquals("fr", account.language)
+        assertNotNull(account.created)
+        assertNotNull(account.updated)
+        assertTrue(account.superUser)
+    }
+
+    @Test
     public fun `search by ID`() {
         val request = SearchAccountRequest(
             ids = listOf(100L, 101L)
