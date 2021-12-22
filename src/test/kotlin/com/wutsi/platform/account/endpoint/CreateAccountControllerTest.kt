@@ -89,6 +89,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
+        assertEquals(TENANT_ID, account.tenantId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)
@@ -127,6 +128,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
+        assertEquals(TENANT_ID, account.tenantId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)
@@ -162,6 +164,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertEquals(AccountStatus.ACTIVE, account.status)
         assertEquals(request.language, account.language)
         assertEquals(100, account.phone?.id)
+        assertEquals(TENANT_ID, account.tenantId)
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
@@ -192,6 +195,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
+        assertEquals(TENANT_ID, account.tenantId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)

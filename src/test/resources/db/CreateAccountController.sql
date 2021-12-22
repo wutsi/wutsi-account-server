@@ -4,4 +4,4 @@ INSERT INTO T_PHONE(id, number, country)
         (101, '+237221234101', 'CM')
 ;
 
-INSERT INTO T_ACCOUNT(phone_fk) VALUES(101);
+INSERT INTO T_ACCOUNT(tenant_id, phone_fk) VALUES(777, 101);

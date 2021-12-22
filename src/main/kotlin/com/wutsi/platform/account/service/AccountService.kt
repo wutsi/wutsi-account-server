@@ -17,6 +17,8 @@ import javax.persistence.Query
 class AccountService(
     private val dao: AccountRepository,
     private val em: EntityManager,
+    private val securityManager: SecurityManager,
+    private val tenantProvider: TenantProvider,
 ) {
     fun findById(id: Long, parameterType: ParameterType = PARAMETER_TYPE_PATH): AccountEntity {
         val account = dao.findById(id)
@@ -45,6 +47,7 @@ class AccountService(
                 )
             )
 
+        securityManager.checkTenant(account)
         return account
     }
 
@@ -71,6 +74,8 @@ class AccountService(
 
     private fun where(request: SearchAccountRequest): String {
         val criteria = mutableListOf("a.isDeleted=:is_deleted")
+
+        criteria.add("a.tenantId=:tenant_id")
         if (!request.phoneNumber.isNullOrEmpty())
             criteria.add("a.phone.number=:phone_number")
         if (request.ids.isNotEmpty())
@@ -80,6 +85,7 @@ class AccountService(
 
     private fun parameters(request: SearchAccountRequest, query: Query) {
         query.setParameter("is_deleted", false)
+        query.setParameter("tenant_id", tenantProvider.id())
         if (!request.phoneNumber.isNullOrEmpty())
             query.setParameter("phone_number", normalizePhoneNumber(request.phoneNumber))
         if (request.ids.isNotEmpty())

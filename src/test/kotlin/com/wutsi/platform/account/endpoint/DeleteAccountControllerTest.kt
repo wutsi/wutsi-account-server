@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.platform.account.dao.AccountRepository
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.account.event.AccountDeletedPayload
 import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.core.error.ErrorResponse
@@ -60,6 +61,7 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountDeletedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_DELETED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
     }
 
     @Test
@@ -87,8 +89,20 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
         assertEquals(403, ex.rawStatusCode)
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
-        assertEquals("urn:error:wutsi:access-denied", response.error.code)
+        assertEquals(ErrorURN.ILLEGAL_ACCOUNT_ACCESS.urn, response.error.code)
 
         verify(eventStream, never()).publish(any(), any())
+    }
+
+    @Test
+    public fun `invalid tenant`() {
+        val url = "http://localhost:$port/v1/accounts/200"
+
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest = createResTemplate(tenantId = 999999)
+            rest.delete(url)
+        }
+
+        assertEquals(403, ex.rawStatusCode)
     }
 }

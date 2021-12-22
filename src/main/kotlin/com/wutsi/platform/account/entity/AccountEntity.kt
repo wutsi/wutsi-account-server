@@ -18,6 +18,8 @@ data class AccountEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
+    val tenantId: Long = -1,
+
     @OneToOne
     @JoinColumn(name = "phone_fk")
     var phone: PhoneEntity? = null,

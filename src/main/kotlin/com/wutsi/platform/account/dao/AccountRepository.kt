@@ -8,5 +8,5 @@ import java.util.Optional
 
 @Repository
 interface AccountRepository : CrudRepository<AccountEntity, Long> {
-    fun findByPhone(phone: PhoneEntity): Optional<AccountEntity>
+    fun findByTenantIdAndPhone(tenantId: Long?, phone: PhoneEntity): Optional<AccountEntity>
 }

@@ -90,7 +90,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
         val url = "http://localhost:$port/v1/accounts/199/payment-methods/0000-00000-199"
 
         val ex = assertThrows<HttpStatusCodeException> {
-            val response = rest.getForEntity(url, GetAccountResponse::class.java)
+            rest.getForEntity(url, GetAccountResponse::class.java)
         }
         assertEquals(404, ex.rawStatusCode)
 
@@ -120,5 +120,31 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
             rest.getForEntity(url, GetAccountResponse::class.java)
         }
         assertEquals(403, ex.rawStatusCode)
+    }
+
+    @Test
+    public fun `invalid tenant`() {
+        rest = createResTemplate(subjectId = 100, tenantId = 99999L, scope = listOf("payment-method-read"))
+        val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
+
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.getForEntity(url, GetAccountResponse::class.java)
+        }
+        assertEquals(403, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals(ErrorURN.ILLEGAL_TENANT_ACCESS.urn, response.error.code)
+    }
+
+    @Test
+    fun `bad user-id`() {
+        val url = "http://localhost:$port/v1/accounts/101/payment-methods/0000-00000-100"
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest.getForEntity(url, GetAccountResponse::class.java)
+        }
+        assertEquals(403, ex.rawStatusCode)
+
+        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        assertEquals(ErrorURN.ILLEGAL_PAYMENT_METHOD_ACCESS.urn, response.error.code)
     }
 }

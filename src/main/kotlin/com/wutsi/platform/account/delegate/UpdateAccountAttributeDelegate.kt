@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
+import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.account.event.AccountUpdatedPayload
 import com.wutsi.platform.account.event.EventURN
@@ -63,7 +64,7 @@ public class UpdateAccountAttributeDelegate(
             )
         }
 
-        publishEvent(id, name)
+        publishEvent(account, name)
     }
 
     private fun toString(value: String?): String? =
@@ -108,11 +109,15 @@ public class UpdateAccountAttributeDelegate(
         return locale?.country ?: DEFAULT_COUNTRY
     }
 
-    private fun publishEvent(id: Long, attribute: String) {
+    private fun publishEvent(account: AccountEntity, attribute: String) {
         try {
             stream.publish(
                 EventURN.ACCOUNT_UPDATED.urn,
-                AccountUpdatedPayload(id, attribute)
+                AccountUpdatedPayload(
+                    accountId = account.id!!,
+                    tenantId = account.tenantId,
+                    attribute = attribute
+                )
             )
         } catch (ex: Exception) {
             LOGGER.error("Unable to push event ${EventURN.ACCOUNT_UPDATED.urn}", ex)

@@ -12,8 +12,12 @@ public class GetAccountDelegate(
     private val securityManager: SecurityManager,
     private val imageKit: ImageKit,
 ) {
-    fun invoke(id: Long): GetAccountResponse =
-        GetAccountResponse(
-            account = service.findById(id).toAccount(securityManager, imageKit)
+    fun invoke(id: Long): GetAccountResponse {
+        val account = service.findById(id)
+        securityManager.checkTenant(account)
+
+        return GetAccountResponse(
+            account = account.toAccount(securityManager, imageKit)
         )
+    }
 }

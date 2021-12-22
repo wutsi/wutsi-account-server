@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.`delegate`
 
 import com.wutsi.platform.account.dao.AccountRepository
+import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.event.AccountDeletedPayload
 import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.account.service.AccountService
@@ -32,14 +33,17 @@ public class DeleteAccountDelegate(
         account.deleted = OffsetDateTime.now()
         dao.save(account)
 
-        publishEvent(id)
+        publishEvent(account)
     }
 
-    private fun publishEvent(id: Long) {
+    private fun publishEvent(account: AccountEntity) {
         try {
             stream.publish(
                 EventURN.ACCOUNT_DELETED.urn,
-                AccountDeletedPayload(id)
+                AccountDeletedPayload(
+                    accountId = account.id!!,
+                    tenantId = account.tenantId
+                )
             )
         } catch (ex: Exception) {
             LOGGER.error("Unable to push event ${EventURN.ACCOUNT_DELETED.urn}", ex)

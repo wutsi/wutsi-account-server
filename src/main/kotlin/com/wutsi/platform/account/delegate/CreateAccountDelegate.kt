@@ -17,11 +17,14 @@ import com.wutsi.platform.account.event.EventURN
 import com.wutsi.platform.account.service.MobilePaymentService
 import com.wutsi.platform.account.service.PasswordService
 import com.wutsi.platform.account.service.PhoneService
+import com.wutsi.platform.account.service.TenantProvider
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
+import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_HEADER
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PAYLOAD
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
+import com.wutsi.platform.core.error.exception.UnauthorizedException
 import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.stream.EventStream
 import com.wutsi.platform.core.tracing.TracingContext
@@ -43,6 +46,7 @@ public class CreateAccountDelegate(
     private val tracingContext: TracingContext,
     private val tenantApi: WutsiTenantApi,
     private val logger: KVLogger,
+    private val tenantProvider: TenantProvider
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(CreateAccountRequest::class.java)
@@ -51,8 +55,21 @@ public class CreateAccountDelegate(
     @Transactional
     public fun invoke(request: CreateAccountRequest): CreateAccountResponse {
         try {
+            // Tenant
+            val tenantId = tenantProvider.id()
+                ?: throw UnauthorizedException(
+                    error = Error(
+                        code = ErrorURN.TENANT_ID_MISSING.urn,
+                        parameter = Parameter(
+                            name = TracingContext.HEADER_TENANT_ID,
+                            type = PARAMETER_TYPE_HEADER,
+                        )
+                    )
+                )
+
+            // Phone
             val phone = phoneService.findOrCreate(request.phoneNumber)
-            if (dao.findByPhone(phone).isPresent) {
+            if (dao.findByTenantIdAndPhone(tenantId, phone).isPresent) {
                 throw ConflictException(
                     error = Error(
                         code = ErrorURN.PHONE_NUMBER_ALREADY_ASSIGNED.urn,
@@ -65,7 +82,7 @@ public class CreateAccountDelegate(
                 )
             }
 
-            val account = createAccount(phone, request)
+            val account = createAccount(tenantId, phone, request)
             logger.add("account_id", account.id)
 
             val password = setPassword(account, request)
@@ -93,7 +110,7 @@ public class CreateAccountDelegate(
         }
     }
 
-    private fun createAccount(phone: PhoneEntity, request: CreateAccountRequest): AccountEntity =
+    private fun createAccount(tenantId: Long, phone: PhoneEntity, request: CreateAccountRequest): AccountEntity =
         dao.save(
             AccountEntity(
                 phone = phone,
@@ -102,6 +119,7 @@ public class CreateAccountDelegate(
                 country = request.country,
                 displayName = request.displayName,
                 pictureUrl = request.pictureUrl,
+                tenantId = tenantId
             )
         )
 

@@ -13,6 +13,8 @@ public class GetPaymentMethodDelegate(
 ) {
     fun invoke(id: Long, token: String): GetPaymentMethodResponse {
         val payment = paymentService.findByToken(id, token, PARAMETER_TYPE_PATH)
+        securityManager.checkTenant(payment.account)
+
         return GetPaymentMethodResponse(
             paymentMethod = payment.toPaymentMethod(securityManager)
         )

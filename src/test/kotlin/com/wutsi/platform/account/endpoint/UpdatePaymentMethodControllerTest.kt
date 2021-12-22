@@ -68,7 +68,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
         assertEquals(403, ex.rawStatusCode)
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
-        assertEquals("urn:error:wutsi:access-denied", response.error.code)
+        assertEquals(ErrorURN.ILLEGAL_ACCOUNT_ACCESS.urn, response.error.code)
     }
 
     @Test

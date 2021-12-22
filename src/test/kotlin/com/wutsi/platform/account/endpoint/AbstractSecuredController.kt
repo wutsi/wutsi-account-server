@@ -3,7 +3,6 @@ package com.wutsi.platform.account.endpoint
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.platform.core.security.ApiKeyProvider
 import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.SubjectType.USER
 import com.wutsi.platform.core.security.spring.SpringApiKeyRequestInterceptor
@@ -13,7 +12,6 @@ import com.wutsi.platform.core.test.TestApiKeyProvider
 import com.wutsi.platform.core.test.TestRSAKeyProvider
 import com.wutsi.platform.core.test.TestTokenProvider
 import com.wutsi.platform.core.test.TestTracingContext
-import com.wutsi.platform.core.tracing.TracingContext
 import com.wutsi.platform.core.tracing.spring.SpringTracingRequestInterceptor
 import com.wutsi.platform.core.util.URN
 import com.wutsi.platform.tenant.WutsiTenantApi
@@ -27,17 +25,15 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.web.client.RestTemplate
 
 abstract class AbstractSecuredController {
-    private lateinit var tracingContext: TracingContext
-    private lateinit var apiKeyProvider: ApiKeyProvider
+    companion object {
+        const val TENANT_ID = 777L
+    }
 
     @MockBean
     protected lateinit var tenantApi: WutsiTenantApi
 
     @BeforeEach
     open fun setUp() {
-        tracingContext = TestTracingContext(tenantId = "1")
-        apiKeyProvider = TestApiKeyProvider("00000000-00000000-00000000-00000000")
-
         val tenant = Tenant(
             id = 1,
             name = "test",
@@ -83,10 +79,11 @@ abstract class AbstractSecuredController {
     }
 
     protected fun createResTemplate(
-        scope: List<String> = emptyList(),
+        scope: List<String> = listOf("user-read", "user-manage"),
         subjectId: Long = -1,
         subjectType: SubjectType = USER,
-        admin: Boolean = false
+        admin: Boolean = false,
+        tenantId: Long = TENANT_ID
     ): RestTemplate {
         val rest = RestTemplate()
 
@@ -97,13 +94,13 @@ abstract class AbstractSecuredController {
                 subjectType = subjectType,
                 scope = scope,
                 keyProvider = TestRSAKeyProvider(),
-                admin = admin
+                admin = admin,
             ).build()
         )
 
-        rest.interceptors.add(SpringTracingRequestInterceptor(tracingContext))
+        rest.interceptors.add(SpringTracingRequestInterceptor(TestTracingContext(tenantId = tenantId.toString())))
         rest.interceptors.add(SpringAuthorizationRequestInterceptor(tokenProvider))
-        rest.interceptors.add(SpringApiKeyRequestInterceptor(apiKeyProvider))
+        rest.interceptors.add(SpringApiKeyRequestInterceptor(TestApiKeyProvider("00000000-00000000-00000000-00000000")))
         return rest
     }
 }

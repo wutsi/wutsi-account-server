@@ -14,4 +14,8 @@ enum class ErrorURN(val urn: String) {
     PHONE_NUMBER_MISSING("urn:wutsi:error:account:phone-number-missing"),
     PHONE_NUMBER_ALREADY_ASSIGNED("urn:wutsi:error:account:phone-number-already-assigned"),
     PHONE_NUMBER_NOT_FOUND("urn:wutsi:error:account:phone-number-not-found"),
+    TENANT_ID_MISSING("urn:wutsi:error:account:tenant-id-missing"),
+    ILLEGAL_TENANT_ACCESS("urn:wutsi:error:account:illegal-tenant-access"),
+    ILLEGAL_ACCOUNT_ACCESS("urn:wutsi:error:account:illegal-account-access"),
+    ILLEGAL_PAYMENT_METHOD_ACCESS("urn:wutsi:error:account:illegal-payment-method-access"),
 }

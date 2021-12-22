@@ -30,7 +30,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     override fun setUp() {
         super.setUp()
 
-        rest = createResTemplate(listOf("user-read"), subjectId = 100)
+        rest = createResTemplate(subjectId = 100)
     }
 
     @Test
@@ -108,5 +108,16 @@ public class GetAccountControllerTest : AbstractSecuredController() {
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.ACCOUNT_NOT_FOUND.urn, response.error.code)
+    }
+
+    @Test
+    public fun `invalid tenant`() {
+        val url = "http://localhost:$port/v1/accounts/100"
+
+        val ex = assertThrows<HttpStatusCodeException> {
+            rest = createResTemplate(tenantId = 999999)
+            rest.getForEntity(url, GetAccountResponse::class.java)
+        }
+        assertEquals(403, ex.rawStatusCode)
     }
 }

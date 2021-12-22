@@ -2,21 +2,41 @@ package com.wutsi.platform.account.service
 
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.PaymentMethodEntity
+import com.wutsi.platform.account.error.ErrorURN
+import com.wutsi.platform.core.error.Error
+import com.wutsi.platform.core.error.exception.ForbiddenException
 import com.wutsi.platform.core.security.WutsiPrincipal
-import org.springframework.security.access.AccessDeniedException
+import com.wutsi.platform.core.tracing.TracingContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class SecurityManager {
+class SecurityManager(
+    private val tracingContext: TracingContext
+) {
     companion object {
         const val PERMISSION_USER_PHONE = "user-phone"
         const val PERMISSION_PAYMENT_DETAILS = "payment-method-details"
     }
 
-    fun checkOwnership(account: AccountEntity) {
+    fun checkOwnership(account: AccountEntity): Boolean {
         if (!isOwner(account))
-            throw AccessDeniedException("Current user not owner of hte Account")
+            throw ForbiddenException(
+                error = Error(
+                    code = ErrorURN.ILLEGAL_ACCOUNT_ACCESS.urn
+                )
+            )
+        return true
+    }
+
+    fun checkTenant(account: AccountEntity): Boolean {
+        if (account.tenantId != tracingContext.tenantId()?.toLong())
+            throw ForbiddenException(
+                error = Error(
+                    code = ErrorURN.ILLEGAL_TENANT_ACCESS.urn
+                )
+            )
+        return true
     }
 
     fun canAccessPhone(account: AccountEntity): Boolean =
@@ -40,5 +60,11 @@ class SecurityManager {
 
         val principal = authentication.principal
         return principal is WutsiPrincipal && principal.admin
+    }
+
+    private fun principal(): WutsiPrincipal {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val principal = authentication.principal
+        return principal as WutsiPrincipal
     }
 }

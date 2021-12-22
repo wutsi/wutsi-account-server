@@ -5,9 +5,9 @@ import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.entity.PhoneEntity
 import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.Error
-import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.ParameterType.PARAMETER_TYPE_PATH
+import com.wutsi.platform.core.error.exception.ForbiddenException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.stereotype.Service
@@ -27,34 +27,23 @@ public class PaymentMethodService(
             .orElseThrow {
                 NotFoundException(
                     error = Error(
-                        code = ErrorURN.PAYMENT_METHOD_NOT_FOUND.urn,
-                        data = mapOf(
-                            "accountId" to accountId,
-                            "token" to token
-                        )
+                        code = ErrorURN.PAYMENT_METHOD_NOT_FOUND.urn
                     )
                 )
             }
-        if (payment.account.id != accountId)
-            throw NotFoundException(
+
+        if (payment.account.id != accountId) {
+            throw ForbiddenException(
                 error = Error(
-                    code = ErrorURN.ACCOUNT_NOT_FOUND.urn,
-                    data = mapOf(
-                        "accountId" to accountId,
-                        "token" to token
-                    )
+                    code = ErrorURN.ILLEGAL_PAYMENT_METHOD_ACCESS.urn
                 )
             )
+        }
 
         if (payment.isDeleted)
             throw NotFoundException(
                 error = Error(
-                    code = ErrorURN.PAYMENT_METHOD_DELETED.urn,
-                    parameter = Parameter(
-                        name = "token",
-                        value = token,
-                        type = parameterType
-                    )
+                    code = ErrorURN.PAYMENT_METHOD_DELETED.urn
                 )
             )
 

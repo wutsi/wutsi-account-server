@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dao.PasswordRepository
 import com.wutsi.platform.account.dto.SavePasswordRequest
+import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -86,6 +87,6 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
         assertEquals(403, ex.rawStatusCode)
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
-        assertEquals("urn:error:wutsi:access-denied", response.error.code)
+        assertEquals(ErrorURN.ILLEGAL_ACCOUNT_ACCESS.urn, response.error.code)
     }
 }
