@@ -5,10 +5,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.SubjectType.USER
-import com.wutsi.platform.core.security.spring.SpringApiKeyRequestInterceptor
 import com.wutsi.platform.core.security.spring.SpringAuthorizationRequestInterceptor
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
-import com.wutsi.platform.core.test.TestApiKeyProvider
 import com.wutsi.platform.core.test.TestRSAKeyProvider
 import com.wutsi.platform.core.test.TestTokenProvider
 import com.wutsi.platform.core.test.TestTracingContext
@@ -100,7 +98,6 @@ abstract class AbstractSecuredController {
 
         rest.interceptors.add(SpringTracingRequestInterceptor(TestTracingContext(tenantId = tenantId.toString())))
         rest.interceptors.add(SpringAuthorizationRequestInterceptor(tokenProvider))
-        rest.interceptors.add(SpringApiKeyRequestInterceptor(TestApiKeyProvider("00000000-00000000-00000000-00000000")))
         return rest
     }
 }

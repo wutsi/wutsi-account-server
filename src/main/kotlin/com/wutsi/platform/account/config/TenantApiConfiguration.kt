@@ -1,7 +1,6 @@
 package com.wutsi.platform.account.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.platform.core.security.feign.FeignApiKeyRequestInterceptor
 import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.tenant.WutsiTenantApi
@@ -15,7 +14,6 @@ import org.springframework.core.env.Profiles
 public class TenantApiConfiguration(
     private val authorizationRequestInterceptor: FeignAuthorizationRequestInterceptor,
     private val tracingRequestInterceptor: FeignTracingRequestInterceptor,
-    private val apiKeyRequestInterceptor: FeignApiKeyRequestInterceptor,
     private val mapper: ObjectMapper,
     private val env: Environment
 ) {
@@ -25,7 +23,6 @@ public class TenantApiConfiguration(
             env = environment(),
             mapper = mapper,
             interceptors = listOf(
-                apiKeyRequestInterceptor,
                 tracingRequestInterceptor,
                 authorizationRequestInterceptor
             )
