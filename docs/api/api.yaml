@@ -172,6 +172,9 @@ paths:
               - country
               - is-transfer-secured
               - business
+              - biography
+              - website
+              - category-id
       requestBody:
         required: true
         content:
@@ -739,6 +742,16 @@ components:
           type: boolean
           default: false
           description: TRUE for retailler business account
+        biography:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        categoryId:
+          type: number
+          format: int64
+          nullable: true
 
 
     Phone:

@@ -53,6 +53,9 @@ public class UpdateAccountAttributeDelegate(
             "country" -> account.country = toCountry(request.value)
             "transfer-secured" -> account.isTransferSecured = toBoolean(request.value)
             "business" -> account.business = toBoolean(request.value)
+            "biography" -> account.biography = request.value
+            "website" -> account.website = request.value
+            "category-id" -> account.categoryId = request.value?.toLong()
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

@@ -18,5 +18,8 @@ public data class Account(
     public val superUser: Boolean = false,
     public val transferSecured: Boolean = true,
     public val business: Boolean = false,
-    public val retail: Boolean = false
+    public val retail: Boolean = false,
+    public val biography: String? = null,
+    public val website: String? = null,
+    public val categoryId: Long? = null
 )

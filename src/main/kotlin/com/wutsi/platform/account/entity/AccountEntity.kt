@@ -39,5 +39,8 @@ data class AccountEntity(
     var isDeleted: Boolean = false,
     var isTransferSecured: Boolean = true,
     var business: Boolean = false,
-    var retail: Boolean = false
+    var retail: Boolean = false,
+    var website: String? = null,
+    var biography: String? = null,
+    var categoryId: Long? = null,
 )

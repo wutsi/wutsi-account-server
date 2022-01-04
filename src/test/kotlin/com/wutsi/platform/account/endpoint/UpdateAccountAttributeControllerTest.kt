@@ -386,4 +386,61 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
         assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("business", payload.firstValue.attribute)
     }
+
+    @Test
+    public fun `set website`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/website"
+        val request = UpdateAccountAttributeRequest(
+            value = "https://www.google.ca"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(request.value, account.website)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("website", payload.firstValue.attribute)
+    }
+
+    @Test
+    public fun `set biography`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/biography"
+        val request = UpdateAccountAttributeRequest(
+            value = "This is a nice store"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(request.value, account.biography)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("biography", payload.firstValue.attribute)
+    }
+
+    @Test
+    public fun `set category-id`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/category-id"
+        val request = UpdateAccountAttributeRequest(
+            value = "555"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(555, account.categoryId)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("category-id", payload.firstValue.attribute)
+    }
 }

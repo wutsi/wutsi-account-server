@@ -26,6 +26,9 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
     transferSecured = this.isTransferSecured,
     business = this.business,
     retail = this.retail,
+    categoryId = this.categoryId,
+    biography = this.biography,
+    website = this.website,
     phone = if (securityManager.canAccessPhone(this))
         this.phone?.toPhone()
     else
