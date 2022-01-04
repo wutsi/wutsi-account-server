@@ -50,6 +50,8 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.updated)
         assertTrue(account.superUser)
         assertFalse(account.transferSecured)
+        assertTrue(account.business)
+        assertTrue(account.retail)
 
         assertNotNull(account.phone)
         assertNotNull("+237221234100", account.phone?.number)

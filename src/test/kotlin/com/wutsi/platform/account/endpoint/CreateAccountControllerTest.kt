@@ -31,6 +31,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -74,7 +75,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
             language = "fr",
             country = "US",
             displayName = "Ray Sponsible",
-            pictureUrl = "http://www.google.ca/img/1.ong"
+            pictureUrl = "http://www.google.ca/img/1.ong",
+            business = true
         )
         val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
 
@@ -89,6 +91,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
+        assertTrue(account.business)
+        assertFalse(account.retail)
         assertEquals(TENANT_ID, account.tenantId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
@@ -128,6 +132,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.created)
         assertNotNull(account.updated)
         assertNull(account.deleted)
+        assertFalse(account.business)
+        assertFalse(account.retail)
         assertEquals(TENANT_ID, account.tenantId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
@@ -165,6 +171,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertEquals(request.language, account.language)
         assertEquals(100, account.phone?.id)
         assertEquals(TENANT_ID, account.tenantId)
+        assertFalse(account.business)
+        assertFalse(account.retail)
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
@@ -196,6 +204,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.updated)
         assertNull(account.deleted)
         assertEquals(TENANT_ID, account.tenantId)
+        assertFalse(account.business)
+        assertFalse(account.retail)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)

@@ -37,5 +37,7 @@ data class AccountEntity(
     var country: String = "",
     val isSuperUser: Boolean = false,
     var isDeleted: Boolean = false,
-    var isTransferSecured: Boolean = true
+    var isTransferSecured: Boolean = true,
+    var business: Boolean = false,
+    var retail: Boolean = false
 )

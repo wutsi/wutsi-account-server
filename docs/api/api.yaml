@@ -171,6 +171,7 @@ paths:
               - language
               - country
               - is-transfer-secured
+              - business
       requestBody:
         required: true
         content:
@@ -456,8 +457,10 @@ components:
           nullable: true
         addPaymentMethod:
           type: boolean
-          description: |
-            if `true`, the phone number assciated with the account will be added as payment method
+          description: Add the phone number as payment method?
+        business:
+          type: boolean
+          description: Business account?
       required:
         - phoneNumber
 
@@ -664,7 +667,14 @@ components:
           default: false
           description: |
             `true` if this is the account of super-user
-
+        business:
+          type: boolean
+          default: false
+          description: Business account?
+        retail:
+          type: boolean
+          default: false
+          description: Retail account?
 
     Account:
       type: object
@@ -721,7 +731,14 @@ components:
           default: true
           description: |
             `true`, transfer will require confirmation from user
-
+        business:
+          type: boolean
+          default: false
+          description: TRUE for business account
+        retail:
+          type: boolean
+          default: false
+          description: TRUE for retailler business account
 
 
     Phone:

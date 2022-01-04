@@ -24,6 +24,8 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
     country = this.country,
     superUser = this.isSuperUser,
     transferSecured = this.isTransferSecured,
+    business = this.business,
+    retail = this.retail,
     phone = if (securityManager.canAccessPhone(this))
         this.phone?.toPhone()
     else
@@ -46,7 +48,9 @@ fun AccountEntity.toAccountSummary(imageKit: ImageKit) = AccountSummary(
     updated = this.updated,
     status = this.status.name,
     language = this.language,
-    superUser = this.isSuperUser
+    superUser = this.isSuperUser,
+    business = this.business,
+    retail = this.retail,
 )
 
 fun PaymentMethodEntity.toPaymentMethod(securityManager: SecurityManager) = PaymentMethod(

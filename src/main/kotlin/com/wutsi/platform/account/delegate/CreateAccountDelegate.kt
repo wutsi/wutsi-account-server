@@ -119,7 +119,8 @@ public class CreateAccountDelegate(
                 country = request.country,
                 displayName = request.displayName,
                 pictureUrl = request.pictureUrl,
-                tenantId = tenantId
+                tenantId = tenantId,
+                business = request.business
             )
         )
 

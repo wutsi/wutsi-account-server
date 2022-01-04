@@ -51,7 +51,8 @@ public class UpdateAccountAttributeDelegate(
             "picture-url" -> account.pictureUrl = toPictureUrl(request.value)?.toString()
             "language" -> account.language = toLanguage(request.value)
             "country" -> account.country = toCountry(request.value)
-            "transfer-secured" -> account.isTransferSecured = request.value?.lowercase() == "true"
+            "transfer-secured" -> account.isTransferSecured = toBoolean(request.value)
+            "business" -> account.business = toBoolean(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,
@@ -66,6 +67,9 @@ public class UpdateAccountAttributeDelegate(
 
         publishEvent(account, name)
     }
+
+    private fun toBoolean(value: String?): Boolean =
+        value?.lowercase() == "true"
 
     private fun toString(value: String?): String? =
         if (value.isNullOrEmpty())

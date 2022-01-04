@@ -367,4 +367,23 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
         assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("transfer-secured", payload.firstValue.attribute)
     }
+
+    @Test
+    public fun `set business`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/business"
+        val request = UpdateAccountAttributeRequest(
+            value = "true"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertTrue(account.business)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("business", payload.firstValue.attribute)
+    }
 }

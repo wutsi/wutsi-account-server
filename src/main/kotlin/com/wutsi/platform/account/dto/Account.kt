@@ -16,5 +16,7 @@ public data class Account(
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     public val updated: OffsetDateTime = OffsetDateTime.now(),
     public val superUser: Boolean = false,
-    public val transferSecured: Boolean = true
+    public val transferSecured: Boolean = true,
+    public val business: Boolean = false,
+    public val retail: Boolean = false
 )
