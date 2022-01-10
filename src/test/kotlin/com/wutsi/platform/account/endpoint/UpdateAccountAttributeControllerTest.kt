@@ -443,4 +443,23 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
         assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("category-id", payload.firstValue.attribute)
     }
+
+    @Test
+    public fun `set whatstapp`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/whatsapp"
+        val request = UpdateAccountAttributeRequest(
+            value = "true"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(true, account.whatsapp)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("whatsapp", payload.firstValue.attribute)
+    }
 }

@@ -56,6 +56,7 @@ public class UpdateAccountAttributeDelegate(
             "biography" -> account.biography = request.value
             "website" -> account.website = request.value
             "category-id" -> account.categoryId = request.value?.toLong()
+            "whatsapp" -> account.whatsapp = toBoolean(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

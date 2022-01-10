@@ -175,6 +175,7 @@ paths:
               - biography
               - website
               - category-id
+              - whatsapp
       requestBody:
         required: true
         content:
@@ -752,6 +753,10 @@ components:
           type: number
           format: int64
           nullable: true
+          description: ID of the business category
+        whatsapp:
+          type: boolean
+          description: if TRUE, the account is associated with Whatsapp
 
 
     Phone:
