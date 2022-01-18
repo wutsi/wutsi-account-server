@@ -22,5 +22,7 @@ public data class Account(
     public val biography: String? = null,
     public val website: String? = null,
     public val categoryId: Long? = null,
-    public val whatsapp: Boolean = false
+    public val whatsapp: String? = null,
+    public val street: String? = null,
+    public val cityId: Long? = null
 )

@@ -43,5 +43,7 @@ data class AccountEntity(
     var website: String? = null,
     var biography: String? = null,
     var categoryId: Long? = null,
-    var whatsapp: Boolean = false,
+    var whatsapp: String? = null,
+    var street: String? = null,
+    var cityId: Long? = null,
 )

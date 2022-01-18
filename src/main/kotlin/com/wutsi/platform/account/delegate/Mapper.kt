@@ -30,6 +30,8 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
     biography = this.biography,
     website = this.website,
     whatsapp = this.whatsapp,
+    street = this.street,
+    cityId = this.cityId,
     phone = if (securityManager.canAccessPhone(this))
         this.phone?.toPhone()
     else

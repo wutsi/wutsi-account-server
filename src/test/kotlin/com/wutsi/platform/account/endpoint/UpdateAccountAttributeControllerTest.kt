@@ -448,18 +448,56 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     public fun `set whatstapp`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/whatsapp"
         val request = UpdateAccountAttributeRequest(
-            value = "true"
+            value = "+15147580101"
         )
         val response = rest.postForEntity(url, request, Any::class.java)
         assertEquals(200, response.statusCodeValue)
 
         val account = dao.findById(100).get()
-        assertEquals(true, account.whatsapp)
+        assertEquals("+15147580101", account.whatsapp)
 
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
         assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("whatsapp", payload.firstValue.attribute)
+    }
+
+    @Test
+    public fun `set street`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/street"
+        val request = UpdateAccountAttributeRequest(
+            value = "340 Pascal"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals("340 Pascal", account.street)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("street", payload.firstValue.attribute)
+    }
+
+    @Test
+    public fun `set city-id`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/city-id"
+        val request = UpdateAccountAttributeRequest(
+            value = "340"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(340, account.cityId)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("city-id", payload.firstValue.attribute)
     }
 }
