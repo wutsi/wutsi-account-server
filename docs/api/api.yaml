@@ -681,6 +681,11 @@ components:
           type: boolean
           default: false
           description: Retail account?
+        categoryId:
+          type: number
+          format: int64
+          nullable: true
+          description: ID of the business category
 
     Account:
       type: object

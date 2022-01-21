@@ -57,6 +57,7 @@ fun AccountEntity.toAccountSummary(imageKit: ImageKit) = AccountSummary(
     superUser = this.isSuperUser,
     business = this.business,
     retail = this.retail,
+    categoryId = this.categoryId
 )
 
 fun PaymentMethodEntity.toPaymentMethod(securityManager: SecurityManager) = PaymentMethod(

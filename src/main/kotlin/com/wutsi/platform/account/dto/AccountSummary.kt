@@ -19,5 +19,6 @@ public data class AccountSummary(
     public val updated: OffsetDateTime = OffsetDateTime.now(),
     public val superUser: Boolean = false,
     public val business: Boolean = false,
-    public val retail: Boolean = false
+    public val retail: Boolean = false,
+    public val categoryId: Long? = null
 )
