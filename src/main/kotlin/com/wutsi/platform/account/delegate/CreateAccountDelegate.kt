@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.`delegate`
 
 import com.google.i18n.phonenumbers.NumberParseException
+import com.ibm.icu.util.TimeZone
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.AddPaymentMethodRequest
 import com.wutsi.platform.account.dto.CreateAccountRequest
@@ -120,9 +121,18 @@ public class CreateAccountDelegate(
                 displayName = request.displayName,
                 pictureUrl = request.pictureUrl,
                 tenantId = tenantId,
-                business = request.business
+                business = request.business,
+                timezoneId = getTimeZone(request.country)
             )
         )
+
+    private fun getTimeZone(country: String): String? {
+        val timezones = TimeZone.getAvailableIDs(country)
+        return if (timezones.isEmpty())
+            null
+        else
+            timezones[0]
+    }
 
     private fun setPassword(account: AccountEntity, request: CreateAccountRequest): PasswordEntity? {
         if (!request.password.isNullOrEmpty()) {

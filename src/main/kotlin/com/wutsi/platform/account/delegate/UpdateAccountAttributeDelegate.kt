@@ -59,6 +59,7 @@ public class UpdateAccountAttributeDelegate(
             "whatsapp" -> account.whatsapp = request.value
             "street" -> account.street = request.value
             "city-id" -> account.cityId = request.value?.toLong()
+            "timezone-id" -> account.timezoneId = request.value
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

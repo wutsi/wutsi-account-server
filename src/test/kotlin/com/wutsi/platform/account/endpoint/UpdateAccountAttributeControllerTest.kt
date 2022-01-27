@@ -500,4 +500,23 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
         assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("city-id", payload.firstValue.attribute)
     }
+
+    @Test
+    public fun `set timezone-id`() {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/timezone-id"
+        val request = UpdateAccountAttributeRequest(
+            value = "Africa/Douala"
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val account = dao.findById(100).get()
+        assertEquals(request.value, account.timezoneId)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals("timezone-id", payload.firstValue.attribute)
+    }
 }

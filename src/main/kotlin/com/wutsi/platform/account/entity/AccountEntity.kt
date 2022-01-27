@@ -46,4 +46,5 @@ data class AccountEntity(
     var whatsapp: String? = null,
     var street: String? = null,
     var cityId: Long? = null,
+    var timezoneId: String? = null
 )

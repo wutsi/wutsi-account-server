@@ -769,11 +769,15 @@ components:
           type: string
           description: Street of the address
           nullable: true
-        city_id:
+        cityId:
           type: number
           format: int64
           nullable: true
           description: ID of the city
+        timezoneId:
+          type: string
+          nullable: true
+          description: Timezone
 
     Phone:
       type: object

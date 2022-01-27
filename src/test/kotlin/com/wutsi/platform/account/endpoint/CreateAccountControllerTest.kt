@@ -73,7 +73,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         val request = CreateAccountRequest(
             phoneNumber = "+23774511111",
             language = "fr",
-            country = "US",
+            country = "CM",
             displayName = "Ray Sponsible",
             pictureUrl = "http://www.google.ca/img/1.ong",
             business = true
@@ -94,6 +94,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertTrue(account.business)
         assertFalse(account.retail)
         assertEquals(TENANT_ID, account.tenantId)
+        assertEquals("Africa/Douala", account.timezoneId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)
@@ -135,6 +136,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertFalse(account.business)
         assertFalse(account.retail)
         assertEquals(TENANT_ID, account.tenantId)
+        assertEquals("Africa/Douala", account.timezoneId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)
@@ -206,6 +208,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertEquals(TENANT_ID, account.tenantId)
         assertFalse(account.business)
         assertFalse(account.retail)
+        assertEquals("Africa/Douala", account.timezoneId)
 
         val phone = phoneDao.findById(account.phone?.id).get()
         assertEquals(request.phoneNumber, phone.number)
