@@ -453,6 +453,7 @@ components:
           type: string
           description: Account's display name
           nullable: true
+          maxLength: 50
         pictureUrl:
           type: string
           description: Account's picture

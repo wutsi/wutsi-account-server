@@ -30,9 +30,9 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/UpdateAccountAttributeController.sql"])
-public class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
+class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Autowired
     private lateinit var dao: AccountRepository
@@ -53,7 +53,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `cannot update another user profile`() {
+    fun `cannot update another user profile`() {
         val url = "http://localhost:$port/v1/accounts/101/attributes/display-name"
         val request = UpdateAccountAttributeRequest(
             value = "Roger Milla"
@@ -71,7 +71,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set display-name`() {
+    fun `set display-name`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/display-name"
         val request = UpdateAccountAttributeRequest(
             value = "Roger Milla"
@@ -90,7 +90,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `reset display-name`() {
+    fun `reset display-name`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/display-name"
         val request = UpdateAccountAttributeRequest(
             value = null
@@ -109,7 +109,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `empty display-name`() {
+    fun `empty display-name`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/display-name"
         val request = UpdateAccountAttributeRequest(
             value = ""
@@ -128,7 +128,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set picture-url`() {
+    fun `set picture-url`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/picture-url"
         val request = UpdateAccountAttributeRequest(
             value = "https://me.com/roger-milla/0.png"
@@ -147,7 +147,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `reset picture-url`() {
+    fun `reset picture-url`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/picture-url"
         val request = UpdateAccountAttributeRequest(
             value = null
@@ -166,7 +166,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `empty picture-url`() {
+    fun `empty picture-url`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/picture-url"
         val request = UpdateAccountAttributeRequest(
             value = ""
@@ -185,7 +185,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `malformed picture-url`() {
+    fun `malformed picture-url`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/picture-url"
         val request = UpdateAccountAttributeRequest(
             value = "invalid-url"
@@ -202,7 +202,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `invalid-attribute`() {
+    fun `invalid-attribute`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/__invalid_attribute__"
         val request = UpdateAccountAttributeRequest(
             value = "value"
@@ -219,7 +219,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `deleted-account`() {
+    fun `deleted-account`() {
         val url = "http://localhost:$port/v1/accounts/199/attributes/display-name"
         val request = UpdateAccountAttributeRequest(
             value = "Omam Biyick"
@@ -236,7 +236,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set language`() {
+    fun `set language`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/language"
         val request = UpdateAccountAttributeRequest(
             value = "fr"
@@ -255,7 +255,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `reset language`() {
+    fun `reset language`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/language"
         val request = UpdateAccountAttributeRequest(
             value = ""
@@ -274,7 +274,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `reset invalid language`() {
+    fun `reset invalid language`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/language"
         val request = UpdateAccountAttributeRequest(
             value = "??"
@@ -293,7 +293,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set country`() {
+    fun `set country`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/country"
         val request = UpdateAccountAttributeRequest(
             value = "CM"
@@ -312,7 +312,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set transfer security`() {
+    fun `set transfer security`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
         val request = UpdateAccountAttributeRequest(
             value = "true"
@@ -331,7 +331,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `reset transfer security`() {
+    fun `reset transfer security`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
         val request = UpdateAccountAttributeRequest(
             value = "false"
@@ -350,7 +350,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `null transfer secured`() {
+    fun `null transfer secured`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/transfer-secured"
         val request = UpdateAccountAttributeRequest(
             value = null
@@ -369,7 +369,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set business`() {
+    fun `set business`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/business"
         val request = UpdateAccountAttributeRequest(
             value = "true"
@@ -388,7 +388,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set website`() {
+    fun `set website`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/website"
         val request = UpdateAccountAttributeRequest(
             value = "https://www.google.ca"
@@ -407,7 +407,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set biography`() {
+    fun `set biography`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/biography"
         val request = UpdateAccountAttributeRequest(
             value = "This is a nice store"
@@ -426,7 +426,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set category-id`() {
+    fun `set category-id`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/category-id"
         val request = UpdateAccountAttributeRequest(
             value = "555"
@@ -445,7 +445,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set whatstapp`() {
+    fun `set whatstapp`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/whatsapp"
         val request = UpdateAccountAttributeRequest(
             value = "+15147580101"
@@ -464,7 +464,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set street`() {
+    fun `set street`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/street"
         val request = UpdateAccountAttributeRequest(
             value = "340 Pascal"
@@ -483,7 +483,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set city-id`() {
+    fun `set city-id`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/city-id"
         val request = UpdateAccountAttributeRequest(
             value = "340"
@@ -502,7 +502,7 @@ public class UpdateAccountAttributeControllerTest : AbstractSecuredController() 
     }
 
     @Test
-    public fun `set timezone-id`() {
+    fun `set timezone-id`() {
         val url = "http://localhost:$port/v1/accounts/100/attributes/timezone-id"
         val request = UpdateAccountAttributeRequest(
             value = "Africa/Douala"
