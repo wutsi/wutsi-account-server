@@ -53,13 +53,13 @@ public class UpdateAccountAttributeDelegate(
             "country" -> account.country = toCountry(request.value)
             "transfer-secured" -> account.isTransferSecured = toBoolean(request.value)
             "business" -> account.business = toBoolean(request.value)
-            "biography" -> account.biography = request.value
-            "website" -> account.website = request.value
+            "biography" -> account.biography = toString(request.value)
+            "website" -> account.website = toString(request.value)
             "category-id" -> account.categoryId = request.value?.toLong()
-            "whatsapp" -> account.whatsapp = request.value
-            "street" -> account.street = request.value
+            "whatsapp" -> account.whatsapp = toString(request.value)
+            "street" -> account.street = toString(request.value)
             "city-id" -> account.cityId = request.value?.toLong()
-            "timezone-id" -> account.timezoneId = request.value
+            "timezone-id" -> account.timezoneId = toString(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,
