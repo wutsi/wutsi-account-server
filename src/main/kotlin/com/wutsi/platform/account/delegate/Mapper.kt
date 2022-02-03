@@ -16,7 +16,7 @@ import com.wutsi.platform.account.service.SecurityManager
 fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit) = Account(
     id = this.id ?: -1,
     displayName = this.displayName,
-    pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, true) },
+    pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, false) },
     created = this.created,
     updated = this.updated,
     status = this.status.name,
@@ -49,7 +49,7 @@ fun PhoneEntity.toPhone() = Phone(
 fun AccountEntity.toAccountSummary(imageKit: ImageKit) = AccountSummary(
     id = this.id ?: -1,
     displayName = this.displayName,
-    pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, true) },
+    pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, false) },
     country = this.country,
     created = this.created,
     updated = this.updated,
