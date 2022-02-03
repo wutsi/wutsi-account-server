@@ -55,10 +55,10 @@ public class UpdateAccountAttributeDelegate(
             "business" -> account.business = toBoolean(request.value)
             "biography" -> account.biography = toString(request.value)
             "website" -> account.website = toString(request.value)
-            "category-id" -> account.categoryId = request.value?.toLong()
+            "category-id" -> account.categoryId = toString(request.value)?.toLong()
             "whatsapp" -> account.whatsapp = toString(request.value)
             "street" -> account.street = toString(request.value)
-            "city-id" -> account.cityId = request.value?.toLong()
+            "city-id" -> account.cityId = toString(request.value)?.toLong()
             "timezone-id" -> account.timezoneId = toString(request.value)
             else -> throw BadRequestException(
                 error = Error(
