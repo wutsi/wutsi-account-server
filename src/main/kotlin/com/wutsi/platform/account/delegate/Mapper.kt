@@ -4,10 +4,12 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL
 import com.wutsi.platform.account.dto.Account
 import com.wutsi.platform.account.dto.AccountSummary
+import com.wutsi.platform.account.dto.BusinessHour
 import com.wutsi.platform.account.dto.PaymentMethod
 import com.wutsi.platform.account.dto.PaymentMethodSummary
 import com.wutsi.platform.account.dto.Phone
 import com.wutsi.platform.account.entity.AccountEntity
+import com.wutsi.platform.account.entity.BusinessHourEntity
 import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.entity.PhoneEntity
 import com.wutsi.platform.account.service.ImageKit
@@ -107,3 +109,10 @@ fun PaymentMethodEntity.toMaskedNumber(): String {
         return "..." + this.phone!!.number.takeLast(4)
     }
 }
+
+fun BusinessHourEntity.toBusinessHour() = BusinessHour(
+    dayOfWeek = this.dayOfWeek,
+    opened = this.opened,
+    openTime = this.openTime,
+    closeTime = this.closeTime
+)
