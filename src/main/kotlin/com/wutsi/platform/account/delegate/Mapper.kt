@@ -5,11 +5,13 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat.INTERNATIO
 import com.wutsi.platform.account.dto.Account
 import com.wutsi.platform.account.dto.AccountSummary
 import com.wutsi.platform.account.dto.BusinessHour
+import com.wutsi.platform.account.dto.CategorySummary
 import com.wutsi.platform.account.dto.PaymentMethod
 import com.wutsi.platform.account.dto.PaymentMethodSummary
 import com.wutsi.platform.account.dto.Phone
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.entity.BusinessHourEntity
+import com.wutsi.platform.account.entity.CategoryEntity
 import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.entity.PhoneEntity
 import com.wutsi.platform.account.service.ImageKit
@@ -115,4 +117,10 @@ fun BusinessHourEntity.toBusinessHour() = BusinessHour(
     opened = this.opened,
     openTime = this.openTime,
     closeTime = this.closeTime
+)
+
+fun CategoryEntity.toCategorySummary() = CategorySummary(
+    id = this.id ?: -1,
+    title = this.title,
+    titleFrench = this.titleFrench
 )

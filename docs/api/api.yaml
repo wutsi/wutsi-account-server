@@ -286,7 +286,7 @@ paths:
         404:
           description: The account not found
       tags:
-        - Password
+        - BusinessHour
       security:
         - api_key: [ 'user-manage' ]
 
@@ -313,9 +313,25 @@ paths:
         404:
           description: The account not found
       tags:
-        - Password
+        - BusinessHour
       security:
-        - api_key: [ 'user-manage' ]
+        - api_key: [ 'user-read' ]
+
+  /v1/categories:
+    get:
+      operationId: "list-categories"
+      description: Return all categories
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCategoryResponse'
+      tags:
+        - Category
+      security:
+        - api_key: [ 'user-read' ]
 
 
   /v1/accounts/{id}/payment-methods:
@@ -977,3 +993,24 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/BusinessHour"
+
+    CategorySummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          description: Category title
+        titleFrench:
+          type: string
+          description: Category title in french
+
+    ListCategoryResponse:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategorySummary"

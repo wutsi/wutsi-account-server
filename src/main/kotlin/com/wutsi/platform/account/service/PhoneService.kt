@@ -12,14 +12,14 @@ class PhoneService(
 ) {
     fun findOrCreate(phoneNumber: String): PhoneEntity {
         val util = PhoneNumberUtil.getInstance()
-        val phoneNumber = util.parse(phoneNumber, "")
-        val number = util.format(phoneNumber, E164)
+        val phone = util.parse(phoneNumber, "")
+        val number = util.format(phone, E164)
 
         return dao.findByNumber(number).orElseGet {
             dao.save(
                 PhoneEntity(
                     number = number,
-                    country = util.getRegionCodeForCountryCode(phoneNumber.countryCode)
+                    country = util.getRegionCodeForCountryCode(phone.countryCode)
                 )
             )
         }

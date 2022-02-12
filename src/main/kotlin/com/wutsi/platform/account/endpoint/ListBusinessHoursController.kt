@@ -13,7 +13,7 @@ public class ListBusinessHoursController(
     private val `delegate`: ListBusinessHoursDelegate
 ) {
     @GetMapping("/v1/accounts/{id}/business-hours")
-    @PreAuthorize(value = "hasAuthority('user-manage')")
+    @PreAuthorize(value = "hasAuthority('user-read')")
     public fun invoke(@PathVariable(name = "id") id: Long): ListBusinessHourResponse =
         delegate.invoke(id)
 }
