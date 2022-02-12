@@ -5,7 +5,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat.INTERNATIO
 import com.wutsi.platform.account.dto.Account
 import com.wutsi.platform.account.dto.AccountSummary
 import com.wutsi.platform.account.dto.BusinessHour
-import com.wutsi.platform.account.dto.CategorySummary
+import com.wutsi.platform.account.dto.Category
 import com.wutsi.platform.account.dto.PaymentMethod
 import com.wutsi.platform.account.dto.PaymentMethodSummary
 import com.wutsi.platform.account.dto.Phone
@@ -17,7 +17,7 @@ import com.wutsi.platform.account.entity.PhoneEntity
 import com.wutsi.platform.account.service.ImageKit
 import com.wutsi.platform.account.service.SecurityManager
 
-fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit) = Account(
+fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit, category: CategoryEntity?) = Account(
     id = this.id ?: -1,
     displayName = this.displayName,
     pictureUrl = this.pictureUrl?.let { imageKit.transform(it, 256, 256, false) },
@@ -30,7 +30,7 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
     transferSecured = this.isTransferSecured,
     business = this.business,
     retail = this.retail,
-    categoryId = this.categoryId,
+    category = category?.toCategory(),
     biography = this.biography,
     website = this.website,
     whatsapp = this.whatsapp,
@@ -119,7 +119,7 @@ fun BusinessHourEntity.toBusinessHour() = BusinessHour(
     closeTime = this.closeTime
 )
 
-fun CategoryEntity.toCategorySummary() = CategorySummary(
+fun CategoryEntity.toCategory() = Category(
     id = this.id ?: -1,
     title = this.title,
     titleFrench = this.titleFrench

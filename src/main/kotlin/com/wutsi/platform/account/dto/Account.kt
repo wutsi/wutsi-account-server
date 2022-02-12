@@ -21,9 +21,9 @@ public data class Account(
     public val retail: Boolean = false,
     public val biography: String? = null,
     public val website: String? = null,
-    public val categoryId: Long? = null,
     public val whatsapp: String? = null,
     public val street: String? = null,
     public val cityId: Long? = null,
-    public val timezoneId: String? = null
+    public val timezoneId: String? = null,
+    public val category: Category? = null
 )

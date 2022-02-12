@@ -18,4 +18,5 @@ enum class ErrorURN(val urn: String) {
     ILLEGAL_TENANT_ACCESS("urn:wutsi:error:account:illegal-tenant-access"),
     ILLEGAL_ACCOUNT_ACCESS("urn:wutsi:error:account:illegal-account-access"),
     ILLEGAL_PAYMENT_METHOD_ACCESS("urn:wutsi:error:account:illegal-payment-method-access"),
+    CATEGORY_NOT_FOUND("urn:wutsi:error:account:category-not-found"),
 }

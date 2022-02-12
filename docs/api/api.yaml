@@ -317,6 +317,7 @@ paths:
       security:
         - api_key: [ 'user-read' ]
 
+
   /v1/categories:
     get:
       operationId: "list-categories"
@@ -328,6 +329,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListCategoryResponse'
+      tags:
+        - Category
+      security:
+        - api_key: [ 'user-read' ]
+
+  /v1/categories/{id}:
+    get:
+      operationId: "get-category"
+      description: Return a category
+      parameters:
+        - in: path
+          name: id
+          description: ID of the category
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCategoryResponse'
       tags:
         - Category
       security:
@@ -831,11 +856,6 @@ components:
         website:
           type: string
           nullable: true
-        categoryId:
-          type: number
-          format: int64
-          nullable: true
-          description: ID of the business category
         whatsapp:
           type: string
           description: Whatsapp phone number to use to contact the user
@@ -853,6 +873,10 @@ components:
           type: string
           nullable: true
           description: Timezone
+        category:
+          type: object
+          nullable: true
+          $ref: "#/components/schemas/Category"
 
     Phone:
       type: object
@@ -994,7 +1018,7 @@ components:
           items:
             $ref: "#/components/schemas/BusinessHour"
 
-    CategorySummary:
+    Category:
       type: object
       properties:
         id:
@@ -1013,4 +1037,11 @@ components:
         categories:
           type: array
           items:
-            $ref: "#/components/schemas/CategorySummary"
+            $ref: "#/components/schemas/Category"
+
+    GetCategoryResponse:
+      type: object
+      properties:
+        category:
+          type: object
+          $ref: "#/components/schemas/Category"

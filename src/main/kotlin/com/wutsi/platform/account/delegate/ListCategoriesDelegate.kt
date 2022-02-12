@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service
 public class ListCategoriesDelegate(private val dao: CategoryRepository) {
     public fun invoke(): ListCategoryResponse =
         ListCategoryResponse(
-            categories = dao.findAll().map { it.toCategorySummary() }
+            categories = dao.findAll().map { it.toCategory() }
         )
 }

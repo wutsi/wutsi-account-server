@@ -57,6 +57,69 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertNotNull("+237221234100", account.phone?.number)
         assertNotNull("CM", account.phone?.country)
         assertNotNull(account.phone?.created)
+
+        assertNotNull(account.category)
+        assertEquals(1000, account.category?.id)
+        assertEquals("Advertising/Marketing", account.category?.title)
+        assertEquals("Marketing publicitaire", account.category?.titleFrench)
+    }
+
+    @Test
+    public fun `get account with no category`() {
+        rest = createResTemplate(subjectId = 101)
+        val url = "http://localhost:$port/v1/accounts/101"
+        val response = rest.getForEntity(url, GetAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = response.body.account
+        assertEquals(101, account.id)
+        assertEquals("No Category", account.displayName)
+        assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
+        assertEquals("ACTIVE", account.status)
+        assertEquals("fr", account.language)
+        assertNotNull(account.created)
+        assertNotNull(account.updated)
+        assertTrue(account.superUser)
+        assertFalse(account.transferSecured)
+        assertTrue(account.business)
+        assertTrue(account.retail)
+
+        assertNotNull(account.phone)
+        assertNotNull("+237221234100", account.phone?.number)
+        assertNotNull("CM", account.phone?.country)
+        assertNotNull(account.phone?.created)
+
+        assertNull(account.category)
+    }
+
+    @Test
+    public fun `get account with invalid category-id`() {
+        rest = createResTemplate(subjectId = 102)
+        val url = "http://localhost:$port/v1/accounts/102"
+        val response = rest.getForEntity(url, GetAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = response.body.account
+        assertEquals(102, account.id)
+        assertEquals("Invalid Category", account.displayName)
+        assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
+        assertEquals("ACTIVE", account.status)
+        assertEquals("fr", account.language)
+        assertNotNull(account.created)
+        assertNotNull(account.updated)
+        assertTrue(account.superUser)
+        assertFalse(account.transferSecured)
+        assertTrue(account.business)
+        assertTrue(account.retail)
+
+        assertNotNull(account.phone)
+        assertNotNull("+237221234100", account.phone?.number)
+        assertNotNull("CM", account.phone?.country)
+        assertNotNull(account.phone?.created)
+
+        assertNull(account.category)
     }
 
     @Test
