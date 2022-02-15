@@ -1027,9 +1027,6 @@ components:
         title:
           type: string
           description: Category title
-        titleFrench:
-          type: string
-          description: Category title in french
 
     ListCategoryResponse:
       type: object

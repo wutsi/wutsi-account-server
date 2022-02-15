@@ -61,7 +61,6 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertNotNull(account.category)
         assertEquals(1000, account.category?.id)
         assertEquals("Advertising/Marketing", account.category?.title)
-        assertEquals("Marketing publicitaire", account.category?.titleFrench)
     }
 
     @Test

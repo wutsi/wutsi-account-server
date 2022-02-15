@@ -16,6 +16,7 @@ import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.entity.PhoneEntity
 import com.wutsi.platform.account.service.ImageKit
 import com.wutsi.platform.account.service.SecurityManager
+import org.springframework.context.i18n.LocaleContextHolder
 
 fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit, category: CategoryEntity?) = Account(
     id = this.id ?: -1,
@@ -121,6 +122,13 @@ fun BusinessHourEntity.toBusinessHour() = BusinessHour(
 
 fun CategoryEntity.toCategory() = Category(
     id = this.id ?: -1,
-    title = this.title,
-    titleFrench = this.titleFrench
+    title = this.toTitle()
 )
+
+fun CategoryEntity.toTitle(): String {
+    val language = LocaleContextHolder.getLocale().language
+    return if (language == "fr")
+        this.titleFrench
+    else
+        this.title
+}

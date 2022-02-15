@@ -1,6 +1,7 @@
 package com.wutsi.platform.account.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.platform.account.LanguageClientHttpRequestInterceptor
 import com.wutsi.platform.account.dto.GetCategoryResponse
 import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
@@ -37,7 +38,19 @@ public class GetCategoryControllerTest : AbstractSecuredController() {
         val category = response.body!!.category
         assertEquals(1000, category.id)
         assertEquals("Advertising/Marketing", category.title)
-        assertEquals("Marketing publicitaire", category.titleFrench)
+    }
+
+    @Test
+    public fun french() {
+        val url = "http://localhost:$port/v1/categories/1000"
+        rest.interceptors.add(LanguageClientHttpRequestInterceptor("fr"))
+        val response = rest.getForEntity(url, GetCategoryResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val category = response.body!!.category
+        assertEquals(1000, category.id)
+        assertEquals("Marketing/Publicité", category.title)
     }
 
     @Test

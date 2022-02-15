@@ -19,6 +19,6 @@ public class ListCategoriesControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        assertEquals(58, response.body!!.categories.size)
+        assertEquals(48, response.body!!.categories.size)
     }
 }

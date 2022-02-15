@@ -5,6 +5,5 @@ import kotlin.String
 
 public data class Category(
     public val id: Long = 0,
-    public val title: String = "",
-    public val titleFrench: String = ""
+    public val title: String = ""
 )
