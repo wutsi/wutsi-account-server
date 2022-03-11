@@ -1,7 +1,10 @@
 package com.wutsi.platform.account.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
 
 public data class Account(
     public val id: Long = 0,
@@ -25,5 +28,6 @@ public data class Account(
     public val street: String? = null,
     public val cityId: Long? = null,
     public val timezoneId: String? = null,
-    public val category: Category? = null
+    public val category: Category? = null,
+    public val hasStore: Boolean = false
 )

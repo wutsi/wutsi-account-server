@@ -60,6 +60,7 @@ public class UpdateAccountAttributeDelegate(
             "street" -> account.street = toString(request.value)
             "city-id" -> account.cityId = toString(request.value)?.toLong()
             "timezone-id" -> account.timezoneId = toString(request.value)
+            "has-store" -> account.hasStore = toBoolean(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

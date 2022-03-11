@@ -38,6 +38,7 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
     street = this.street,
     cityId = this.cityId,
     timezoneId = this.timezoneId,
+    hasStore = this.hasStore,
     phone = if (securityManager.canAccessPhone(this))
         this.phone?.toPhone()
     else

@@ -178,6 +178,7 @@ paths:
               - whatsapp
               - street
               - city-id
+              - has-store
       requestBody:
         required: true
         content:
@@ -877,6 +878,9 @@ components:
           type: object
           nullable: true
           $ref: "#/components/schemas/Category"
+        hasStore:
+          type: boolean
+          description: if TRUE, this user has the store enabled
 
     Phone:
       type: object
