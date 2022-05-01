@@ -43,6 +43,10 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
         this.phone?.toPhone()
     else
         null,
+    email = if (securityManager.canAccessEmail(this))
+        this.email
+    else
+        null,
 )
 
 fun PhoneEntity.toPhone() = Phone(

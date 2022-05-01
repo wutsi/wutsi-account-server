@@ -8,6 +8,7 @@ import kotlin.String
 
 public data class Account(
     public val id: Long = 0,
+    public val email: String? = null,
     public val phone: Phone? = null,
     public val pictureUrl: String? = null,
     public val status: String = "",

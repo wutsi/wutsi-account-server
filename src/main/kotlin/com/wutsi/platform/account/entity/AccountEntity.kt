@@ -48,4 +48,5 @@ data class AccountEntity(
     var cityId: Long? = null,
     var timezoneId: String? = null,
     var hasStore: Boolean = false,
+    var email: String? = null,
 )

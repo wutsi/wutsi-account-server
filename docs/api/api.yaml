@@ -179,6 +179,7 @@ paths:
               - street
               - city-id
               - has-store
+              - email
       requestBody:
         required: true
         content:
@@ -795,6 +796,10 @@ components:
           type: integer
           format: int64
           description: Unique identifier of the account
+        email:
+          type: string
+          format: email
+          nullable: true
         phone:
           type: object
           $ref: "#/components/schemas/Phone"

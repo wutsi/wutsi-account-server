@@ -16,6 +16,7 @@ class SecurityManager(
 ) {
     companion object {
         const val PERMISSION_USER_PHONE = "user-phone"
+        const val PERMISSION_USER_EMAIL = "user-email"
         const val PERMISSION_PAYMENT_DETAILS = "payment-method-details"
     }
 
@@ -41,6 +42,9 @@ class SecurityManager(
 
     fun canAccessPhone(account: AccountEntity): Boolean =
         isOwner(account) || hasAuthority(PERMISSION_USER_PHONE)
+
+    fun canAccessEmail(account: AccountEntity): Boolean =
+        isOwner(account) || hasAuthority(PERMISSION_USER_EMAIL)
 
     fun canAccessPaymentMethodDetails(payment: PaymentMethodEntity): Boolean =
         isOwner(payment.account) || hasAuthority(PERMISSION_PAYMENT_DETAILS)

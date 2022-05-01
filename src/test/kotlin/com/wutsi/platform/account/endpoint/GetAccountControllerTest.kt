@@ -20,9 +20,9 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetAccountController.sql"])
-public class GetAccountControllerTest : AbstractSecuredController() {
+class GetAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -34,13 +34,13 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `get account`() {
+    fun `get account`() {
         val url = "http://localhost:$port/v1/accounts/100"
         val response = rest.getForEntity(url, GetAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = response.body.account
+        val account = response.body!!.account
         assertEquals(100, account.id)
         assertEquals("Ray Sponsible", account.displayName)
         assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
@@ -54,9 +54,11 @@ public class GetAccountControllerTest : AbstractSecuredController() {
         assertTrue(account.retail)
 
         assertNotNull(account.phone)
-        assertNotNull("+237221234100", account.phone?.number)
-        assertNotNull("CM", account.phone?.country)
+        assertEquals("+237221234100", account.phone?.number)
+        assertEquals("CM", account.phone?.country)
         assertNotNull(account.phone?.created)
+
+        assertEquals("ray.sponsible@gmail.com", account.email)
 
         assertNotNull(account.category)
         assertEquals(1000, account.category?.id)
@@ -64,14 +66,14 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `get account with no category`() {
+    fun `get account with no category`() {
         rest = createResTemplate(subjectId = 101)
         val url = "http://localhost:$port/v1/accounts/101"
         val response = rest.getForEntity(url, GetAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = response.body.account
+        val account = response.body!!.account
         assertEquals(101, account.id)
         assertEquals("No Category", account.displayName)
         assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
@@ -93,14 +95,14 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `get account with invalid category-id`() {
+    fun `get account with invalid category-id`() {
         rest = createResTemplate(subjectId = 102)
         val url = "http://localhost:$port/v1/accounts/102"
         val response = rest.getForEntity(url, GetAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = response.body.account
+        val account = response.body!!.account
         assertEquals(102, account.id)
         assertEquals("Invalid Category", account.displayName)
         assertEquals("https://me.com/12343/picture.png", account.pictureUrl)
@@ -122,17 +124,17 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    fun `phone is returned without user-phone permission`() {
+    fun `phone is returned with user-phone permission`() {
         rest = createResTemplate(listOf("user-read", "user-phone"), subjectId = 101)
         val url = "http://localhost:$port/v1/accounts/100"
         val response = rest.getForEntity(url, GetAccountResponse::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = response.body.account
+        val account = response.body!!.account
         assertNotNull(account.phone)
-        assertNotNull("+237221234100", account.phone?.number)
-        assertNotNull("CM", account.phone?.country)
+        assertEquals("+237221234100", account.phone?.number)
+        assertEquals("CM", account.phone?.country)
         assertNotNull(account.phone?.created)
     }
 
@@ -144,12 +146,36 @@ public class GetAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = response.body.account
+        val account = response.body!!.account
         assertNull(account.phone)
     }
 
     @Test
-    public fun `deleted-account`() {
+    fun `email is returned with user-email permission`() {
+        rest = createResTemplate(listOf("user-read", "user-email"), subjectId = 101)
+        val url = "http://localhost:$port/v1/accounts/100"
+        val response = rest.getForEntity(url, GetAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = response.body!!.account
+        assertEquals("ray.sponsible@gmail.com", account.email)
+    }
+
+    @Test
+    fun `email is not returned without user-email permission`() {
+        rest = createResTemplate(listOf("user-read"), subjectId = 101)
+        val url = "http://localhost:$port/v1/accounts/100"
+        val response = rest.getForEntity(url, GetAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val account = response.body!!.account
+        assertNull(account.email)
+    }
+
+    @Test
+    fun `deleted-account`() {
         val url = "http://localhost:$port/v1/accounts/199"
 
         val ex = assertThrows<HttpStatusCodeException> {
@@ -162,7 +188,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid id`() {
+    fun `invalid id`() {
         val url = "http://localhost:$port/v1/accounts/9999"
 
         val ex = assertThrows<HttpStatusCodeException> {
@@ -175,7 +201,7 @@ public class GetAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid tenant`() {
+    fun `invalid tenant`() {
         val url = "http://localhost:$port/v1/accounts/100"
 
         val ex = assertThrows<HttpStatusCodeException> {
