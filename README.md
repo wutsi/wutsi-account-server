@@ -6,6 +6,7 @@
 
 API for managing user&#39;s accounts&#10;
 
+
 # Installation Prerequisites
 ## Database Setup
 - Install postgres
