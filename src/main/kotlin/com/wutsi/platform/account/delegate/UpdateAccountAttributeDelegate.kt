@@ -64,7 +64,7 @@ public class UpdateAccountAttributeDelegate(
             "email" -> account.email = toString(request.value)
             "facebook-id" -> account.facebookId = toString(request.value)
             "instagram-id" -> account.instagramId = toString(request.value)
-            "telegram-id" -> account.telegramId = toString(request.value)
+            "twitter-id" -> account.twitterId = toString(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

@@ -574,10 +574,10 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    fun `set telegram-id`() {
+    fun `set twitter-id`() {
         val value = "111"
-        val account = testAttibute("telegram-id", value)
-        assertEquals(value, account.telegramId)
+        val account = testAttibute("twitter-id", value)
+        assertEquals(value, account.twitterId)
     }
 
     private fun testAttibute(name: String, value: String): AccountEntity {

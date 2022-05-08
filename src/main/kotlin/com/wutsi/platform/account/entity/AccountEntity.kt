@@ -51,5 +51,5 @@ data class AccountEntity(
     var email: String? = null,
     var facebookId: String? = null,
     var instagramId: String? = null,
-    var telegramId: String? = null,
+    var twitterId: String? = null,
 )

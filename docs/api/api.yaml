@@ -182,7 +182,7 @@ paths:
               - email
               - facebook-id
               - instagram-id
-              - telegram-id
+              - twitter-id
       requestBody:
         required: true
         content:
@@ -897,9 +897,9 @@ components:
           type: string
           description: Instagram identifier
           nullable: true
-        telegramId:
+        twitterId:
           type: string
-          description: Telegram identifier
+          description: Twitter identifier
           nullable: true
     Phone:
       type: object
