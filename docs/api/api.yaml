@@ -180,6 +180,9 @@ paths:
               - city-id
               - has-store
               - email
+              - facebook-id
+              - instagram-id
+              - telegram-id
       requestBody:
         required: true
         content:
@@ -886,7 +889,18 @@ components:
         hasStore:
           type: boolean
           description: if TRUE, this user has the store enabled
-
+        facebookId:
+          type: string
+          description: Facebook identifier
+          nullable: true
+        instagramId:
+          type: string
+          description: Instagram identifier
+          nullable: true
+        telegramId:
+          type: string
+          description: Telegram identifier
+          nullable: true
     Phone:
       type: object
       properties:

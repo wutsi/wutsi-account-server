@@ -62,6 +62,9 @@ public class UpdateAccountAttributeDelegate(
             "timezone-id" -> account.timezoneId = toString(request.value)
             "has-store" -> account.hasStore = toBoolean(request.value)
             "email" -> account.email = toString(request.value)
+            "facebook-id" -> account.facebookId = toString(request.value)
+            "instagram-id" -> account.instagramId = toString(request.value)
+            "telegram-id" -> account.telegramId = toString(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_INVALID.urn,

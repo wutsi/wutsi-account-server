@@ -9,7 +9,7 @@ import kotlin.String
 public data class Account(
     public val id: Long = 0,
     public val email: String? = null,
-    public val phone: Phone? = null,
+    public val phone: Phone = Phone(),
     public val pictureUrl: String? = null,
     public val status: String = "",
     public val displayName: String? = null,
@@ -30,5 +30,8 @@ public data class Account(
     public val cityId: Long? = null,
     public val timezoneId: String? = null,
     public val category: Category? = null,
-    public val hasStore: Boolean = false
+    public val hasStore: Boolean = false,
+    public val facebookId: String? = null,
+    public val instagramId: String? = null,
+    public val telegramId: String? = null
 )

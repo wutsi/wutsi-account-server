@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
+import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.account.event.AccountUpdatedPayload
 import com.wutsi.platform.account.event.EventURN
@@ -556,5 +557,43 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         assertEquals(100L, payload.firstValue.accountId)
         assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("email", payload.firstValue.attribute)
+    }
+
+    @Test
+    fun `set facebook-id`() {
+        val value = "111"
+        val account = testAttibute("facebook-id", value)
+        assertEquals(value, account.facebookId)
+    }
+
+    @Test
+    fun `set instagram-id`() {
+        val value = "111"
+        val account = testAttibute("instagram-id", value)
+        assertEquals(value, account.instagramId)
+    }
+
+    @Test
+    fun `set telegram-id`() {
+        val value = "111"
+        val account = testAttibute("telegram-id", value)
+        assertEquals(value, account.telegramId)
+    }
+
+    private fun testAttibute(name: String, value: String): AccountEntity {
+        val url = "http://localhost:$port/v1/accounts/100/attributes/$name"
+        val request = UpdateAccountAttributeRequest(
+            value = value
+        )
+        val response = rest.postForEntity(url, request, Any::class.java)
+        assertEquals(200, response.statusCodeValue)
+
+        val payload = argumentCaptor<AccountUpdatedPayload>()
+        verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
+        assertEquals(100L, payload.firstValue.accountId)
+        assertEquals(TENANT_ID, payload.firstValue.tenantId)
+        assertEquals(name, payload.firstValue.attribute)
+
+        return dao.findById(100).get()
     }
 }

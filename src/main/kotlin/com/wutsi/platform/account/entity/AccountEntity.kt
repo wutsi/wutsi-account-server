@@ -49,4 +49,7 @@ data class AccountEntity(
     var timezoneId: String? = null,
     var hasStore: Boolean = false,
     var email: String? = null,
+    var facebookId: String? = null,
+    var instagramId: String? = null,
+    var telegramId: String? = null,
 )
