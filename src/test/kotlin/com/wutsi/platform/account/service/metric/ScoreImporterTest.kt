@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/ScoreImporter.sql"])
@@ -37,6 +38,8 @@ internal class ScoreImporterTest {
     @Autowired
     private lateinit var dao: AccountRepository
 
+    private val date = LocalDate.of(2020, 4, 14)
+
     @BeforeEach
     fun setUp() {
         File(storageDirectory).deleteRecursively()
@@ -44,9 +47,9 @@ internal class ScoreImporterTest {
 
     @Test
     fun run() {
-        store(MetricType.VIEW)
+        store()
 
-        importer.import(LocalDate.now(), MetricType.VIEW)
+        importer.import(date, MetricType.VIEW)
 
         assertScore(100, 0.12)
         assertScore(101, 0.21)
@@ -58,8 +61,10 @@ internal class ScoreImporterTest {
         assertEquals(expected, product.get().score)
     }
 
-    private fun store(type: MetricType) {
-        val path = "aggregates/overall/" + type.name.lowercase() + ".csv"
+    private fun store() {
+        val path = "aggregates/daily/" +
+            date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) +
+            "/view.csv"
         storage.store(
             path,
             ByteArrayInputStream(CSV.trimIndent().toByteArray()),

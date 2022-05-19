@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/ConversionImporter.sql"])
@@ -42,11 +43,13 @@ internal class ConversionImporterTest {
         File(storageDirectory).deleteRecursively()
     }
 
+    private val date = LocalDate.of(2020, 4, 14)
+
     @Test
     fun run() {
-        store(MetricType.ORDER)
+        store()
 
-        importer.import(LocalDate.now(), MetricType.ORDER)
+        importer.import(date, MetricType.ORDER)
 
         assertConversion(100, 0.01)
         assertConversion(101, 0.1)
@@ -58,8 +61,10 @@ internal class ConversionImporterTest {
         assertEquals(expected, product.get().conversion)
     }
 
-    private fun store(type: MetricType) {
-        val path = "aggregates/overall/" + type.name.lowercase() + ".csv"
+    private fun store() {
+        val path = "aggregates/daily/" +
+            date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) +
+            "/order.csv"
         storage.store(
             path,
             ByteArrayInputStream(CSV.trimIndent().toByteArray()),

@@ -13,10 +13,11 @@ import org.springframework.test.context.jdbc.Sql
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/MetricImporterOverall.sql"])
-internal class MetricImporterOverallTest {
+internal class MetricImporterTest {
     companion object {
         const val CSV: String = """
             "time","tenantid","merchantid","productid","value"
@@ -32,7 +33,7 @@ internal class MetricImporterOverallTest {
     private lateinit var storage: StorageService
 
     @Autowired
-    private lateinit var importer: MetricImporterOverall
+    private lateinit var importer: MetricImporter
 
     @Autowired
     private lateinit var dao: AccountRepository
@@ -50,8 +51,8 @@ internal class MetricImporterOverallTest {
 
         importer.import(date, MetricType.VIEW)
 
-        assertTotalViews(100, 31)
-        assertTotalViews(101, 11)
+        assertTotalViews(100, 1000 + 31)
+        assertTotalViews(101, 100 + 11)
     }
 
     @Test
@@ -60,8 +61,8 @@ internal class MetricImporterOverallTest {
 
         importer.import(date, MetricType.SHARE)
 
-        assertTotalShares(100, 31)
-        assertTotalShares(101, 11)
+        assertTotalShares(100, 100 + 31)
+        assertTotalShares(101, 10 + 11)
     }
 
     @Test
@@ -70,8 +71,8 @@ internal class MetricImporterOverallTest {
 
         importer.import(date, MetricType.CHAT)
 
-        assertTotalChats(100, 31)
-        assertTotalChats(101, 11)
+        assertTotalChats(100, 10 + 31)
+        assertTotalChats(101, 1 + 11)
     }
 
     @Test
@@ -105,7 +106,9 @@ internal class MetricImporterOverallTest {
     }
 
     private fun store(type: MetricType) {
-        val path = "aggregates/overall/" + type.name.lowercase() + ".csv"
+        val path = "aggregates/daily/" +
+            date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) +
+            "/" + type.name.lowercase() + ".csv"
         storage.store(path, ByteArrayInputStream(CSV.trimIndent().toByteArray()), "application/csv")
     }
 }

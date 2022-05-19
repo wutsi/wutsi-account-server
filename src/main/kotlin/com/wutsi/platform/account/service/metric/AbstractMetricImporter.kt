@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.sql.PreparedStatement
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.sql.DataSource
 
 abstract class AbstractMetricImporter(
@@ -18,7 +19,6 @@ abstract class AbstractMetricImporter(
 ) : Importer {
     protected abstract fun sql(type: MetricType): String
     protected abstract fun map(item: CsvAccountMetric, stmt: PreparedStatement)
-    protected abstract fun toURL(date: LocalDate, type: MetricType): URL
 
     override fun import(date: LocalDate, type: MetricType): Long {
         val cnn = ds.connection
@@ -49,7 +49,6 @@ abstract class AbstractMetricImporter(
     }
 
     private fun import(date: LocalDate, type: MetricType, stmt: PreparedStatement, logger: KVLogger): Long {
-        val output = ByteArrayOutputStream()
         val metrics = load(date, type, logger)
         return import(metrics, stmt)
     }
@@ -80,4 +79,11 @@ abstract class AbstractMetricImporter(
         }
         return imported
     }
+
+    protected open fun toURL(date: LocalDate, type: MetricType): URL =
+        storage.toURL(
+            "aggregates/daily/" +
+                date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd/")) +
+                type.name.lowercase() + ".csv"
+        )
 }

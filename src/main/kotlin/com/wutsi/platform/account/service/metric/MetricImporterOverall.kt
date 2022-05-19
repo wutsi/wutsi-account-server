@@ -17,7 +17,7 @@ class MetricImporterOverall(
         val column = "total_${type.name.lowercase()}s"
         return """
             UPDATE T_ACCOUNT
-                SET $column=$column+?
+                SET $column=?
                 WHERE id=?
         """
     }

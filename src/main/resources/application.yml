@@ -62,6 +62,9 @@ wutsi:
     jobs:
       metric-importer:
         cron: "0 0 3 * * *"   # Every day at 3AM
+      metric-importer-overall:
+        cron: "0 30 21 * * *"   # Every day at 9:30PM
+
   platform:
     security:
       type: jwt
