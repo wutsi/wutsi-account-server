@@ -3,6 +3,7 @@ package com.wutsi.platform.account.service
 import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.account.entity.AccountEntity
+import com.wutsi.platform.account.entity.AccountSort
 import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -63,11 +64,20 @@ class AccountService(
     private fun sql(request: SearchAccountRequest): String {
         val select = select()
         val where = where(request)
+        val order = order(request)
         return if (where.isNullOrEmpty())
             select
         else
-            "$select WHERE $where"
+            "$select WHERE $where $order"
     }
+
+    private fun order(request: SearchAccountRequest): String =
+        when (request.sortBy?.uppercase()) {
+            AccountSort.NAME.name -> "ORDER BY a.name, a.score DESC"
+            AccountSort.VIEWS.name -> "ORDER BY a.totalViews DESC, a.score DESC"
+            AccountSort.RECOMMENDED.name -> "ORDER BY a.score DESC"
+            else -> ""
+        }
 
     private fun select(): String =
         "SELECT a FROM AccountEntity a"
@@ -80,6 +90,8 @@ class AccountService(
             criteria.add("a.phone.number=:phone_number")
         if (request.ids.isNotEmpty())
             criteria.add("a.id IN :ids")
+        if (request.business != null)
+            criteria.add("a.business=:business")
         return criteria.joinToString(separator = " AND ")
     }
 
@@ -90,6 +102,8 @@ class AccountService(
             query.setParameter("phone_number", normalizePhoneNumber(request.phoneNumber))
         if (request.ids.isNotEmpty())
             query.setParameter("ids", request.ids)
+        if (request.business != null)
+            query.setParameter("business", request.business)
     }
 
     private fun normalizePhoneNumber(phoneNumber: String?): String? {

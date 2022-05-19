@@ -631,12 +631,23 @@ components:
           description: |
             Phone number in the [E164](https://en.wikipedia.org/wiki/E.164) format
           nullable: true
+        business:
+          type: boolean
+          description: Filter business account
+          nullable: true
         limit:
           type: integer
           default: 30
         offset:
           type: integer
           default: 0
+        sortBy:
+          type: string
+          enum:
+            - RECOMMENDED
+            - NAME
+            - VIEWS
+          nullable: true
 
     SearchAccountResponse:
       type: object
@@ -901,6 +912,10 @@ components:
           type: string
           description: Twitter identifier
           nullable: true
+        overallMetrics:
+          type: object
+          $ref: "#/components/schemas/Metrics"
+
     Phone:
       type: object
       properties:
@@ -1065,3 +1080,25 @@ components:
         category:
           type: object
           $ref: "#/components/schemas/Category"
+
+    Metrics:
+      type: object
+      properties:
+        totalViews:
+          type: integer
+          format: int64
+        totalChats:
+          type: integer
+          format: int64
+        totalShares:
+          type: integer
+          format: int64
+        totalOrders:
+          type: integer
+          format: int64
+        conversion:
+          type: number
+          format: double
+        score:
+          type: number
+          format: double

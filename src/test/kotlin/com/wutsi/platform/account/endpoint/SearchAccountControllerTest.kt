@@ -2,6 +2,7 @@ package com.wutsi.platform.account.endpoint
 
 import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.account.dto.SearchAccountResponse
+import com.wutsi.platform.account.entity.AccountSort
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,9 +15,9 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/SearchAccountController.sql"])
-public class SearchAccountControllerTest : AbstractSecuredController() {
+class SearchAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -31,7 +32,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `search by phone`() {
+    fun `search by phone`() {
         val request = SearchAccountRequest(
             phoneNumber = "+237221234100"
         )
@@ -54,7 +55,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `search by phone to normalize`() {
+    fun `search by phone to normalize`() {
         val request = SearchAccountRequest(
             phoneNumber = " 237221234100"
         )
@@ -77,7 +78,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `search by ID`() {
+    fun `search by ID`() {
         val request = SearchAccountRequest(
             ids = listOf(100L, 101L)
         )
@@ -89,5 +90,21 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
         assertEquals(2, accounts.size)
         assertEquals(100, accounts[0].id)
         assertEquals(101, accounts[1].id)
+    }
+
+    @Test
+    fun `search business accounts - sort by recommended`() {
+        val request = SearchAccountRequest(
+            business = true,
+            sortBy = AccountSort.RECOMMENDED.name
+        )
+        val response = rest.postForEntity(url, request, SearchAccountResponse::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val accounts = response.body!!.accounts
+        assertEquals(2, accounts.size)
+        assertEquals(102, accounts[0].id)
+        assertEquals(100, accounts[1].id)
     }
 }
