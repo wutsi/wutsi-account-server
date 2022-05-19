@@ -64,7 +64,7 @@ wutsi:
         cron: "0 0 3 * * *"   # Every day at 3AM
       metric-importer-overall:
         enabled: true           # This process is very resource intensive. So enable if only when needed!!!!
-        cron: "0 15 22 * * *"   # Every day at 10:15PM
+        cron: "0 35 22 * * *"   # Every day at 10:35PM
 
   platform:
     security:

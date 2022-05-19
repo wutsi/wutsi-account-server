@@ -22,4 +22,8 @@ wutsi:
       type: rabbitmq
       rabbitmq:
         url: ${CLOUDAMQP_URL}
+    storage:
+      type: aws
+      aws:
+        bucket: prod-wutsi-track
 
