@@ -131,7 +131,6 @@ public class UpdateAccountAttributeDelegate(
                 EventURN.ACCOUNT_UPDATED.urn,
                 AccountUpdatedPayload(
                     accountId = account.id!!,
-                    tenantId = account.tenantId,
                     attribute = attribute
                 )
             )

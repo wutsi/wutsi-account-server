@@ -42,7 +42,6 @@ public class DeleteAccountDelegate(
                 EventURN.ACCOUNT_DELETED.urn,
                 AccountDeletedPayload(
                     accountId = account.id!!,
-                    tenantId = account.tenantId
                 )
             )
         } catch (ex: Exception) {

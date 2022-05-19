@@ -61,7 +61,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
         assertEquals(request.phoneNumber, phone.number)
         assertEquals("CM", phone.country)
 
-        val payment = dao.findByToken(response.body.token).get()
+        val payment = dao.findByToken(response.body!!.token).get()
         assertEquals(request.ownerName, payment.ownerName)
         assertEquals(PaymentMethodType.MOBILE, payment.type)
         assertEquals(PaymentMethodProvider.ORANGE, payment.provider)
@@ -89,7 +89,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
         assertEquals(request.phoneNumber, phone.number)
         assertEquals("CM", phone.country)
 
-        val payment = dao.findByToken(response.body.token).get()
+        val payment = dao.findByToken(response.body!!.token).get()
         assertEquals(request.ownerName, payment.ownerName)
         assertEquals(PaymentMethodType.MOBILE, payment.type)
         assertEquals(PaymentMethodProvider.ORANGE, payment.provider)

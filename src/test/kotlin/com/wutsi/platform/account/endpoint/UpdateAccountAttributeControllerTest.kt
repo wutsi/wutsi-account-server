@@ -86,7 +86,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("display-name", payload.firstValue.attribute)
     }
 
@@ -105,7 +104,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("display-name", payload.firstValue.attribute)
     }
 
@@ -124,7 +122,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("display-name", payload.firstValue.attribute)
     }
 
@@ -143,7 +140,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("picture-url", payload.firstValue.attribute)
     }
 
@@ -162,7 +158,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("picture-url", payload.firstValue.attribute)
     }
 
@@ -181,7 +176,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("picture-url", payload.firstValue.attribute)
     }
 
@@ -251,7 +245,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("language", payload.firstValue.attribute)
     }
 
@@ -270,7 +263,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("language", payload.firstValue.attribute)
     }
 
@@ -289,7 +281,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("language", payload.firstValue.attribute)
     }
 
@@ -308,7 +299,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("country", payload.firstValue.attribute)
     }
 
@@ -327,7 +317,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("transfer-secured", payload.firstValue.attribute)
     }
 
@@ -346,7 +335,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("transfer-secured", payload.firstValue.attribute)
     }
 
@@ -365,7 +353,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("transfer-secured", payload.firstValue.attribute)
     }
 
@@ -384,7 +371,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("business", payload.firstValue.attribute)
     }
 
@@ -403,7 +389,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("website", payload.firstValue.attribute)
     }
 
@@ -422,7 +407,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("biography", payload.firstValue.attribute)
     }
 
@@ -441,7 +425,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("category-id", payload.firstValue.attribute)
     }
 
@@ -460,7 +443,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("whatsapp", payload.firstValue.attribute)
     }
 
@@ -479,7 +461,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("street", payload.firstValue.attribute)
     }
 
@@ -498,7 +479,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("city-id", payload.firstValue.attribute)
     }
 
@@ -517,7 +497,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("timezone-id", payload.firstValue.attribute)
     }
 
@@ -536,7 +515,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("has-store", payload.firstValue.attribute)
     }
 
@@ -555,7 +533,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals("email", payload.firstValue.attribute)
     }
 
@@ -591,7 +568,6 @@ class UpdateAccountAttributeControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
         assertEquals(name, payload.firstValue.attribute)
 
         return dao.findById(100).get()

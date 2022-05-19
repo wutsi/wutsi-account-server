@@ -60,7 +60,7 @@ public class UpdateAccountControllerTest : AbstractSecuredController() {
         assertEquals(200, response.statusCodeValue)
 
         // THEN
-        val account = dao.findById(response.body?.id).get()
+        val account = dao.findById(response.body!!.id).get()
 
         assertEquals(request.displayName, account.displayName)
         assertEquals(request.language, account.language)
@@ -68,7 +68,7 @@ public class UpdateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountUpdatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_UPDATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.accountId)
+        assertEquals(response.body!!.id, payload.firstValue.accountId)
         assertNull(payload.firstValue.attribute)
     }
 

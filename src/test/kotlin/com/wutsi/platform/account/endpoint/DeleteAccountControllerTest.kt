@@ -61,7 +61,6 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
         val payload = argumentCaptor<AccountDeletedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_DELETED.urn), payload.capture())
         assertEquals(100L, payload.firstValue.accountId)
-        assertEquals(TENANT_ID, payload.firstValue.tenantId)
     }
 
     @Test

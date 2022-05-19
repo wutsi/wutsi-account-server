@@ -186,7 +186,6 @@ public class CreateAccountDelegate(
                 EventURN.ACCOUNT_CREATED.urn,
                 AccountCreatedPayload(
                     account.id!!,
-                    tracingContext.tenantId()?.toLong(),
                     phone.number,
                 )
             )

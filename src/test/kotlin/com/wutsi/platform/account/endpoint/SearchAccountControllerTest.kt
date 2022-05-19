@@ -39,7 +39,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val accounts = response.body.accounts
+        val accounts = response.body!!.accounts
         assertEquals(1, accounts.size)
 
         val account = accounts[0]
@@ -62,7 +62,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val accounts = response.body.accounts
+        val accounts = response.body!!.accounts
         assertEquals(1, accounts.size)
 
         val account = accounts[0]
@@ -85,7 +85,7 @@ public class SearchAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val accounts = response.body.accounts
+        val accounts = response.body!!.accounts
         assertEquals(2, accounts.size)
         assertEquals(100, accounts[0].id)
         assertEquals(101, accounts[1].id)

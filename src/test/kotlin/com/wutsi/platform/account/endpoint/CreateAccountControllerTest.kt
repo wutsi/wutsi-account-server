@@ -82,7 +82,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = dao.findById(response.body.id).get()
+        val account = dao.findById(response.body!!.id).get()
         assertEquals(request.displayName, account.displayName)
         assertEquals(request.pictureUrl, account.pictureUrl)
         assertEquals(request.language, account.language)
@@ -106,7 +106,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.accountId)
+        assertEquals(response.body!!.id, payload.firstValue.accountId)
         assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
@@ -124,7 +124,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = dao.findById(response.body.id).get()
+        val account = dao.findById(response.body!!.id).get()
         assertEquals(request.displayName, account.displayName)
         assertEquals(request.pictureUrl, account.pictureUrl)
         assertEquals(request.language, account.language)
@@ -149,7 +149,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.accountId)
+        assertEquals(response.body!!.id, payload.firstValue.accountId)
         assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 
@@ -163,7 +163,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = dao.findById(response.body.id).get()
+        val account = dao.findById(response.body!!.id).get()
         assertNull(account.displayName)
         assertNull(account.pictureUrl)
         assertNotNull(account.created)
@@ -178,7 +178,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.accountId)
+        assertEquals(response.body!!.id, payload.firstValue.accountId)
         assertEquals(request.phoneNumber, payload.firstValue.phoneNumber)
     }
 
@@ -196,7 +196,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val account = dao.findById(response.body.id).get()
+        val account = dao.findById(response.body!!.id).get()
         assertEquals(request.displayName, account.displayName)
         assertEquals(request.pictureUrl, account.pictureUrl)
         assertEquals(request.language, account.language)
@@ -228,7 +228,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
 
         val payload = argumentCaptor<AccountCreatedPayload>()
         verify(eventStream).publish(eq(EventURN.ACCOUNT_CREATED.urn), payload.capture())
-        assertEquals(response.body.id, payload.firstValue.accountId)
+        assertEquals(response.body!!.id, payload.firstValue.accountId)
         assertEquals(phone.number, payload.firstValue.phoneNumber)
     }
 

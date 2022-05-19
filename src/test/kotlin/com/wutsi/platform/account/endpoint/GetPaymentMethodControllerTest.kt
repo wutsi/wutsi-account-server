@@ -40,7 +40,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val paymentMethod = response.body.paymentMethod
+        val paymentMethod = response.body!!.paymentMethod
         assertEquals("0000-00000-100", paymentMethod.token)
         assertEquals("+237 2 21...00", paymentMethod.maskedNumber)
         assertEquals("Ray Sponsible", paymentMethod.ownerName)
@@ -64,7 +64,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val paymentMethod = response.body.paymentMethod
+        val paymentMethod = response.body!!.paymentMethod
         assertNotNull(paymentMethod.phone)
     }
 
@@ -77,7 +77,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val paymentMethod = response.body.paymentMethod
+        val paymentMethod = response.body!!.paymentMethod
         assertNotNull(paymentMethod.phone)
         assertNotNull("+237221234100", paymentMethod.phone?.number)
         assertNotNull("CM", paymentMethod.phone?.country)

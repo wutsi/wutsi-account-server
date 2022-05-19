@@ -38,7 +38,7 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val paymentMethods = response.body.paymentMethods
+        val paymentMethods = response.body!!.paymentMethods
         assertEquals(2, paymentMethods.size)
 
         assertEquals("0000-00000-100", paymentMethods[0].token)
@@ -74,7 +74,7 @@ public class ListPaymentMethodsControllerTest : AbstractSecuredController() {
 
         assertEquals(200, response.statusCodeValue)
 
-        val paymentMethods = response.body.paymentMethods
+        val paymentMethods = response.body!!.paymentMethods
         assertEquals(2, paymentMethods.size)
 
         assertEquals("+237 2 21...00", paymentMethods[0].maskedNumber)

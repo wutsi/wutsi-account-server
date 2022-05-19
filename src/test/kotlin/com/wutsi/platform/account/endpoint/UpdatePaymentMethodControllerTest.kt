@@ -44,7 +44,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
             provider = PaymentMethodProvider.MTN.name
         )
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
-        val response = rest.postForEntity(url, request, Any::class.java)
+        rest.postForEntity(url, request, Any::class.java)
 
         val payment = dao.findByToken("0000-00000-100").get()
         assertEquals(request.ownerName, payment.ownerName)
