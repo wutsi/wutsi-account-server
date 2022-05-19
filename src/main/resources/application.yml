@@ -59,6 +59,9 @@ spring:
 wutsi:
   application:
     name: wutsi-account
+    jobs:
+      metric-importer:
+        cron: "0 0 3 * * *"   # Every day at 3AM
   platform:
     security:
       type: jwt

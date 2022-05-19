@@ -32,15 +32,23 @@
     <libphonenumber.version>8.12.48</libphonenumber.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
     <hikari-cp.version>5.0.1</hikari-cp.version>
+    <opencsv.version>5.6</opencsv.version>
     <postgresql.version>42.3.5</postgresql.version>
     <flyway.version>8.5.10</flyway.version>
     <icu4j.version>71.1</icu4j.version>
     <wutsi-platform-core.version>0.0.109</wutsi-platform-core.version>
     <wutsi-platform-payment.version>0.0.67</wutsi-platform-payment.version>
     <wutsi-tenant.version>0.0.19</wutsi-tenant.version>
+    <wutsi-tracking.version>0.0.12</wutsi-tracking.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.wutsi.analytics.tracking</groupId>
+      <artifactId>wutsi-tracking-sdk-kotlin</artifactId>
+      <version>${wutsi-tracking.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
@@ -75,6 +83,11 @@
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-reflect</artifactId>
       <version>${kotlin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>${opencsv.version}</version>
     </dependency>
 
     <dependency>
