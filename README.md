@@ -6,60 +6,12 @@
 
 API for managing user&#39;s accounts&#10;
 
+# Architecture
 
-# Installation Prerequisites
-## Database Setup
-- Install postgres
-- Create account with username/password: `postgres`/`postgres`
-- Create a database named `wutsi-account`
-
-## Configure Github
-- Generate a Github token for accessing packages from GibHub
-  - Goto [https://github.com/settings/tokens](https://github.com/settings/tokens)
-  - Click on `Generate New Token`
-  - Give a value to your token
-  - Select the permissions `read:packages`
-  - Generate the token
-- Set your GitHub environment variables on your machine:
-  - `GITHUB_TOKEN = your-token-value`
-  - `GITHUB_USER = your-github-user-name`
-
-## Maven Setup
-- Download Instance [Maven 3.6+](https://maven.apache.org/download.cgi)
-- Add into `~/m2/settings.xml`
-```
-    <settings>
-        ...
-        <servers>
-            ...
-            <server>
-              <id>github</id>
-              <username>${env.GITHUB_USER}</username>
-              <password>${env.GITHUB_TOKEN}</password>
-            </server>
-        </servers>
-    </settings>
-```
-
-## Usage
-- Install
-```
-$ git clone git@github.com:wutsi/wutsi-account-server.git
-```
-
-- Build
-```
-$ cd wutsi-account-server
-$ mvn clean install
-```
-
-- Launch the API
-```
-$ mvn spring-boot:run
-```
-
-That's it... the API is up and running! Start sending requests :-)
+![](https://www.plantuml.com/plantuml/png/TOwn2i9038RtF4MeyqtkKWSVG1n4f4Dw3RNqUYTtYHMAxsuLGL5l2YHV_kylar0K7HpOC9o3Poz8rWQTv_InEuuggJElaqaSBnmhN1pOkJ02DYHKKs8ichgO0ByUAi0RG2x5cDKFF-Dl-tg_msUeHB9zvrkJbgPMsxDK-42toifeSWB8YN5pjIVoBKE-sbyhbEmR7TmT)
 
 # Links
+
+- [Event](docs/Event.md)
 - [API](https://wutsi.github.io/wutsi-account-server/api/)
 - [Documentation](docs/)
