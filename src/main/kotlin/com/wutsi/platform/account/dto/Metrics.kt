@@ -9,5 +9,6 @@ public data class Metrics(
     public val totalShares: Long = 0,
     public val totalOrders: Long = 0,
     public val conversion: Double = 0.0,
-    public val score: Double = 0.0
+    public val score: Double = 0.0,
+    public val totalSales: Long = 0
 )

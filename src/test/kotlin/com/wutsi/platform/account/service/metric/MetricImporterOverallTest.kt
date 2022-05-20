@@ -15,7 +15,7 @@ import java.io.File
 import java.time.LocalDate
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/MetricImporterOverall.sql"])
+@Sql(value = ["/db/clean.sql", "/db/MetricImporter.sql"])
 internal class MetricImporterOverallTest {
     companion object {
         const val CSV: String = """
@@ -84,6 +84,16 @@ internal class MetricImporterOverallTest {
         assertTotalOrders(101, 11)
     }
 
+    @Test
+    fun sale() {
+        store(MetricType.SALE)
+
+        importer.import(date, MetricType.SALE)
+
+        assertTotalSales(100, 31)
+        assertTotalSales(101, 11)
+    }
+
     private fun assertTotalViews(productId: Long, expected: Long) {
         val product = dao.findById(productId)
         assertEquals(expected, product.get().totalViews)
@@ -102,6 +112,11 @@ internal class MetricImporterOverallTest {
     private fun assertTotalShares(productId: Long, expected: Long) {
         val product = dao.findById(productId)
         assertEquals(expected, product.get().totalShares)
+    }
+
+    private fun assertTotalSales(productId: Long, expected: Long) {
+        val product = dao.findById(productId)
+        assertEquals(expected, product.get().totalSales)
     }
 
     private fun store(type: MetricType) {

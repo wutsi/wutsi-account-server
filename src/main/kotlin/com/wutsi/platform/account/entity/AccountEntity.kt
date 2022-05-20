@@ -59,4 +59,5 @@ data class AccountEntity(
     val totalOrders: Long = 0,
     val conversion: Double = 0.0,
     val score: Double = 0.0,
+    val totalSales: Long = 0,
 )

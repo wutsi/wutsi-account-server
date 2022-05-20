@@ -53,11 +53,12 @@ internal class MetricImporterJobTest {
     fun run() {
         job.run()
 
-        verify(metricImporter, times(4)).import(any(), any())
+        verify(metricImporter, times(5)).import(any(), any())
         verify(metricImporter).import(date, MetricType.SHARE)
         verify(metricImporter).import(date, MetricType.CHAT)
         verify(metricImporter).import(date, MetricType.VIEW)
         verify(metricImporter).import(date, MetricType.ORDER)
+        verify(metricImporter).import(date, MetricType.SALE)
 
         verify(conversionImporter).import(date, MetricType.ORDER)
         verify(scoreImporter).import(date, MetricType.VIEW)

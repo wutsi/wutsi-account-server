@@ -39,7 +39,7 @@
     <wutsi-platform-core.version>0.0.109</wutsi-platform-core.version>
     <wutsi-platform-payment.version>0.0.67</wutsi-platform-payment.version>
     <wutsi-tenant.version>0.0.19</wutsi-tenant.version>
-    <wutsi-tracking.version>0.0.12</wutsi-tracking.version>
+    <wutsi-tracking.version>0.0.17</wutsi-tracking.version>
   </properties>
 
   <dependencies>

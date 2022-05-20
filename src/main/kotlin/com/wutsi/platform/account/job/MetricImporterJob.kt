@@ -31,6 +31,7 @@ class MetricImporterJob(
             importer.import(date, MetricType.SHARE) +
             importer.import(date, MetricType.VIEW) +
             importer.import(date, MetricType.ORDER) +
+            importer.import(date, MetricType.SALE) +
             conversion.import(date, MetricType.ORDER) + // IMPORTANT: Must be after all metrics
             score.import(date, MetricType.VIEW) // IMPORTANT: Must be the last
     }

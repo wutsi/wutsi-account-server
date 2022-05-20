@@ -92,6 +92,8 @@ class AccountService(
             criteria.add("a.id IN :ids")
         if (request.business != null)
             criteria.add("a.business=:business")
+        if (request.hasStore != null)
+            criteria.add("a.hasStore=:hasStore")
         return criteria.joinToString(separator = " AND ")
     }
 
@@ -104,6 +106,8 @@ class AccountService(
             query.setParameter("ids", request.ids)
         if (request.business != null)
             query.setParameter("business", request.business)
+        if (request.hasStore != null)
+            query.setParameter("hasStore", request.hasStore)
     }
 
     private fun normalizePhoneNumber(phoneNumber: String?): String? {

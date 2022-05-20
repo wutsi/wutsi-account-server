@@ -635,6 +635,10 @@ components:
           type: boolean
           description: Filter business account
           nullable: true
+        catalog:
+          type: boolean
+          description: Filter account with catalog enabled
+          nullable: true
         limit:
           type: integer
           default: 30
@@ -1102,3 +1106,6 @@ components:
         score:
           type: number
           format: double
+        totalSales:
+          type: number
+          format: int64

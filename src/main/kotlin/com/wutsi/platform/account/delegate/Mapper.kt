@@ -59,6 +59,7 @@ fun AccountEntity.toMetrics() = Metrics(
     totalChats = this.totalChats,
     totalShares = this.totalShares,
     totalOrders = this.totalShares,
+    totalSales = this.totalSales,
     conversion = this.conversion,
     score = this.score
 )
