@@ -635,9 +635,9 @@ components:
           type: boolean
           description: Filter business account
           nullable: true
-        catalog:
+        hasStore:
           type: boolean
-          description: Filter account with catalog enabled
+          description: Filter account with store enabled
           nullable: true
         limit:
           type: integer
