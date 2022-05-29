@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-public class CreateAccountDelegate(
+class CreateAccountDelegate(
     private val phoneService: PhoneService,
     private val passwordService: PasswordService,
     private val mobilePaymentService: MobilePaymentService,
@@ -54,7 +54,7 @@ public class CreateAccountDelegate(
     }
 
     @Transactional
-    public fun invoke(request: CreateAccountRequest): CreateAccountResponse {
+    fun invoke(request: CreateAccountRequest): CreateAccountResponse {
         try {
             // Tenant
             val tenantId = tenantProvider.id()
@@ -122,7 +122,8 @@ public class CreateAccountDelegate(
                 pictureUrl = request.pictureUrl,
                 tenantId = tenantId,
                 business = request.business,
-                timezoneId = getTimeZone(request.country)
+                timezoneId = getTimeZone(request.country),
+                cityId = request.cityId
             )
         )
 

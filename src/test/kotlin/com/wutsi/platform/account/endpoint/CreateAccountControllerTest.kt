@@ -76,7 +76,8 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
             country = "CM",
             displayName = "Ray Sponsible",
             pictureUrl = "http://www.google.ca/img/1.ong",
-            business = true
+            business = true,
+            cityId = 11111L,
         )
         val response = rest.postForEntity(url, request, CreateAccountResponse::class.java)
 
@@ -87,6 +88,7 @@ public class CreateAccountControllerTest : AbstractSecuredController() {
         assertEquals(request.pictureUrl, account.pictureUrl)
         assertEquals(request.language, account.language)
         assertEquals(request.country, account.country)
+        assertEquals(request.cityId, account.cityId)
         assertEquals(AccountStatus.ACTIVE, account.status)
         assertNotNull(account.created)
         assertNotNull(account.updated)

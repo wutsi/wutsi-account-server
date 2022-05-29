@@ -572,6 +572,11 @@ components:
         business:
           type: boolean
           description: Business account?
+        cityId:
+          type: integer
+          format: int64
+          nullable: true
+          description: ID of the location of the owner of this account
       required:
         - phoneNumber
 
