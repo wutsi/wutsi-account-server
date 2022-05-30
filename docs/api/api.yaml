@@ -811,6 +811,11 @@ components:
           format: int64
           nullable: true
           description: ID of the business category
+        cityId:
+          type: number
+          format: int64
+          nullable: true
+          description: ID of the city
 
     Account:
       type: object
