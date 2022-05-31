@@ -29,5 +29,4 @@ data class Account(
     val facebookId: String? = null,
     val instagramId: String? = null,
     val twitterId: String? = null,
-    val overallMetrics: Metrics = Metrics()
 )

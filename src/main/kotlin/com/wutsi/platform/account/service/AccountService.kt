@@ -74,8 +74,6 @@ class AccountService(
     private fun order(request: SearchAccountRequest): String =
         when (request.sortBy?.uppercase()) {
             AccountSort.NAME.name -> "ORDER BY a.displayName, a.score DESC"
-            AccountSort.VIEWS.name -> "ORDER BY a.totalViews DESC, a.score DESC"
-            AccountSort.RECOMMENDED.name -> "ORDER BY a.score DESC"
             else -> ""
         }
 

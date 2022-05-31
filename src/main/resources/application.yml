@@ -59,13 +59,6 @@ spring:
 wutsi:
   application:
     name: wutsi-account
-    jobs:
-      metric-importer:
-        cron: "0 0 3 * * *"   # Every day at 3AM
-      metric-importer-overall:
-        enabled: false          # IMPORTANT: This process is very resource intensive. So enable it only when needed!!!!
-        cron: "0 50 14 * * *"   # Every day at 10:35PM
-
   platform:
     security:
       type: jwt

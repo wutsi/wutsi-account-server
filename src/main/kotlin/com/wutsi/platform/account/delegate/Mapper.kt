@@ -6,7 +6,6 @@ import com.wutsi.platform.account.dto.Account
 import com.wutsi.platform.account.dto.AccountSummary
 import com.wutsi.platform.account.dto.BusinessHour
 import com.wutsi.platform.account.dto.Category
-import com.wutsi.platform.account.dto.Metrics
 import com.wutsi.platform.account.dto.PaymentMethod
 import com.wutsi.platform.account.dto.PaymentMethodSummary
 import com.wutsi.platform.account.dto.Phone
@@ -51,17 +50,6 @@ fun AccountEntity.toAccount(securityManager: SecurityManager, imageKit: ImageKit
         this.email
     else
         null,
-    overallMetrics = toMetrics()
-)
-
-fun AccountEntity.toMetrics() = Metrics(
-    totalViews = this.totalChats,
-    totalChats = this.totalChats,
-    totalShares = this.totalShares,
-    totalOrders = this.totalShares,
-    totalSales = this.totalSales,
-    conversion = this.conversion,
-    score = this.score
 )
 
 fun PhoneEntity.toPhone() = Phone(

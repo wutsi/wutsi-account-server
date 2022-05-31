@@ -22,10 +22,6 @@ wutsi:
       type: rabbitmq
       rabbitmq:
         url: ${CLOUDAMQP_URL}
-    storage:
-      type: aws
-      aws:
-        bucket: prod-wutsi-track
   image-kit: # Configuration of integration with imagekit.io
     origin-url: "https://s3.amazonaws.com/prod-wutsi"
     endpoint-url: "https://ik.imagekit.io/toifevuwjn"
