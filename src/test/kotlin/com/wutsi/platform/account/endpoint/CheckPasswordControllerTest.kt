@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -15,9 +15,9 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/CheckPasswordController.sql"])
-public class CheckPasswordControllerTest : AbstractSecuredController() {
+class CheckPasswordControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -29,7 +29,7 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `check password`() {
+    fun `check password`() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/100/password?password=$password"
 
@@ -39,7 +39,7 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `password mismatch`() {
+    fun `password mismatch`() {
         val password = "123456"
         val url = "http://localhost:$port/v1/accounts/100/password?password=$password"
 
@@ -54,7 +54,7 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `no password`() {
+    fun `no password`() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/101/password?password=$password"
 
@@ -70,7 +70,7 @@ public class CheckPasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid account`() {
+    fun `invalid account`() {
         val password = "xxx"
         val url = "http://localhost:$port/v1/accounts/9999/password?password=$password"
 

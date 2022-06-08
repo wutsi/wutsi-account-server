@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -20,9 +20,9 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetPaymentMethodController.sql"])
-public class GetPaymentMethodControllerTest : AbstractSecuredController() {
+class GetPaymentMethodControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -85,7 +85,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `deleted payment-method`() {
+    fun `deleted payment-method`() {
         rest = createResTemplate(listOf("payment-method-read"), subjectId = 199)
         val url = "http://localhost:$port/v1/accounts/199/payment-methods/0000-00000-199"
 
@@ -99,7 +99,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid payment-method token`() {
+    fun `invalid payment-method token`() {
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/999999"
 
         val ex = assertThrows<HttpStatusCodeException> {
@@ -112,7 +112,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid permission`() {
+    fun `invalid permission`() {
         rest = createResTemplate(listOf(), subjectId = 100)
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
 
@@ -123,7 +123,7 @@ public class GetPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid tenant`() {
+    fun `invalid tenant`() {
         rest = createResTemplate(subjectId = 100, tenantId = 99999L, scope = listOf("payment-method-read"))
         val url = "http://localhost:$port/v1/accounts/100/payment-methods/0000-00000-100"
 

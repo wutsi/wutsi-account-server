@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -21,9 +21,9 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/UpdatePaymentMethodController.sql"])
-public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
+class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -38,7 +38,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `update a payment method`() {
+    fun `update a payment method`() {
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
             provider = PaymentMethodProvider.MTN.name
@@ -54,7 +54,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot update payment method to another account`() {
+    fun `cannot update payment method to another account`() {
         rest = createResTemplate(listOf("payment-method-manage"), subjectId = 7777)
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
@@ -72,7 +72,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot update payment method without permission`() {
+    fun `cannot update payment method without permission`() {
         rest = createResTemplate(listOf(), subjectId = 100)
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
@@ -90,7 +90,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot update payment method with invalid token`() {
+    fun `cannot update payment method with invalid token`() {
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
             provider = PaymentMethodProvider.MTN.name
@@ -107,7 +107,7 @@ public class UpdatePaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot update payment method with invalid account`() {
+    fun `cannot update payment method with invalid account`() {
         val request = UpdatePaymentMethodRequest(
             ownerName = "Thomas NKono",
             provider = PaymentMethodProvider.MTN.name

@@ -1,5 +1,6 @@
 package com.wutsi.platform.account.`delegate`
 
+import com.wutsi.platform.account.dao.AccountRepository
 import com.wutsi.platform.account.dto.UpdateAccountAttributeRequest
 import com.wutsi.platform.account.entity.AccountEntity
 import com.wutsi.platform.account.error.ErrorURN
@@ -22,7 +23,8 @@ import java.util.Locale
 import javax.transaction.Transactional
 
 @Service
-public class UpdateAccountAttributeDelegate(
+class UpdateAccountAttributeDelegate(
+    private val dao: AccountRepository,
     private val service: AccountService,
     private val securityManager: SecurityManager,
     private val logger: KVLogger,
@@ -35,7 +37,7 @@ public class UpdateAccountAttributeDelegate(
     }
 
     @Transactional
-    public fun invoke(
+    fun invoke(
         id: Long,
         name: String,
         request: UpdateAccountAttributeRequest
@@ -76,7 +78,7 @@ public class UpdateAccountAttributeDelegate(
                 )
             )
         }
-
+        dao.save(account)
         publishEvent(account, name)
     }
 

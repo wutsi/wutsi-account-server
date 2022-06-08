@@ -171,7 +171,6 @@ paths:
               - language
               - country
               - is-transfer-secured
-              - business
               - biography
               - website
               - category-id
@@ -264,6 +263,57 @@ paths:
       security:
         - api_key: [ 'user-read' ]
 
+
+  /v1/accounts/{id}/business:
+    post:
+      operationId: "enable-business"
+      description: Switch account to business account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnableBusinessRequest'
+      responses:
+        200:
+          description: Success
+        403:
+          description: The caller is not the owner of the account
+        404:
+          description: The account not found
+      tags:
+        - Account
+      security:
+        - api_key: [ 'user-manage' ]
+
+    delete:
+      operationId: "disable-business"
+      description: Switch account to personal account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Success
+        403:
+          description: The caller is not the owner of the account
+      tags:
+        - Account
+      security:
+        - api_key: [ 'user-manage' ]
 
   /v1/accounts/{id}/business-hours:
     post:
@@ -926,9 +976,6 @@ components:
           type: string
           description: Twitter identifier
           nullable: true
-        overallMetrics:
-          type: object
-          $ref: "#/components/schemas/Metrics"
 
     Phone:
       type: object
@@ -1095,27 +1142,39 @@ components:
           type: object
           $ref: "#/components/schemas/Category"
 
-    Metrics:
+    EnableBusinessRequest:
       type: object
       properties:
-        totalViews:
-          type: integer
-          format: int64
-        totalChats:
-          type: integer
-          format: int64
-        totalShares:
-          type: integer
-          format: int64
-        totalOrders:
-          type: integer
-          format: int64
-        conversion:
-          type: number
-          format: double
-        score:
-          type: number
-          format: double
-        totalSales:
+        displayName:
+          type: string
+          description: Account's display name
+          maxLength: 50
+        categoryId:
           type: number
           format: int64
+          nullable: true
+          description: ID of the business category
+        country:
+          type: string
+          description: Country code
+        cityId:
+          type: number
+          format: int64
+          nullable: true
+          description: ID of the city
+        street:
+          type: string
+          nullable: true
+          description: Street
+        biography:
+          type: string
+          nullable: true
+        whatsapp:
+          type: string
+          description: Whatsapp phone number to use to contact the user
+          nullable: true
+      required:
+        - displayName
+        - categoryId
+        - cityId
+        - country

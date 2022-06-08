@@ -18,7 +18,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -29,9 +29,9 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/DeleteAccountController.sql"])
-public class DeleteAccountControllerTest : AbstractSecuredController() {
+class DeleteAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Autowired
     private lateinit var dao: AccountRepository
@@ -49,7 +49,7 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun invoke() {
+    fun invoke() {
         val url = "http://localhost:$port/v1/accounts/100"
         rest.delete(url)
 
@@ -64,7 +64,7 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `already deleted`() {
+    fun `already deleted`() {
         rest = createResTemplate(listOf("user-manage"), subjectId = 199)
         val url = "http://localhost:$port/v1/accounts/199"
 
@@ -77,7 +77,7 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot delete another user account`() {
+    fun `cannot delete another user account`() {
         rest = createResTemplate(listOf("user-manage"), subjectId = 7777)
         val url = "http://localhost:$port/v1/accounts/101"
 
@@ -94,7 +94,7 @@ public class DeleteAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid tenant`() {
+    fun `invalid tenant`() {
         val url = "http://localhost:$port/v1/accounts/200"
 
         val ex = assertThrows<HttpStatusCodeException> {

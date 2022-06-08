@@ -9,15 +9,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GetCategoryControllerTest : AbstractSecuredController() {
+class GetCategoryControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -29,7 +29,7 @@ public class GetCategoryControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun get() {
+    fun get() {
         val url = "http://localhost:$port/v1/categories/1000"
         val response = rest.getForEntity(url, GetCategoryResponse::class.java)
 
@@ -41,7 +41,7 @@ public class GetCategoryControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun french() {
+    fun french() {
         val url = "http://localhost:$port/v1/categories/1000"
         rest.interceptors.add(LanguageClientHttpRequestInterceptor("fr"))
         val response = rest.getForEntity(url, GetCategoryResponse::class.java)
@@ -54,7 +54,7 @@ public class GetCategoryControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `invalid id`() {
+    fun `invalid id`() {
         val url = "http://localhost:$port/v1/categories/999999"
 
         val ex = assertThrows<HttpStatusCodeException> {

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -21,9 +21,9 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/SavePasswordController.sql"])
-public class SavePasswordControllerTest : AbstractSecuredController() {
+class SavePasswordControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Autowired
     private lateinit var dao: PasswordRepository
@@ -41,7 +41,7 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `create password`() {
+    fun `create password`() {
         val url = "http://localhost:$port/v1/accounts/100/password"
         val request = SavePasswordRequest(
             password = "This is a secret"
@@ -57,7 +57,7 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `update password`() {
+    fun `update password`() {
         rest = createResTemplate(scope = listOf("user-manage"), subjectId = 101)
         val url = "http://localhost:$port/v1/accounts/101/password"
         val request = SavePasswordRequest(
@@ -74,7 +74,7 @@ public class SavePasswordControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot set another user password`() {
+    fun `cannot set another user password`() {
         rest = createResTemplate(scope = listOf("user-manage"), subjectId = 7777)
         val url = "http://localhost:$port/v1/accounts/101/password"
         val request = SavePasswordRequest(

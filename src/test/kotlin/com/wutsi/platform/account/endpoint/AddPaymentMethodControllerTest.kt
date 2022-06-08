@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
@@ -25,9 +25,9 @@ import kotlin.test.assertNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/AddPaymentMethodController.sql"])
-public class AddPaymentMethodControllerTest : AbstractSecuredController() {
+class AddPaymentMethodControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     private lateinit var rest: RestTemplate
 
@@ -45,7 +45,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `add payment method with existing phone number`() {
+    fun `add payment method with existing phone number`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
             type = PaymentMethodType.MOBILE.name,
@@ -73,7 +73,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `add payment method with new phone number`() {
+    fun `add payment method with new phone number`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
             type = PaymentMethodType.MOBILE.name,
@@ -101,7 +101,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot add payment method to another account`() {
+    fun `cannot add payment method to another account`() {
         rest = createResTemplate(listOf("payment-method-manage"), subjectId = 7777)
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
@@ -121,7 +121,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot add payment method without permission`() {
+    fun `cannot add payment method without permission`() {
         rest = createResTemplate(listOf(), subjectId = 100)
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
@@ -141,7 +141,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot add payment method already owner by another account`() {
+    fun `cannot add payment method already owner by another account`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
             type = PaymentMethodType.MOBILE.name,
@@ -160,7 +160,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot add payment method with invalid phone number`() {
+    fun `cannot add payment method with invalid phone number`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
             type = PaymentMethodType.MOBILE.name,
@@ -179,7 +179,7 @@ public class AddPaymentMethodControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `cannot add payment method with invalid type`() {
+    fun `cannot add payment method with invalid type`() {
         val request = AddPaymentMethodRequest(
             ownerName = "Roger Milla",
             type = "xxx",

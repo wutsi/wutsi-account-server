@@ -3,7 +3,7 @@ package com.wutsi.platform.account.endpoint
 import com.wutsi.platform.account.dto.ListBusinessHourResponse
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -12,9 +12,9 @@ import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/ListBusinessHourController.sql"])
-public class ListBusinessHoursControllerTest : AbstractSecuredController() {
+class ListBusinessHoursControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Test
     fun list() {

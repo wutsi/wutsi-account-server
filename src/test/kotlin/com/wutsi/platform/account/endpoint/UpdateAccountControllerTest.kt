@@ -17,7 +17,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -26,9 +26,9 @@ import kotlin.test.assertNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/UpdateAccountController.sql"])
-public class UpdateAccountControllerTest : AbstractSecuredController() {
+class UpdateAccountControllerTest : AbstractSecuredController() {
     @LocalServerPort
-    public val port: Int = 0
+    val port: Int = 0
 
     @Autowired
     private lateinit var dao: AccountRepository
@@ -46,7 +46,7 @@ public class UpdateAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `update account`() {
+    fun `update account`() {
         // GIVEN
         val url = "http://localhost:$port/v1/accounts/100"
         val request = UpdateAccountRequest(
@@ -73,7 +73,7 @@ public class UpdateAccountControllerTest : AbstractSecuredController() {
     }
 
     @Test
-    public fun `account not found`() {
+    fun `account not found`() {
         // GIVEN
         val url = "http://localhost:$port/v1/accounts/9999"
         val request = UpdateAccountRequest(
