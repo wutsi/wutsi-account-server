@@ -33,7 +33,7 @@
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
     <hikari-cp.version>5.0.1</hikari-cp.version>
     <opencsv.version>5.6</opencsv.version>
-    <postgresql.version>42.3.6</postgresql.version>
+    <postgresql.version>42.4.0</postgresql.version>
     <flyway.version>8.5.12</flyway.version>
     <icu4j.version>71.1</icu4j.version>
     <wutsi-platform-core.version>0.0.109</wutsi-platform-core.version>
