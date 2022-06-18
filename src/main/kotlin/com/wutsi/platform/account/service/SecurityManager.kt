@@ -5,6 +5,7 @@ import com.wutsi.platform.account.entity.PaymentMethodEntity
 import com.wutsi.platform.account.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.exception.ForbiddenException
+import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.WutsiPrincipal
 import com.wutsi.platform.core.tracing.TracingContext
 import org.springframework.security.core.context.SecurityContextHolder
@@ -31,7 +32,10 @@ class SecurityManager(
     }
 
     fun checkTenant(account: AccountEntity): Boolean {
-        if (account.tenantId != tracingContext.tenantId()?.toLong())
+        val tenantId = tracingContext.tenantId()
+            ?: return true
+
+        if (account.tenantId != tenantId.toLong())
             throw ForbiddenException(
                 error = Error(
                     code = ErrorURN.ILLEGAL_TENANT_ACCESS.urn
@@ -50,9 +54,9 @@ class SecurityManager(
         isOwner(payment.account) || hasAuthority(PERMISSION_PAYMENT_DETAILS)
 
     private fun isOwner(account: AccountEntity): Boolean {
-        val authentication = SecurityContextHolder.getContext().authentication
-        val principal = authentication.principal
+        val principal = principal()
         return principal is WutsiPrincipal &&
+            principal.type == SubjectType.USER &&
             (account.id.toString() == principal.id || principal.admin)
     }
 
