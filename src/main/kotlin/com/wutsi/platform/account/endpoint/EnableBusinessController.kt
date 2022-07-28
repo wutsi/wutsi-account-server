@@ -12,7 +12,7 @@ import kotlin.Long
 
 @RestController
 public class EnableBusinessController(
-    private val `delegate`: EnableBusinessDelegate
+    public val `delegate`: EnableBusinessDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}/business")
     @PreAuthorize(value = "hasAuthority('user-manage')")

@@ -12,7 +12,7 @@ import kotlin.Long
 
 @RestController
 public class SaveBusinessHourController(
-    private val `delegate`: SaveBusinessHourDelegate
+    public val `delegate`: SaveBusinessHourDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}/business-hours")
     @PreAuthorize(value = "hasAuthority('user-manage')")

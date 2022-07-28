@@ -13,7 +13,7 @@ import kotlin.Long
 
 @RestController
 public class UpdateAccountController(
-    private val `delegate`: UpdateAccountDelegate
+    public val `delegate`: UpdateAccountDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}")
     @PreAuthorize(value = "hasAuthority('user-manage')")

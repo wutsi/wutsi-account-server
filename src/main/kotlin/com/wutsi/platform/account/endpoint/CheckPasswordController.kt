@@ -11,7 +11,7 @@ import kotlin.String
 
 @RestController
 public class CheckPasswordController(
-    private val `delegate`: CheckPasswordDelegate
+    public val `delegate`: CheckPasswordDelegate,
 ) {
     @GetMapping("/v1/accounts/{id}/password")
     @PreAuthorize(value = "hasAuthority('user-read')")

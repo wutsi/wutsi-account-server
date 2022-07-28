@@ -12,5 +12,5 @@ public data class AddPaymentMethodRequest(
     @get:NotBlank
     public val type: String = "",
     @get:NotBlank
-    public val provider: String = ""
+    public val provider: String = "",
 )

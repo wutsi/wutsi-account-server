@@ -8,5 +8,5 @@ public data class UpdateAccountRequest(
     public val language: String = "en",
     @get:Size(max = 2)
     public val country: String = "US",
-    public val displayName: String? = null
+    public val displayName: String? = null,
 )

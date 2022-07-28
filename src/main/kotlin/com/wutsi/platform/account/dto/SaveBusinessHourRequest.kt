@@ -15,5 +15,5 @@ public data class SaveBusinessHourRequest(
     @get:Size(max = 5)
     public val openTime: String? = null,
     @get:Size(max = 5)
-    public val closeTime: String? = null
+    public val closeTime: String? = null,
 )

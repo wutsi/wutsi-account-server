@@ -12,7 +12,7 @@ import kotlin.Long
 
 @RestController
 public class SavePasswordController(
-    private val `delegate`: SavePasswordDelegate
+    public val `delegate`: SavePasswordDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}/password")
     @PreAuthorize(value = "hasAuthority('user-manage')")

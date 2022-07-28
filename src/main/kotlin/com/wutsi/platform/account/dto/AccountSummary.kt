@@ -21,5 +21,5 @@ public data class AccountSummary(
     public val business: Boolean = false,
     public val retail: Boolean = false,
     public val categoryId: Long? = null,
-    public val cityId: Long? = null
+    public val cityId: Long? = null,
 )

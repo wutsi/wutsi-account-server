@@ -10,7 +10,7 @@ import kotlin.Long
 
 @RestController
 public class ListBusinessHoursController(
-    private val `delegate`: ListBusinessHoursDelegate
+    public val `delegate`: ListBusinessHoursDelegate,
 ) {
     @GetMapping("/v1/accounts/{id}/business-hours")
     @PreAuthorize(value = "hasAuthority('user-read')")

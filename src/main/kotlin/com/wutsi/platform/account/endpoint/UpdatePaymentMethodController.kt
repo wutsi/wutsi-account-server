@@ -13,14 +13,14 @@ import kotlin.String
 
 @RestController
 public class UpdatePaymentMethodController(
-    private val `delegate`: UpdatePaymentMethodDelegate
+    public val `delegate`: UpdatePaymentMethodDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}/payment-methods/{token}")
     @PreAuthorize(value = "hasAuthority('payment-method-manage')")
     public fun invoke(
         @PathVariable(name = "id") id: Long,
         @PathVariable(name = "token") token: String,
-        @Valid @RequestBody request: UpdatePaymentMethodRequest
+        @Valid @RequestBody request: UpdatePaymentMethodRequest,
     ) {
         delegate.invoke(id, token, request)
     }

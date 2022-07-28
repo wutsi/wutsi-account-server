@@ -13,14 +13,14 @@ import kotlin.String
 
 @RestController
 public class UpdateAccountAttributeController(
-    private val `delegate`: UpdateAccountAttributeDelegate
+    public val `delegate`: UpdateAccountAttributeDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}/attributes/{name}")
     @PreAuthorize(value = "hasAuthority('user-manage')")
     public fun invoke(
         @PathVariable(name = "id") id: Long,
         @PathVariable(name = "name") name: String,
-        @Valid @RequestBody request: UpdateAccountAttributeRequest
+        @Valid @RequestBody request: UpdateAccountAttributeRequest,
     ) {
         delegate.invoke(id, name, request)
     }

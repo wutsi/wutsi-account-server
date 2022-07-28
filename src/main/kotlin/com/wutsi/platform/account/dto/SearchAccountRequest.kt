@@ -13,5 +13,5 @@ public data class SearchAccountRequest(
     public val hasStore: Boolean? = null,
     public val limit: Int = 30,
     public val offset: Int = 0,
-    public val sortBy: String? = null
+    public val sortBy: String? = null,
 )

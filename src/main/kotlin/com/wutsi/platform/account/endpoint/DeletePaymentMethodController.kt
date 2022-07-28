@@ -10,7 +10,7 @@ import kotlin.String
 
 @RestController
 public class DeletePaymentMethodController(
-    private val `delegate`: DeletePaymentMethodDelegate
+    public val `delegate`: DeletePaymentMethodDelegate,
 ) {
     @DeleteMapping("/v1/accounts/{id}/payment-methods/{token}")
     @PreAuthorize(value = "hasAuthority('payment-method-manage')")

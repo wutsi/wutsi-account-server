@@ -10,7 +10,7 @@ import kotlin.Long
 
 @RestController
 public class GetAccountController(
-    private val `delegate`: GetAccountDelegate
+    public val `delegate`: GetAccountDelegate,
 ) {
     @GetMapping("/v1/accounts/{id}")
     @PreAuthorize(value = "hasAuthority('user-read')")

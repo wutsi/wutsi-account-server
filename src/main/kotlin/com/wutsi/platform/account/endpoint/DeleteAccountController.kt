@@ -9,7 +9,7 @@ import kotlin.Long
 
 @RestController
 public class DeleteAccountController(
-    private val `delegate`: DeleteAccountDelegate
+    public val `delegate`: DeleteAccountDelegate,
 ) {
     @DeleteMapping("/v1/accounts/{id}")
     @PreAuthorize(value = "hasAuthority('user-manage')")

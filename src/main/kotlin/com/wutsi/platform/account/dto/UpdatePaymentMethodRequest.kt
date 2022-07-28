@@ -9,5 +9,5 @@ public data class UpdatePaymentMethodRequest(
     @get:Size(max = 100)
     public val ownerName: String = "",
     @get:NotBlank
-    public val provider: String = ""
+    public val provider: String = "",
 )

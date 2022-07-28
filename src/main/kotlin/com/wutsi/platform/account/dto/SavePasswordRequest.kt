@@ -7,5 +7,5 @@ import kotlin.String
 public data class SavePasswordRequest(
     @get:NotBlank
     @get:Size(min = 6)
-    public val password: String = ""
+    public val password: String = "",
 )

@@ -10,7 +10,7 @@ import kotlin.Long
 
 @RestController
 public class GetCategoryController(
-    private val `delegate`: GetCategoryDelegate
+    public val `delegate`: GetCategoryDelegate,
 ) {
     @GetMapping("/v1/categories/{id}")
     @PreAuthorize(value = "hasAuthority('user-read')")

@@ -10,7 +10,7 @@ import kotlin.Long
 
 @RestController
 public class ListPaymentMethodsController(
-    private val `delegate`: ListPaymentMethodsDelegate
+    public val `delegate`: ListPaymentMethodsDelegate,
 ) {
     @GetMapping("/v1/accounts/{id}/payment-methods")
     @PreAuthorize(value = "hasAuthority('payment-method-read')")

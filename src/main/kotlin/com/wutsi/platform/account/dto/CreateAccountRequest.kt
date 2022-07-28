@@ -19,5 +19,5 @@ public data class CreateAccountRequest(
     public val password: String? = null,
     public val addPaymentMethod: Boolean = false,
     public val business: Boolean = false,
-    public val cityId: Long? = null
+    public val cityId: Long? = null,
 )

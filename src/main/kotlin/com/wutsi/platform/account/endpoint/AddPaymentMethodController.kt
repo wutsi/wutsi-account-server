@@ -13,7 +13,7 @@ import kotlin.Long
 
 @RestController
 public class AddPaymentMethodController(
-    private val `delegate`: AddPaymentMethodDelegate
+    public val `delegate`: AddPaymentMethodDelegate,
 ) {
     @PostMapping("/v1/accounts/{id}/payment-methods")
     @PreAuthorize(value = "hasAuthority('payment-method-manage')")

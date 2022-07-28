@@ -11,7 +11,7 @@ import javax.validation.Valid
 
 @RestController
 public class CreateAccountController(
-    private val `delegate`: CreateAccountDelegate
+    public val `delegate`: CreateAccountDelegate,
 ) {
     @PostMapping("/v1/accounts")
     @PreAuthorize(value = "hasAuthority('user-manage')")

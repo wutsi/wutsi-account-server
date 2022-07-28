@@ -11,7 +11,7 @@ import javax.validation.Valid
 
 @RestController
 public class SearchAccountController(
-    private val `delegate`: SearchAccountDelegate
+    public val `delegate`: SearchAccountDelegate,
 ) {
     @PostMapping("/v1/accounts/search")
     @PreAuthorize(value = "hasAuthority('user-read')")

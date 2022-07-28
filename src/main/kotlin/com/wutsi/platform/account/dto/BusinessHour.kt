@@ -8,5 +8,5 @@ public data class BusinessHour(
     public val dayOfWeek: Int = 0,
     public val opened: Boolean = false,
     public val openTime: String? = null,
-    public val closeTime: String? = null
+    public val closeTime: String? = null,
 )

@@ -11,7 +11,7 @@ import kotlin.String
 
 @RestController
 public class GetPaymentMethodController(
-    private val `delegate`: GetPaymentMethodDelegate
+    public val `delegate`: GetPaymentMethodDelegate,
 ) {
     @GetMapping("/v1/accounts/{id}/payment-methods/{token}")
     @PreAuthorize(value = "hasAuthority('payment-method-read')")

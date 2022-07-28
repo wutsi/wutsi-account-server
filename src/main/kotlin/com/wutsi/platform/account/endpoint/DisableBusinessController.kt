@@ -9,7 +9,7 @@ import kotlin.Long
 
 @RestController
 public class DisableBusinessController(
-    private val `delegate`: DisableBusinessDelegate
+    public val `delegate`: DisableBusinessDelegate,
 ) {
     @DeleteMapping("/v1/accounts/{id}/business")
     @PreAuthorize(value = "hasAuthority('user-manage')")
