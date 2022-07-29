@@ -18,6 +18,8 @@ wutsi:
         username: ${MEMCACHIER_USERNAME}
         password: ${MEMCACHIER_PASSWORD}
         servers: ${MEMCACHIER_SERVERS}
+    security:
+      api-key: ${API_KEY}
     stream:
       type: rabbitmq
       rabbitmq:

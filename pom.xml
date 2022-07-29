@@ -36,13 +36,19 @@
     <postgresql.version>42.4.0</postgresql.version>
     <flyway.version>8.5.13</flyway.version>
     <icu4j.version>71.1</icu4j.version>
-    <wutsi-platform-core.version>0.0.109</wutsi-platform-core.version>
+    <wutsi-platform-core.version>0.0.122</wutsi-platform-core.version>
     <wutsi-platform-payment.version>0.0.67</wutsi-platform-payment.version>
-    <wutsi-tenant.version>0.0.19</wutsi-tenant.version>
-    <wutsi-tracking.version>0.0.17</wutsi-tracking.version>
+    <wutsi-security.version>0.0.21</wutsi-security.version>
+    <wutsi-tenant.version>0.0.50</wutsi-tenant.version>
+    <wutsi-tracking.version>0.0.22</wutsi-tracking.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.wutsi.platform.security</groupId>
+      <artifactId>wutsi-security-sdk-kotlin</artifactId>
+      <version>${wutsi-security.version}</version>
+    </dependency>
     <dependency>
       <groupId>com.wutsi.analytics.tracking</groupId>
       <artifactId>wutsi-tracking-sdk-kotlin</artifactId>

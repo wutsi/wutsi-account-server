@@ -84,9 +84,9 @@ jobs:
 
       - name: Notification
         uses: rtCamp/action-slack-notify@v2
-        if: $
+        if: ${{always()}}
         env:
-          SLACK_COLOR: $
+          SLACK_COLOR: ${{job.status}}
           SLACK_TITLE: wutsi-account-server-test
           SLACK_MESSAGE: Heroku Deployment in TEST
           MSG_MINIMAL: true
@@ -140,9 +140,9 @@ jobs:
 
       - name: Notification
         uses: rtCamp/action-slack-notify@v2
-        if: $
+        if: ${{always()}}
         env:
-          SLACK_COLOR: $
+          SLACK_COLOR: ${{job.status}}
           SLACK_TITLE: wutsi-account-server-prod
           SLACK_MESSAGE: Heroku Deployment in PROD
           MSG_MINIMAL: true
@@ -152,7 +152,7 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     needs: [ deploy-test, deploy-prod ]
-    if: $
+    if: ${{always()}}
     steps:
       - uses: geekyeggo/delete-artifact@v1
         with:
